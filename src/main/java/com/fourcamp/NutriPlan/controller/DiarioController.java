@@ -1,10 +1,8 @@
 package com.fourcamp.NutriPlan.controller;
 
-import com.fourcamp.NutriPlan.dto.JwtData;
 import com.fourcamp.NutriPlan.dto.RefeicaoRequest;
-import com.fourcamp.NutriPlan.exception.AlimentoNotFoundException;
 import com.fourcamp.NutriPlan.service.DiarioService;
-import com.fourcamp.NutriPlan.utils.JwtUtils;
+import com.fourcamp.NutriPlan.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +16,14 @@ public class DiarioController {
     @Autowired
     DiarioService diarioService;
 
+    @Autowired
+    JwtUtils jwtUtils;
+
     @PostMapping("/adicionar-refeicao")
     public ResponseEntity<String> adicionarRefeicao(@RequestHeader("Authorization") String token, @RequestBody RefeicaoRequest refeicaoRequest) {
-        JwtData jwtData = JwtUtils.decodeToken(token);
-        String mensagem = diarioService.adicionarRefeicao(jwtData, refeicaoRequest);
+        String jwtToken = token.replace("Bearer ", "");
+        String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
+        String mensagem = diarioService.adicionarRefeicao(email, refeicaoRequest);
         return ResponseEntity.ok(mensagem);
     }
 }

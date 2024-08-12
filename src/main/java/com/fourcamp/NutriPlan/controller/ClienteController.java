@@ -1,14 +1,10 @@
 package com.fourcamp.NutriPlan.controller;
 
-import com.fourcamp.NutriPlan.dto.ClienteDto;
-import com.fourcamp.NutriPlan.dto.JwtData;
-import com.fourcamp.NutriPlan.dto.LoginRequestDto;
-import com.fourcamp.NutriPlan.dto.PesoDto;
-import com.fourcamp.NutriPlan.dto.CategoriaAtividadeRequestDto;
+import com.fourcamp.NutriPlan.dto.*;
 import com.fourcamp.NutriPlan.model.Cliente;
 import com.fourcamp.NutriPlan.service.ClienteService;
 import com.fourcamp.NutriPlan.service.ObjetivoService;
-import com.fourcamp.NutriPlan.utils.JwtUtils;
+import com.fourcamp.NutriPlan.security.jwt.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,6 +22,9 @@ public class ClienteController {
 
     @Autowired
     private ObjetivoService objetivoService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @PostMapping("/create/account")
     @Operation(description = "Criação da conta")
@@ -72,9 +71,10 @@ public class ClienteController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<String> alterarPeso(@RequestHeader("Authorization") String token, @RequestBody PesoDto novoPeso) {
-        JwtData jwtData = JwtUtils.decodeToken(token);
+        String jwtToken = token.replace("Bearer ", "");
+        String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
 
-        String mensagem = clienteService.alterarPeso(jwtData.getEmail(), novoPeso.getNovoPeso());
+        String mensagem = clienteService.alterarPeso(email, novoPeso.getNovoPeso());
         return ResponseEntity.ok(mensagem);
     }
 
@@ -87,9 +87,10 @@ public class ClienteController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<String> formularioObjetivo(@RequestHeader("Authorization") String token, @RequestBody ClienteDto cliente) {
-        JwtData jwtData = JwtUtils.decodeToken(token);
+        String jwtToken = token.replace("Bearer ", "");
+        String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
 
-        String mensagem = clienteService.formularioObjetivo(jwtData.getEmail(), cliente.getCategoria(), cliente.getTempoMeta());
+        String mensagem = clienteService.formularioObjetivo(email, cliente.getCategoria(), cliente.getTempoMeta());
         return ResponseEntity.ok(mensagem);
     }
 
@@ -102,9 +103,19 @@ public class ClienteController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<Double> visualizarTMB(@RequestHeader("Authorization") String token, @RequestBody CategoriaAtividadeRequestDto request) {
-        JwtData jwtData = JwtUtils.decodeToken(token);
+        String email = jwtUtils.getUserNameFromJwtToken(token);
+        JwtData jwtData = clienteService.obterDadosDoUsuario(email);
 
-        return ResponseEntity.ok(objetivoService.calcularGETSalvar(jwtData, request.getCategoriaAtividade()));
+        return ResponseEntity.ok(objetivoService.calcularGETSalvar(
+                email,
+                jwtData.getCategoria(),
+                jwtData.getTempoMeta(),
+                jwtData.getGenero(),
+                jwtData.getPeso(),
+                jwtData.getAltura(),
+                jwtData.getDataNascimento(),
+                request.getCategoriaAtividade()
+        ));
     }
 
     @GetMapping("acessar-plano")
@@ -117,11 +128,20 @@ public class ClienteController {
     })
     public ResponseEntity<String> acessarPlano(@RequestHeader("Authorization") String token,
                                                @RequestParam("categoriaAtividade") String categoriaAtividade) {
-        JwtData jwtData = JwtUtils.decodeToken(token);
+        String email = jwtUtils.getUserNameFromJwtToken(token);
+        JwtData jwtData = clienteService.obterDadosDoUsuario(email);
 
-        String mensagem = objetivoService.acessarPlano(jwtData, categoriaAtividade);
+        String mensagem = objetivoService.acessarPlano(
+                email,
+                jwtData.getCategoria(),
+                jwtData.getTempoMeta(),
+                jwtData.getGenero(),
+                jwtData.getPeso(),
+                jwtData.getAltura(),
+                jwtData.getDataNascimento(),
+                categoriaAtividade
+        );
 
         return ResponseEntity.ok(mensagem);
     }
-
 }

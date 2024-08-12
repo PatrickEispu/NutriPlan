@@ -1,17 +1,22 @@
 package com.fourcamp.NutriPlan.service;
 
+import com.fourcamp.NutriPlan.dao.ClienteRepository;
 import com.fourcamp.NutriPlan.dao.JdbcTemplateDao;
-import com.fourcamp.NutriPlan.dao.impl.JdbcTemplateDaoImpl;
+import com.fourcamp.NutriPlan.dto.JwtData;
 import com.fourcamp.NutriPlan.exception.DataException;
 import com.fourcamp.NutriPlan.exception.EmailException;
 import com.fourcamp.NutriPlan.exception.SenhaException;
 import com.fourcamp.NutriPlan.model.Cliente;
+import com.fourcamp.NutriPlan.security.jwt.JwtUtils;
 import com.fourcamp.NutriPlan.utils.*;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -30,6 +35,15 @@ public class ClienteService {
     @Autowired
     private CalculoIdade calculoIdade;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public String criarCliente(String nome, String email, String genero, Double peso, Double pesoDesejado, Double altura, Date dataNascimento, String senha, String categoria, String tempoMeta){
 
         if (!EmailValidador.isValidEmail(email)) {
@@ -46,28 +60,31 @@ public class ClienteService {
             throw new DataException();
         }
 
-        jdbcTemplateDao.criarCliente(nome, email, genero, peso, pesoDesejado, altura, dataNascimento, senha, categoria , tempoMeta);
+        //Codifica a senha antes de salvar no banco de dados
+        String encodedPassword = passwordEncoder.encode(senha);
+
+        jdbcTemplateDao.criarCliente(nome, email, genero, peso, pesoDesejado, altura, dataNascimento, encodedPassword, categoria , tempoMeta);
         return Constantes.MSG_CRIACAO_CLIENTE_SUCESSO;
     }
 
+    /**
+     * Autentica o usuário utilizando Spring Security e retorna um token JWT
+     *
+     * @param email o email do usuário
+     * @param senha a senha do usuário
+     * @return um token JWT válido ou null se a autenticação falhar
+     */
     public String login(String email, String senha) {
-        Cliente cliente = jdbcTemplateDao.buscarClientePorEmail(email);
-        if (cliente != null && cliente.getSenha().equals(senha)) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, senha));
 
-            Key chaveSecreta = JwtConfig.getChaveSecreta();
+            //Define o contexto de segurança com a autenticação bem-sucedida
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String token = Jwts.builder().claim("nome", cliente.getNome()).claim("email", cliente.getEmail())
-                    .claim("genero", cliente.getGenero())
-                    .claim("peso", cliente.getPeso()).claim("peso_desejado", cliente.getPesoDesejado())
-                    .claim("altura",cliente.getAltura())
-                    .claim("data_nascimento", cliente.getDataNascimento()).claim("senha", cliente.getSenha())
-                    .claim("categoria", cliente.getCategoria()) .claim("tempo_meta", cliente.getTempoMeta())
+        //Gera o token JWT utilizando as informaçoes do usuário autenticado
+        String jwt = jwtUtils.generateJwtToken(authentication);
 
-                    .setExpiration(new Date(System.currentTimeMillis() + 86400000)).signWith(chaveSecreta).compact();
-            return token;
-        } else { 
-            return null;
-        }
+        return jwt;
     }
 
     public String alterarPeso(String email, double novoPeso) {
@@ -85,5 +102,24 @@ public class ClienteService {
         cliente.setTempoMeta(tempoMeta);
         jdbcTemplateDao.formularioObjetivo(email,categoria,tempoMeta);
         return Constantes.MSG_FORMULARIO_SUCESSO;
+    }
+
+    public JwtData obterDadosDoUsuario(String token) {
+        String email = jwtUtils.getUserNameFromJwtToken(token);
+        Cliente cliente = jdbcTemplateDao.buscarClientePorEmail(email);
+
+        if (cliente != null) {
+            JwtData jwtData = new JwtData();
+            jwtData.setEmail(cliente.getEmail());
+            jwtData.setCategoria(cliente.getCategoria());
+            jwtData.setTempoMeta(cliente.getTempoMeta());
+            jwtData.setPeso(cliente.getPeso());
+            jwtData.setAltura(cliente.getAltura());
+            jwtData.setDataNascimento(new Date(cliente.getDataNascimento().getTime()));
+            jwtData.setGenero(cliente.getGenero());
+            return jwtData;
+        } else {
+            throw new RuntimeException("Cliente não encontrado com o email: " + email);
+        }
     }
 }

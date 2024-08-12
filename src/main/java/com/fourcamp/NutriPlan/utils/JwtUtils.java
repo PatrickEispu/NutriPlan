@@ -14,7 +14,7 @@ public class JwtUtils {
         Key chaveSecreta = JwtConfig.getChaveSecreta();
 
         try {
-            Jws<Claims> jws = Jwts.parserBuilder()
+            Jws<Claims> jws = Jwts.parser()
                     .setSigningKey(chaveSecreta)
                     .build()
                     .parseClaimsJws(token);

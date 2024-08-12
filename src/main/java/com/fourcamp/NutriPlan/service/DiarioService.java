@@ -1,11 +1,8 @@
 package com.fourcamp.NutriPlan.service;
 
 import com.fourcamp.NutriPlan.dao.JdbcTemplateDao;
-import com.fourcamp.NutriPlan.dao.impl.JdbcTemplateDaoImpl;
-import com.fourcamp.NutriPlan.dto.JwtData;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
 import com.fourcamp.NutriPlan.dto.RefeicaoRequest;
-import com.fourcamp.NutriPlan.exception.AlimentoNotFoundException;
 import com.fourcamp.NutriPlan.exception.PlanoException;
 import com.fourcamp.NutriPlan.model.Alimento;
 import com.fourcamp.NutriPlan.model.Diario;
@@ -14,12 +11,8 @@ import com.fourcamp.NutriPlan.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-
 
 @Service
 public class DiarioService {
@@ -27,7 +20,7 @@ public class DiarioService {
     @Autowired
     JdbcTemplateDao jdbcTemplateDao;
 
-    public String adicionarRefeicao(JwtData jwtData, RefeicaoRequest refeicaoRequest) {
+    public String adicionarRefeicao(String email, RefeicaoRequest refeicaoRequest) {
         MacrosDto tabelaAlimento = consultarTabelaNutricional(refeicaoRequest.getAlimento());
         MacrosDto tabelaAlimentoCalculado = calcularQuantidadeAlimento(tabelaAlimento, refeicaoRequest.getQuantidade());
 
@@ -38,10 +31,10 @@ public class DiarioService {
                 tabelaAlimentoCalculado.getGordura()
         );
 
-        MacrosDto planoAposAdicao = consultarPlanoCliente(jwtData, planoAtual);
+        MacrosDto planoAposAdicao = consultarPlanoCliente(email, planoAtual);
 
-         jdbcTemplateDao.salvarDiario(
-                jwtData.getEmail(),
+        jdbcTemplateDao.salvarDiario(
+                email,
                 refeicaoRequest.getAlimento(),
                 refeicaoRequest.getQuantidade(),
                 Arredondamento.roundToThreeDecimalPlaces(planoAposAdicao.getKcalTotais()),
@@ -57,12 +50,12 @@ public class DiarioService {
     public MacrosDto consultarTabelaNutricional(String nomeAlimento){
         Alimento alimento = jdbcTemplateDao.buscarAlimentoPorNome(nomeAlimento);
 
-            return new MacrosDto(
-                    alimento.getKcal(),
-                    alimento.getCarboidrato(),
-                    alimento.getProteina(),
-                    alimento.getGordura()
-            );
+        return new MacrosDto(
+                alimento.getKcal(),
+                alimento.getCarboidrato(),
+                alimento.getProteina(),
+                alimento.getGordura()
+        );
     }
 
     public MacrosDto calcularQuantidadeAlimento(MacrosDto macro, Double quantidade) {
@@ -73,8 +66,8 @@ public class DiarioService {
         return macro;
     }
 
-    public MacrosDto consultarPlanoCliente(JwtData jwtData, MacrosDto planoAtual) {
-        List<Diario> diarios = jdbcTemplateDao.buscarPlanoCliente(jwtData.getEmail());
+    public MacrosDto consultarPlanoCliente(String email, MacrosDto planoAtual) {
+        List<Diario> diarios = jdbcTemplateDao.buscarPlanoCliente(email);
 
         if (!diarios.isEmpty()) {
             Diario diario = diarios.get(0);
@@ -82,11 +75,10 @@ public class DiarioService {
             planoAtual.setCarboidrato(diario.getCarboidrato() - planoAtual.getCarboidrato());
             planoAtual.setProteina(diario.getProteina() - planoAtual.getProteina());
             planoAtual.setGordura(diario.getGordura() - planoAtual.getGordura());
-        }else {
+        } else {
             throw new PlanoException();
         }
 
         return planoAtual;
     }
-
 }
