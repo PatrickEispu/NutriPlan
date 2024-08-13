@@ -1,6 +1,7 @@
 package com.fourcamp.NutriPlan.service;
 
-import com.fourcamp.NutriPlan.dao.JdbcTemplateDao;
+import com.fourcamp.NutriPlan.dao.ClienteDao;
+import com.fourcamp.NutriPlan.dao.impl.AlimentoDao;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
 import com.fourcamp.NutriPlan.dto.RefeicaoRequest;
 import com.fourcamp.NutriPlan.exception.PlanoException;
@@ -18,7 +19,10 @@ import java.util.List;
 public class DiarioService {
 
     @Autowired
-    JdbcTemplateDao jdbcTemplateDao;
+    ClienteDao clienteDao;
+
+    @Autowired
+    AlimentoDao alimentoDao;
 
     public String adicionarRefeicao(String email, RefeicaoRequest refeicaoRequest) {
         MacrosDto tabelaAlimento = consultarTabelaNutricional(refeicaoRequest.getAlimento());
@@ -33,7 +37,7 @@ public class DiarioService {
 
         MacrosDto planoAposAdicao = consultarPlanoCliente(email, planoAtual);
 
-        jdbcTemplateDao.salvarDiario(
+        clienteDao.salvarDiario(
                 email,
                 refeicaoRequest.getAlimento(),
                 refeicaoRequest.getQuantidade(),
@@ -48,7 +52,7 @@ public class DiarioService {
     }
 
     public MacrosDto consultarTabelaNutricional(String nomeAlimento){
-        Alimento alimento = jdbcTemplateDao.buscarAlimentoPorNome(nomeAlimento);
+        Alimento alimento = alimentoDao.buscarAlimentoPorNome(nomeAlimento);
 
         return new MacrosDto(
                 alimento.getKcal(),
@@ -67,7 +71,7 @@ public class DiarioService {
     }
 
     public MacrosDto consultarPlanoCliente(String email, MacrosDto planoAtual) {
-        List<Diario> diarios = jdbcTemplateDao.buscarPlanoCliente(email);
+        List<Diario> diarios = clienteDao.buscarPlanoCliente(email);
 
         if (!diarios.isEmpty()) {
             Diario diario = diarios.get(0);

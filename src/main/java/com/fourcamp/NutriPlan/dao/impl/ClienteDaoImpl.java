@@ -1,26 +1,19 @@
 package com.fourcamp.NutriPlan.dao.impl;
 
-import com.fourcamp.NutriPlan.dao.JdbcTemplateDao;
-import com.fourcamp.NutriPlan.dto.MacrosDto;
-import com.fourcamp.NutriPlan.model.Alimento;
+import com.fourcamp.NutriPlan.dao.ClienteDao;
 import com.fourcamp.NutriPlan.model.Cliente;
 import com.fourcamp.NutriPlan.model.Diario;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class JdbcTemplateDaoImpl implements JdbcTemplateDao {
+public class ClienteDaoImpl implements ClienteDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -70,44 +63,7 @@ public class JdbcTemplateDaoImpl implements JdbcTemplateDao {
         jdbcTemplate.update(sql, clienteId, tmb, get);
     }
 
-    public void criarAlimento(Double kcal, Double carboidrato, Double proteina, Double gordura, Double quantidade, String nome) {
-        String sql = "CALL criar_alimento(?, ?, ?, ?, ?, ?)";
-        Object[] params = {kcal,carboidrato,proteina,gordura,quantidade,nome};
-        int[] types = {Types.DOUBLE, Types.DOUBLE, Types.DOUBLE, Types.DOUBLE, Types.DOUBLE, Types.VARCHAR};
 
-        jdbcTemplate.update(sql, params, types);
-    }
-
-    public List<Alimento> listarAlimentos() {
-        return jdbcTemplate.query("SELECT * FROM listar_alimentos()", (rs, rowNum) -> {
-            Alimento alimento = new Alimento(rs.getDouble("kcal"), rs.getDouble("carboidrato"), rs.getDouble("proteina"),
-                    rs.getDouble("gordura"), rs.getDouble("quantidade"), rs.getString("nome"));
-            return alimento;
-        });
-    }
-
-    public Alimento buscarAlimentoPorNome(String nome) {
-        String sql = "SELECT * FROM alimento WHERE nome = ?";
-        List<Alimento> alimentos = jdbcTemplate.query(sql, new Object[]{nome}, new RowMapper<Alimento>() {
-            @Override
-            public Alimento mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Alimento(
-                        rs.getDouble("kcal"),
-                        rs.getDouble("carboidrato"),
-                        rs.getDouble("proteina"),
-                        rs.getDouble("gordura"),
-                        rs.getDouble("quantidade"),
-                        rs.getString("nome")
-                );
-            }
-        });
-
-        if (alimentos.isEmpty()) {
-            throw new IllegalArgumentException("Alimento não encontrado: " + nome);
-        }
-
-        return alimentos.get(0);
-    }
 
     public void salvarDiario(String email, String alimento, double quantidade, double kcal, double carboidrato, double proteina, double gordura, Date data) {
         String sql = "INSERT INTO diario (email, alimento, quantidade, kcal, carboidrato, proteina, gordura, data) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";

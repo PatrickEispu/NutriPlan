@@ -1,7 +1,6 @@
 package com.fourcamp.NutriPlan.service;
 
-import com.fourcamp.NutriPlan.dao.ClienteRepository;
-import com.fourcamp.NutriPlan.dao.JdbcTemplateDao;
+import com.fourcamp.NutriPlan.dao.ClienteDao;
 import com.fourcamp.NutriPlan.dto.JwtData;
 import com.fourcamp.NutriPlan.exception.DataException;
 import com.fourcamp.NutriPlan.exception.EmailException;
@@ -24,7 +23,7 @@ import java.util.Date;
 public class ClienteService {
 
     @Autowired
-    private JdbcTemplateDao jdbcTemplateDao;
+    private ClienteDao clienteDao;
 
     @Autowired
     private EmailValidador emailValidador;
@@ -63,7 +62,7 @@ public class ClienteService {
         //Codifica a senha antes de salvar no banco de dados
         String encodedPassword = passwordEncoder.encode(senha);
 
-        jdbcTemplateDao.criarCliente(nome, email, genero, peso, pesoDesejado, altura, dataNascimento, encodedPassword, categoria , tempoMeta);
+        clienteDao.criarCliente(nome, email, genero, peso, pesoDesejado, altura, dataNascimento, encodedPassword, categoria , tempoMeta);
         return Constantes.MSG_CRIACAO_CLIENTE_SUCESSO;
     }
 
@@ -88,25 +87,25 @@ public class ClienteService {
     }
 
     public String alterarPeso(String email, double novoPeso) {
-        Cliente cliente = jdbcTemplateDao.buscarClientePorEmail(email);
+        Cliente cliente = clienteDao.buscarClientePorEmail(email);
 
         cliente.setPeso(novoPeso);
-        jdbcTemplateDao.atualizarPesoCliente(email, novoPeso);
+        clienteDao.atualizarPesoCliente(email, novoPeso);
         return Constantes.MSG_PESO_ALTERADO_SUCESSO;
     }
 
     public String formularioObjetivo(String email, String categoria, String tempoMeta) {
-        Cliente cliente = jdbcTemplateDao.buscarClientePorEmail(email);
+        Cliente cliente = clienteDao.buscarClientePorEmail(email);
 
         cliente.setCategoria(categoria);
         cliente.setTempoMeta(tempoMeta);
-        jdbcTemplateDao.formularioObjetivo(email,categoria,tempoMeta);
+        clienteDao.formularioObjetivo(email,categoria,tempoMeta);
         return Constantes.MSG_FORMULARIO_SUCESSO;
     }
 
     public JwtData obterDadosDoUsuario(String token) {
         String email = jwtUtils.getUserNameFromJwtToken(token);
-        Cliente cliente = jdbcTemplateDao.buscarClientePorEmail(email);
+        Cliente cliente = clienteDao.buscarClientePorEmail(email);
 
         if (cliente != null) {
             JwtData jwtData = new JwtData();

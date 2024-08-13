@@ -1,6 +1,6 @@
 package com.fourcamp.NutriPlan.service;
 
-import com.fourcamp.NutriPlan.dao.JdbcTemplateDao;
+import com.fourcamp.NutriPlan.dao.ClienteDao;
 import com.fourcamp.NutriPlan.exception.CategoriaException;
 import com.fourcamp.NutriPlan.exception.TempoMetaException;
 import com.fourcamp.NutriPlan.utils.Arredondamento;
@@ -17,7 +17,7 @@ import java.util.Objects;
 public class ObjetivoService {
 
     @Autowired
-    private JdbcTemplateDao jdbcTemplateDao;
+    private ClienteDao clienteDao;
 
     @Autowired
     private CalculoIdade calculoIdade;
@@ -54,7 +54,7 @@ public class ObjetivoService {
                 throw new CategoriaException();
         }
 
-        jdbcTemplateDao.salvarTMBGET(email, tmb, get);
+        clienteDao.salvarTMBGET(email, tmb, get);
         return get;
     }
 
@@ -138,7 +138,7 @@ public class ObjetivoService {
                 "Carboidratos: " + carboidratos + " g\n" +
                 "Gorduras: " + gorduras + " g";
 
-        jdbcTemplateDao.salvarDiario(
+        clienteDao.salvarDiario(
                 email,
                 "Plano Nutricional",
                 1,

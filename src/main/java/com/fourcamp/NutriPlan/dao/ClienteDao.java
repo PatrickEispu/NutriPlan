@@ -1,7 +1,5 @@
 package com.fourcamp.NutriPlan.dao;
 
-import com.fourcamp.NutriPlan.dao.impl.JdbcTemplateDaoImpl;
-import com.fourcamp.NutriPlan.dto.MacrosDto;
 import com.fourcamp.NutriPlan.model.Alimento;
 import com.fourcamp.NutriPlan.model.Cliente;
 import com.fourcamp.NutriPlan.model.Diario;
@@ -10,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public interface JdbcTemplateDao {
+public interface ClienteDao {
 
     void criarCliente(String nome, String email, String genero, double peso, double pesoDesejado, double altura, Date dataNascimento, String senha, String categoria, String tempoMeta);
 
@@ -24,11 +22,9 @@ public interface JdbcTemplateDao {
 
     void salvarTMBGET(String email, double tmb, double get);
 
-    void criarAlimento(Double kcal, Double carboidrato, Double proteina, Double gordura, Double quantidade, String nome);
 
-    List<Alimento> listarAlimentos();
 
-    Alimento buscarAlimentoPorNome(String nome);
+
 
     void salvarDiario(String email, String alimento, double quantidade, double kcal, double carboidrato, double proteina, double gordura, Date data);
 

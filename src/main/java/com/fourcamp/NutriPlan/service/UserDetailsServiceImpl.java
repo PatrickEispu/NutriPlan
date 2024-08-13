@@ -1,7 +1,7 @@
 package com.fourcamp.NutriPlan.service;
 
 import com.fourcamp.NutriPlan.model.Cliente;
-import com.fourcamp.NutriPlan.dao.JdbcTemplateDao;
+import com.fourcamp.NutriPlan.dao.ClienteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private JdbcTemplateDao jdbcTemplateDao;
+    private ClienteDao clienteDao;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Cliente cliente = jdbcTemplateDao.buscarClientePorEmail(email);
+        Cliente cliente = clienteDao.buscarClientePorEmail(email);
 
         if (cliente == null) {
             throw new UsernameNotFoundException("User Not Found with email: " + email);
