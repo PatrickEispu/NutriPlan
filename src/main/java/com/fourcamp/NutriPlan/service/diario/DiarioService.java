@@ -6,7 +6,6 @@ import com.fourcamp.NutriPlan.dto.MacrosDto;
 import com.fourcamp.NutriPlan.dto.alimento.RefeicaoRequest;
 import com.fourcamp.NutriPlan.exception.PlanoException;
 import com.fourcamp.NutriPlan.model.alimento.Alimento;
-import com.fourcamp.NutriPlan.model.diario.Diario;
 import com.fourcamp.NutriPlan.utils.Arredondamento;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;

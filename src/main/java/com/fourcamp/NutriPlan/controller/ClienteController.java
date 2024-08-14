@@ -5,7 +5,7 @@ import com.fourcamp.NutriPlan.dto.conta.ClienteDto;
 import com.fourcamp.NutriPlan.model.conta.Cliente;
 import com.fourcamp.NutriPlan.service.conta.ClienteService;
 import com.fourcamp.NutriPlan.service.meta.MetaService;
-import com.fourcamp.NutriPlan.security.jwt.JwtUtils;
+import com.fourcamp.NutriPlan.utils.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -41,12 +41,10 @@ public class ClienteController {
                 cliente.getEmail(),
                 cliente.getGenero(),
                 cliente.getPeso(),
-                cliente.getPesoDesejado(),
                 cliente.getAltura(),
                 dataSql,
                 cliente.getSenha(),
-                cliente.getCategoria(),
-                cliente.getTempoMeta()
+                cliente.getCategoria()
         );
 
         return ResponseEntity.ok().body(mensagem);
@@ -72,9 +70,6 @@ public class ClienteController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<String> alterarPeso(@RequestHeader("Authorization") String token, @RequestBody PesoDto novoPeso) {
-        String jwtToken = token.replace("Bearer ", "");
-        String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
-
         String mensagem = clienteService.alterarPeso(email, novoPeso.getNovoPeso());
         return ResponseEntity.ok(mensagem);
     }
@@ -88,8 +83,6 @@ public class ClienteController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<String> formularioObjetivo(@RequestHeader("Authorization") String token, @RequestBody ClienteDto cliente) {
-        String jwtToken = token.replace("Bearer ", "");
-        String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
 
         String mensagem = clienteService.formularioObjetivo(email, cliente.getCategoria(), cliente.getTempoMeta());
         return ResponseEntity.ok(mensagem);
@@ -104,7 +97,6 @@ public class ClienteController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     public ResponseEntity<Double> visualizarTMB(@RequestHeader("Authorization") String token, @RequestBody CategoriaAtividadeRequestDto request) {
-        String email = jwtUtils.getUserNameFromJwtToken(token);
         JwtData jwtData = clienteService.obterDadosDoUsuario(email);
 
         return ResponseEntity.ok(metaService.calcularGETSalvar(
@@ -129,7 +121,6 @@ public class ClienteController {
     })
     public ResponseEntity<String> acessarPlano(@RequestHeader("Authorization") String token,
                                                @RequestParam("categoriaAtividade") String categoriaAtividade) {
-        String email = jwtUtils.getUserNameFromJwtToken(token);
         JwtData jwtData = clienteService.obterDadosDoUsuario(email);
 
         String mensagem = metaService.acessarPlano(

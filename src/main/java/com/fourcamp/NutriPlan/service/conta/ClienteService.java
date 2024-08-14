@@ -7,7 +7,6 @@ import com.fourcamp.NutriPlan.exception.DataException;
 import com.fourcamp.NutriPlan.exception.EmailException;
 import com.fourcamp.NutriPlan.exception.SenhaException;
 import com.fourcamp.NutriPlan.model.conta.Cliente;
-import com.fourcamp.NutriPlan.security.jwt.JwtUtils;
 import com.fourcamp.NutriPlan.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

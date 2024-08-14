@@ -1,17 +1,16 @@
 package com.fourcamp.NutriPlan.dao.conta;
 
 import com.fourcamp.NutriPlan.model.conta.Cliente;
-import com.fourcamp.NutriPlan.model.diario.Diario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Types;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Repository
 public class ClienteDaoImpl implements ClienteDao {
 
     @Autowired

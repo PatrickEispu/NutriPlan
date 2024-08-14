@@ -1,10 +1,8 @@
 package com.fourcamp.NutriPlan.dao.conta;
 
 import com.fourcamp.NutriPlan.model.conta.Cliente;
-import com.fourcamp.NutriPlan.model.diario.Diario;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public interface ClienteDao {
@@ -25,6 +23,6 @@ public interface ClienteDao {
 
     void salvarDiario(String email, String alimento, double quantidade, double kcal, double carboidrato, double proteina, double gordura, Date data);
 
-    List<Diario> buscarPlanoCliente(String email);
+    //List<Diario> buscarPlanoCliente(String email);
 
 }
