@@ -23,8 +23,6 @@ public interface ClienteDao {
 
 
 
-
-
     void salvarDiario(String email, String alimento, double quantidade, double kcal, double carboidrato, double proteina, double gordura, Date data);
 
     List<Diario> buscarPlanoCliente(String email);

@@ -1,17 +1,16 @@
 package com.fourcamp.NutriPlan.controller;
 
 import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
+import com.fourcamp.NutriPlan.dto.alimento.RefeicaoRequest;
 import com.fourcamp.NutriPlan.model.alimento.Alimento;
 import com.fourcamp.NutriPlan.service.alimento.AlimentoService;
+import com.fourcamp.NutriPlan.service.alimento.RefeicaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +19,8 @@ public class AlimentoController {
 
     @Autowired
     private AlimentoService alimentoService;
+    @Autowired
+    RefeicaoService refeicaoService;
 
     @PostMapping("/criar-alimento")
     @Operation(description = "Criar alimentos no banco")
@@ -43,5 +44,13 @@ public class AlimentoController {
     })
     public List<Alimento> mostrarAlimentos() {
         return alimentoService.visualizarAlimentos();
+    }
+
+    @PostMapping("/adicionar-refeicao")
+    public ResponseEntity<String> adicionarRefeicao(@RequestHeader("Authorization") String token, @RequestBody RefeicaoRequest refeicaoRequest) {
+        String jwtToken = token.replace("Bearer ", "");
+        String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
+        String mensagem = refeicaoService.adicionarRefeicao(email, refeicaoRequest);
+        return ResponseEntity.ok(mensagem);
     }
 }

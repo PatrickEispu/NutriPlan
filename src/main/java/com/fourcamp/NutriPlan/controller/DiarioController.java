@@ -19,11 +19,5 @@ public class DiarioController {
     @Autowired
     JwtUtils jwtUtils;
 
-    @PostMapping("/adicionar-refeicao")
-    public ResponseEntity<String> adicionarRefeicao(@RequestHeader("Authorization") String token, @RequestBody RefeicaoRequest refeicaoRequest) {
-        String jwtToken = token.replace("Bearer ", "");
-        String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
-        String mensagem = diarioService.adicionarRefeicao(email, refeicaoRequest);
-        return ResponseEntity.ok(mensagem);
-    }
+
 }

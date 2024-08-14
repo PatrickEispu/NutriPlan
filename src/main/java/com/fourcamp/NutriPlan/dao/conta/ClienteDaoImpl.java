@@ -63,12 +63,6 @@ public class ClienteDaoImpl implements ClienteDao {
     }
 
 
-
-    public void salvarDiario(String email, String alimento, double quantidade, double kcal, double carboidrato, double proteina, double gordura, Date data) {
-        String sql = "INSERT INTO diario (email, alimento, quantidade, kcal, carboidrato, proteina, gordura, data) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, email, alimento, quantidade, kcal, carboidrato, proteina, gordura, data);
-    }
-
     public List<Diario> buscarPlanoCliente(String email) {
         String sql = "SELECT * FROM diario WHERE email = ? AND data = ? ORDER BY data DESC";
         Date currentDate = new Date(System.currentTimeMillis());
