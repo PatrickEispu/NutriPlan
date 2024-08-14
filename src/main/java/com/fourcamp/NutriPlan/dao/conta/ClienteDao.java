@@ -1,8 +1,7 @@
-package com.fourcamp.NutriPlan.dao;
+package com.fourcamp.NutriPlan.dao.conta;
 
-import com.fourcamp.NutriPlan.model.Alimento;
-import com.fourcamp.NutriPlan.model.Cliente;
-import com.fourcamp.NutriPlan.model.Diario;
+import com.fourcamp.NutriPlan.model.conta.Cliente;
+import com.fourcamp.NutriPlan.model.diario.Diario;
 
 import java.util.Date;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.fourcamp.NutriPlan.controller;
 
-import com.fourcamp.NutriPlan.dto.RefeicaoRequest;
-import com.fourcamp.NutriPlan.service.DiarioService;
+import com.fourcamp.NutriPlan.dto.alimento.RefeicaoRequest;
+import com.fourcamp.NutriPlan.service.diario.DiarioService;
 import com.fourcamp.NutriPlan.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

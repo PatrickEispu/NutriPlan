@@ -1,23 +1,21 @@
 package com.fourcamp.NutriPlan.service;
 
-import com.fourcamp.NutriPlan.model.Cliente;
+import com.fourcamp.NutriPlan.model.conta.Cliente;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private Long id;
+    private Integer id;
     private String username;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String password,
+    public UserDetailsImpl(Integer id, String username, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
@@ -41,7 +39,7 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

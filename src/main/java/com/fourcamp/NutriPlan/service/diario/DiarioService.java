@@ -1,12 +1,12 @@
-package com.fourcamp.NutriPlan.service;
+package com.fourcamp.NutriPlan.service.diario;
 
-import com.fourcamp.NutriPlan.dao.ClienteDao;
-import com.fourcamp.NutriPlan.dao.impl.AlimentoDao;
+import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
+import com.fourcamp.NutriPlan.dao.alimento.AlimentoDao;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
-import com.fourcamp.NutriPlan.dto.RefeicaoRequest;
+import com.fourcamp.NutriPlan.dto.alimento.RefeicaoRequest;
 import com.fourcamp.NutriPlan.exception.PlanoException;
-import com.fourcamp.NutriPlan.model.Alimento;
-import com.fourcamp.NutriPlan.model.Diario;
+import com.fourcamp.NutriPlan.model.alimento.Alimento;
+import com.fourcamp.NutriPlan.model.diario.Diario;
 import com.fourcamp.NutriPlan.utils.Arredondamento;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;

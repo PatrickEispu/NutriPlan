@@ -1,9 +1,10 @@
 package com.fourcamp.NutriPlan.controller;
 
 import com.fourcamp.NutriPlan.dto.*;
-import com.fourcamp.NutriPlan.model.Cliente;
-import com.fourcamp.NutriPlan.service.ClienteService;
-import com.fourcamp.NutriPlan.service.ObjetivoService;
+import com.fourcamp.NutriPlan.dto.conta.ClienteDto;
+import com.fourcamp.NutriPlan.model.conta.Cliente;
+import com.fourcamp.NutriPlan.service.conta.ClienteService;
+import com.fourcamp.NutriPlan.service.meta.MetaService;
 import com.fourcamp.NutriPlan.security.jwt.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,7 +22,7 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @Autowired
-    private ObjetivoService objetivoService;
+    private MetaService metaService;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -106,7 +107,7 @@ public class ClienteController {
         String email = jwtUtils.getUserNameFromJwtToken(token);
         JwtData jwtData = clienteService.obterDadosDoUsuario(email);
 
-        return ResponseEntity.ok(objetivoService.calcularGETSalvar(
+        return ResponseEntity.ok(metaService.calcularGETSalvar(
                 email,
                 jwtData.getCategoria(),
                 jwtData.getTempoMeta(),
@@ -131,7 +132,7 @@ public class ClienteController {
         String email = jwtUtils.getUserNameFromJwtToken(token);
         JwtData jwtData = clienteService.obterDadosDoUsuario(email);
 
-        String mensagem = objetivoService.acessarPlano(
+        String mensagem = metaService.acessarPlano(
                 email,
                 jwtData.getCategoria(),
                 jwtData.getTempoMeta(),

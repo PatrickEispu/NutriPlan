@@ -1,8 +1,7 @@
-package com.fourcamp.NutriPlan.dao.impl;
+package com.fourcamp.NutriPlan.dao.conta;
 
-import com.fourcamp.NutriPlan.dao.ClienteDao;
-import com.fourcamp.NutriPlan.model.Cliente;
-import com.fourcamp.NutriPlan.model.Diario;
+import com.fourcamp.NutriPlan.model.conta.Cliente;
+import com.fourcamp.NutriPlan.model.diario.Diario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;

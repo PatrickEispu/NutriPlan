@@ -1,8 +1,8 @@
 package com.fourcamp.NutriPlan.controller;
 
-import com.fourcamp.NutriPlan.dto.AlimentoDto;
-import com.fourcamp.NutriPlan.model.Alimento;
-import com.fourcamp.NutriPlan.service.AlimentoService;
+import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
+import com.fourcamp.NutriPlan.model.alimento.Alimento;
+import com.fourcamp.NutriPlan.service.alimento.AlimentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

@@ -1,12 +1,17 @@
-package com.fourcamp.NutriPlan.dto;
+package com.fourcamp.NutriPlan.dto.conta;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @Data
-public class ClienteDto {
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder(toBuilder = true)
+public class ClienteDto extends ContaDto {
 
     private String nome;
     private String email;

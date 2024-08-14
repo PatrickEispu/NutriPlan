@@ -1,6 +1,6 @@
-package com.fourcamp.NutriPlan.dao.impl;
+package com.fourcamp.NutriPlan.dao.alimento;
 
-import com.fourcamp.NutriPlan.model.Alimento;
+import com.fourcamp.NutriPlan.model.alimento.Alimento;
 
 import java.util.List;
 

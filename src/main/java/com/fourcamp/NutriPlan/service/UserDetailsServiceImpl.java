@@ -1,7 +1,7 @@
 package com.fourcamp.NutriPlan.service;
 
-import com.fourcamp.NutriPlan.model.Cliente;
-import com.fourcamp.NutriPlan.dao.ClienteDao;
+import com.fourcamp.NutriPlan.model.conta.Cliente;
+import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
