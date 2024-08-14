@@ -1,4 +1,4 @@
-package com.fourcamp.NutriPlan.dao.conta;
+/*package com.fourcamp.NutriPlan.dao.conta;
 
 import com.fourcamp.NutriPlan.model.conta.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,4 +77,4 @@ public class ClienteDaoImpl implements ClienteDao {
             return diario;
         });
     }
-}
+}*/

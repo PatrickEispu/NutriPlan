@@ -1,4 +1,4 @@
-package com.fourcamp.NutriPlan.controller;
+/*package com.fourcamp.NutriPlan.controller;
 
 import com.fourcamp.NutriPlan.dto.*;
 import com.fourcamp.NutriPlan.dto.conta.ClienteDto;
@@ -136,4 +136,4 @@ public class ClienteController {
 
         return ResponseEntity.ok(mensagem);
     }
-}
+}*/

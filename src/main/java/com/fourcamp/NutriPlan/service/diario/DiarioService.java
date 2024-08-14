@@ -1,6 +1,5 @@
 package com.fourcamp.NutriPlan.service.diario;
 
-import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
 import com.fourcamp.NutriPlan.dao.alimento.AlimentoDao;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
 import com.fourcamp.NutriPlan.dto.alimento.RefeicaoRequest;
@@ -17,8 +16,6 @@ import java.util.List;
 @Service
 public class DiarioService {
 
-    @Autowired
-    ClienteDao clienteDao;
 
     @Autowired
     AlimentoDao alimentoDao;

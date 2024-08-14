@@ -5,9 +5,9 @@ import com.fourcamp.NutriPlan.model.alimento.Alimento;
 import java.util.List;
 
 public interface AlimentoDao {
-    void criarAlimento(Double kcal, Double carboidrato, Double proteina, Double gordura, Double quantidade, String nome);
+    int criarAlimento(int idCategoriaAlimento, double kcal, double carboidrato, double proteina, double gordura, double quantidade, String nome);
 
-    List<Alimento> listarAlimentos();
+    List<Alimento> listarTodosAlimentos();
 
     Alimento buscarAlimentoPorNome(String nome);
 }
