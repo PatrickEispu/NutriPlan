@@ -39,6 +39,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+CREATE OR REPLACE FUNCTION busca_id_alimento(nome_alimento VARCHAR)
+RETURNS INTEGER AS $$
+DECLARE
+    id_alimento INTEGER;
+BEGIN
+    SELECT nr_id_alimento INTO id_alimento
+    FROM alimento
+    WHERE nm_nome = nome_alimento;
+
+    RETURN id_alimento;
+END;
+$$ LANGUAGE plpgsql;
+
+
 CREATE OR REPLACE FUNCTION listar_todos_alimentos()
 RETURNS TABLE(
     nr_id_alimento INT,

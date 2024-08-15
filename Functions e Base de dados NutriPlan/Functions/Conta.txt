@@ -33,6 +33,22 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION public.buscar_id_conta_por_email(email character varying)
+ RETURNS integer
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    id_conta INT;
+BEGIN
+    SELECT nr_id_conta INTO id_conta
+    FROM conta
+    WHERE ds_email = email;
+
+    RETURN id_conta;
+END;
+$function$
+;
+
 CREATE OR REPLACE FUNCTION atualizar_conta(
     p_nr_id_conta INT,
     p_nm_nome VARCHAR,
@@ -71,6 +87,7 @@ BEGIN
     DELETE FROM conta WHERE nr_id_conta = p_nr_id_conta;
 END;
 $$ LANGUAGE plpgsql;
+
 
 
 
