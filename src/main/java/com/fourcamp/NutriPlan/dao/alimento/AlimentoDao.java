@@ -1,13 +1,13 @@
 package com.fourcamp.NutriPlan.dao.alimento;
 
-import com.fourcamp.NutriPlan.model.alimento.Alimento;
+import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 
 import java.util.List;
 
 public interface AlimentoDao {
     int criarAlimento(int idCategoriaAlimento, double kcal, double carboidrato, double proteina, double gordura, double quantidade, String nome);
 
-    List<Alimento> listarTodosAlimentos();
+    List<AlimentoEntity> listarTodosAlimentos();
 
-    Alimento buscarAlimentoPorNome(String nome);
+    AlimentoEntity buscarAlimentoPorNome(String nome);
 }

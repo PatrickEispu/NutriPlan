@@ -1,14 +1,16 @@
 package com.fourcamp.NutriPlan.dao.alimento;
 
-import com.fourcamp.NutriPlan.model.alimento.Alimento;
+import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -23,40 +25,46 @@ public class AlimentoDaoImpl implements AlimentoDao {
     @Transactional
     public int criarAlimento(int idCategoriaAlimento, double kcal, double carboidrato, double proteina, double gordura, double quantidade, String nome) {
         String sql = "SELECT criar_alimento(?, ?, ?, ?, ?, ?, ?)";
-        return jdbcTemplate.queryForObject(sql, Integer.class, idCategoriaAlimento, kcal, carboidrato, proteina, gordura, quantidade, nome);
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{idCategoriaAlimento, kcal, carboidrato, proteina, gordura, quantidade, nome}, Integer.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criar alimento: " + e.getMessage());
+        }
     }
+
 
     @Override
     @Transactional
-    public List<Alimento> listarTodosAlimentos() {
+    public List<AlimentoEntity> listarTodosAlimentos() {
         String sql = "SELECT * FROM listar_todos_alimentos()";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Alimento.class));
-    }
-
-    @Override
-    @Transactional
-    public Alimento buscarAlimentoPorNome(String nome) {
-        String sql = "SELECT * FROM buscar_alimento_por_nome(?)";
-        List<Alimento> alimentos = jdbcTemplate.query(sql, new Object[]{nome}, new RowMapper<Alimento>() {
+        return jdbcTemplate.query(sql, new RowMapper<AlimentoEntity>() {
             @Override
-            public Alimento mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Alimento(
-                        rs.getInt("nr_id_alimento"),
-                        rs.getInt("fk_nr_id_categoria_alimento"),
-                        rs.getDouble("nr_kcal"),
-                        rs.getDouble("nr_carboidrato"),
-                        rs.getDouble("nr_proteina"),
-                        rs.getDouble("nr_gordura"),
-                        rs.getDouble("nr_quantidade"),
-                        rs.getString("nm_nome")
-                );
+            public AlimentoEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+                AlimentoEntity alimento = new AlimentoEntity();
+                alimento.setIdAlimento(rs.getInt("nr_id_alimento")); // Use o nome exato da coluna no banco de dados
+                alimento.setIdCategoriaAlimento(rs.getInt("fk_nr_id_categoria_alimento"));
+                alimento.setKcal(rs.getDouble("nr_kcal"));
+                alimento.setCarboidrato(rs.getDouble("nr_carboidrato"));
+                alimento.setProteina(rs.getDouble("nr_proteina"));
+                alimento.setGordura(rs.getDouble("nr_gordura"));
+                alimento.setQuantidade(rs.getDouble("nr_quantidade"));
+                alimento.setNome(rs.getString("nm_nome"));
+                return alimento;
             }
         });
+    }
 
-        if (alimentos.isEmpty()) {
+
+    @Override
+    @Transactional
+    public AlimentoEntity buscarAlimentoPorNome(String nome) {
+        String sql = "SELECT * FROM buscar_alimento_por_nome(?)";
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(AlimentoEntity.class), nome);
+        } catch (EmptyResultDataAccessException e) {
             throw new IllegalArgumentException("Alimento não encontrado: " + nome);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar alimento por nome: " + e.getMessage());
         }
-
-        return alimentos.get(0);
     }
 }

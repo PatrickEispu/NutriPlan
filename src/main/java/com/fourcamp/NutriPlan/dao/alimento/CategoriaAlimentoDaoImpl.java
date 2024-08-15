@@ -20,13 +20,6 @@ public class CategoriaAlimentoDaoImpl implements CategoriaAlimentoDao{
 
     @Override
     @Transactional
-    public CategoriaAlimentoEntity buscarCategoriaAlimentoPorId(int idCategoriaAlimento) {
-        String sql = "SELECT * FROM buscar_categoria_alimento_por_id(?)";
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CategoriaAlimentoEntity.class), idCategoriaAlimento);
-    }
-
-    @Override
-    @Transactional
     public CategoriaAlimentoEntity buscarCategoriaAlimentoPorNome(String nome) {
         String sql = "SELECT * FROM buscar_categoria_alimento_por_nome(?)";
         List<CategoriaAlimentoEntity> categorias = jdbcTemplate.query(sql, new Object[]{nome}, new RowMapper<CategoriaAlimentoEntity>() {

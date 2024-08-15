@@ -4,8 +4,7 @@ package com.fourcamp.NutriPlan.service.alimento;
 import com.fourcamp.NutriPlan.dao.alimento.AlimentoDao;
 import com.fourcamp.NutriPlan.dao.alimento.CategoriaAlimentoDao;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
-import com.fourcamp.NutriPlan.exception.PlanoException;
-import com.fourcamp.NutriPlan.model.alimento.Alimento;
+import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import com.fourcamp.NutriPlan.model.alimento.CategoriaAlimentoEntity;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class AlimentoService {
         alimentoDao.criarAlimento(categoriaAlimento.getIdCategoriaAlimento(), kcal, carboidrato, proteina, gordura, quantidade, nome);
         return Constantes.MSG_CRIACAO_ALIMENTO_SUCESSO;
     }
-    public List<Alimento> visualizarAlimentos() {
+    public List<AlimentoEntity> visualizarAlimentos() {
         return alimentoDao.listarTodosAlimentos();
     }
 
@@ -56,13 +55,13 @@ public class AlimentoService {
         return macro;
     }
     public MacrosDto consultarTabelaNutricional(String nomeAlimento){
-        Alimento alimento = alimentoDao.buscarAlimentoPorNome(nomeAlimento);
+        AlimentoEntity alimentoEntity = alimentoDao.buscarAlimentoPorNome(nomeAlimento);
 
         return new MacrosDto(
-                alimento.getKcal(),
-                alimento.getCarboidrato(),
-                alimento.getProteina(),
-                alimento.getGordura()
+                alimentoEntity.getKcal(),
+                alimentoEntity.getCarboidrato(),
+                alimentoEntity.getProteina(),
+                alimentoEntity.getGordura()
         );
     }
 

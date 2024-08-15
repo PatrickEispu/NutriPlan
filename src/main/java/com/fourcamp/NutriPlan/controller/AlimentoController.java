@@ -1,8 +1,7 @@
 package com.fourcamp.NutriPlan.controller;
 
 import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
-import com.fourcamp.NutriPlan.dto.alimento.RefeicaoRequest;
-import com.fourcamp.NutriPlan.model.alimento.Alimento;
+import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import com.fourcamp.NutriPlan.service.alimento.AlimentoService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/api")
 public class AlimentoController {
     @Autowired
@@ -48,7 +48,7 @@ public class AlimentoController {
             @ApiResponse(responseCode = "400", description = "Falha no retorno dos alimentos, dados inválidos ou formato incorreto"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    public List<Alimento> mostrarAlimentos() {
+    public List<AlimentoEntity> mostrarAlimentos() {
         return alimentoService.visualizarAlimentos();
     }
 
