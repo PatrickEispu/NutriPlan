@@ -58,7 +58,6 @@ CREATE TABLE meta (
     FOREIGN KEY (fk_nr_id_tempo) REFERENCES tempo(nr_id_tempo)
 );
 
-
 -- Tabela dispensa
 CREATE TABLE dispensa (
     nr_id_dispensa SERIAL PRIMARY KEY,
@@ -71,6 +70,11 @@ CREATE TABLE categoria_alimento (
     nr_id_categoria_alimento SERIAL PRIMARY KEY,
     nm_categoria VARCHAR(255) NOT NULL
 );
+
+INSERT INTO categoria_alimento (nm_categoria) VALUES ('CARBOIDRATO');
+INSERT INTO categoria_alimento (nm_categoria) VALUES ('FIBRA');
+INSERT INTO categoria_alimento (nm_categoria) VALUES ('GORDURA');
+INSERT INTO categoria_alimento (nm_categoria) VALUES ('PROTEINA');
 
 -- Tabela alimento
 CREATE TABLE alimento (
