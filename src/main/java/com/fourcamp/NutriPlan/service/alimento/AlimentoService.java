@@ -1,6 +1,5 @@
 package com.fourcamp.NutriPlan.service.alimento;
 
-
 import com.fourcamp.NutriPlan.dao.alimento.AlimentoDao;
 import com.fourcamp.NutriPlan.dao.alimento.CategoriaAlimentoDao;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
