@@ -1,0 +1,69 @@
+CREATE OR REPLACE FUNCTION criar_cliente(
+    p_ds_genero CHAR(1),
+    p_nr_peso NUMERIC,
+    p_nr_altura NUMERIC,
+    p_ds_data_nascimento VARCHAR,
+    p_nr_tmb DOUBLE PRECISION,
+    p_nr_get DOUBLE PRECISION,
+    p_fk_nr_id_categoria INT,
+    p_fk_nr_id_conta INT
+)
+RETURNS INT AS $$
+DECLARE
+    new_id INT;
+BEGIN
+    INSERT INTO cliente (ds_genero, nr_peso, nr_altura, ds_data_nascimento, nr_tmb, nr_get, fk_nr_id_categoria, fk_nr_id_conta)
+    VALUES (p_ds_genero, p_nr_peso, p_nr_altura, p_ds_data_nascimento, p_nr_tmb, p_nr_get, p_fk_nr_id_categoria, p_fk_nr_id_conta)
+    RETURNING fk_nr_id_conta INTO new_id;
+    RETURN new_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION buscar_cliente_por_id(
+    p_fk_nr_id_conta INT
+)
+RETURNS TABLE(
+    fk_nr_id_conta INT,
+    ds_genero CHAR(1),
+    nr_peso NUMERIC,
+    nr_altura NUMERIC,
+    ds_data_nascimento VARCHAR,
+    nr_tmb DOUBLE PRECISION,
+    nr_get DOUBLE PRECISION,
+    fk_nr_id_categoria INT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT fk_nr_id_conta, ds_genero, nr_peso, nr_altura, ds_data_nascimento, nr_tmb, nr_get, fk_nr_id_categoria
+    FROM cliente
+    WHERE fk_nr_id_conta = p_fk_nr_id_conta;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION atualizar_cliente(
+    p_fk_nr_id_conta INT,
+    p_ds_genero CHAR(1),
+    p_nr_peso NUMERIC,
+    p_nr_altura NUMERIC,
+    p_ds_data_nascimento VARCHAR,
+    p_nr_tmb DOUBLE PRECISION,
+    p_nr_get DOUBLE PRECISION,
+    p_fk_nr_id_categoria INT
+)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE cliente
+    SET ds_genero = p_ds_genero, nr_peso = p_nr_peso, nr_altura = p_nr_altura, ds_data_nascimento = p_ds_data_nascimento, 
+        nr_tmb = p_nr_tmb, nr_get = p_nr_get, fk_nr_id_categoria = p_fk_nr_id_categoria
+    WHERE fk_nr_id_conta = p_fk_nr_id_conta;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION deletar_cliente(
+    p_fk_nr_id_conta INT
+)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM cliente WHERE fk_nr_id_conta = p_fk_nr_id_conta;
+END;
+$$ LANGUAGE plpgsql;

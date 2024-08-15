@@ -1,57 +1,76 @@
 package com.fourcamp.NutriPlan.dao.alimento;
 
-import com.fourcamp.NutriPlan.model.alimento.Alimento;
+import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Service;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Repository
 public class AlimentoDaoImpl implements AlimentoDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    public void criarAlimento(Double kcal, Double carboidrato, Double proteina, Double gordura, Double quantidade, String nome) {
-        String sql = "CALL criar_alimento(?, ?, ?, ?, ?, ?)";
-        Object[] params = {kcal,carboidrato,proteina,gordura,quantidade,nome};
-        int[] types = {Types.DOUBLE, Types.DOUBLE, Types.DOUBLE, Types.DOUBLE, Types.DOUBLE, Types.VARCHAR};
 
-        jdbcTemplate.update(sql, params, types);
+    @Override
+    @Transactional
+    public int criarAlimento(int idCategoriaAlimento, double kcal, double carboidrato, double proteina, double gordura, double quantidade, String nome) {
+        String sql = "SELECT criar_alimento(?, ?, ?, ?, ?, ?, ?)";
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{idCategoriaAlimento, kcal, carboidrato, proteina, gordura, quantidade, nome}, Integer.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criar alimento: " + e.getMessage());
+        }
     }
 
-    public List<Alimento> listarAlimentos() {
-        return jdbcTemplate.query("SELECT * FROM listar_alimentos()", (rs, rowNum) -> {
-            Alimento alimento = new Alimento(rs.getDouble("kcal"), rs.getDouble("carboidrato"), rs.getDouble("proteina"),
-                    rs.getDouble("gordura"), rs.getDouble("quantidade"), rs.getString("nome"));
-            return alimento;
-        });
-    }
 
-    public Alimento buscarAlimentoPorNome(String nome) {
-        String sql = "SELECT * FROM alimento WHERE nome = ?";
-        List<Alimento> alimentos = jdbcTemplate.query(sql, new Object[]{nome}, new RowMapper<Alimento>() {
-            @Override
-            public Alimento mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Alimento(
-                        rs.getDouble("kcal"),
-                        rs.getDouble("carboidrato"),
-                        rs.getDouble("proteina"),
-                        rs.getDouble("gordura"),
-                        rs.getDouble("quantidade"),
-                        rs.getString("nome")
-                );
+    @Override
+    @Transactional
+    public List<AlimentoEntity> listarTodosAlimentos() {
+        String sql = "SELECT * FROM listar_todos_alimentos()";
+        return jdbcTemplate.execute(sql, (PreparedStatementCallback<List<AlimentoEntity>>) ps -> {
+            // Não precisamos configurar parâmetros específicos aqui, já que estamos listando todos os alimentos.
+            try (ResultSet rs = ps.executeQuery()) {
+                List<AlimentoEntity> alimentos = new ArrayList<>();
+                while (rs.next()) {
+                    AlimentoEntity alimento = new AlimentoEntity();
+                    setResultSetParameters(rs, alimento);  // Método para preencher o objeto AlimentoEntity
+                    alimentos.add(alimento);
+                }
+                return alimentos;
             }
         });
+    }
 
-        if (alimentos.isEmpty()) {
+    private void setResultSetParameters(ResultSet rs, AlimentoEntity alimento) throws SQLException {
+        alimento.setIdAlimento(rs.getInt(1));  // Assume que o ResultSet está configurado corretamente
+        alimento.setIdCategoriaAlimento(rs.getInt(2));
+        alimento.setKcal(rs.getDouble(3));
+        alimento.setCarboidrato(rs.getDouble(4));
+        alimento.setProteina(rs.getDouble(5));
+        alimento.setGordura(rs.getDouble(6));
+        alimento.setQuantidade(rs.getDouble(7));
+        alimento.setNome(rs.getString(8));
+    }
+
+    @Override
+    @Transactional
+    public AlimentoEntity buscarAlimentoPorNome(String nome) {
+        String sql = "SELECT * FROM buscar_alimento_por_nome(?)";
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(AlimentoEntity.class), nome);
+        } catch (EmptyResultDataAccessException e) {
             throw new IllegalArgumentException("Alimento não encontrado: " + nome);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar alimento por nome: " + e.getMessage());
         }
-
-        return alimentos.get(0);
     }
 }

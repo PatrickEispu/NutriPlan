@@ -1,0 +1,14 @@
+public void criarDiario(int idConta, String data, int idRefeicao) {
+    String sql = "SELECT criar_diario(?, ?, ?)";
+    jdbcTemplate.update(sql, idConta, data, idRefeicao);
+}
+
+public Diario buscarDiarioPorIdContaEData(int idConta, String data) {
+    String sql = "SELECT * FROM buscar_diario_por_id_conta_e_data(?, ?)";
+    return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Diario.class), idConta, data);
+}
+
+public void deletarDiario(int idConta, String data, int idRefeicao) {
+    String sql = "SELECT deletar_diario(?, ?, ?)";
+    jdbcTemplate.update(sql, idConta, data, idRefeicao);
+}

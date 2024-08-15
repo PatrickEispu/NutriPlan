@@ -1,0 +1,19 @@
+public int criarTipoConta(String tipoConta) {
+    String sql = "SELECT criar_tipo_conta(?)";
+    return jdbcTemplate.queryForObject(sql, Integer.class, tipoConta);
+}
+
+public TipoConta buscarTipoContaPorId(int idTipoConta) {
+    String sql = "SELECT * FROM buscar_tipo_conta_por_id(?)";
+    return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(TipoConta.class), idTipoConta);
+}
+
+public void atualizarTipoConta(int idTipoConta, String tipoConta) {
+    String sql = "SELECT atualizar_tipo_conta(?, ?)";
+    jdbcTemplate.update(sql, idTipoConta, tipoConta);
+}
+
+public void deletarTipoConta(int idTipoConta) {
+    String sql = "SELECT deletar_tipo_conta(?)";
+    jdbcTemplate.update(sql, idTipoConta);
+}

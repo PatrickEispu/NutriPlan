@@ -1,10 +1,10 @@
 package com.fourcamp.NutriPlan.service.alimento;
 
-import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
 import com.fourcamp.NutriPlan.dao.alimento.AlimentoDao;
+import com.fourcamp.NutriPlan.dao.alimento.CategoriaAlimentoDao;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
-import com.fourcamp.NutriPlan.exception.PlanoException;
-import com.fourcamp.NutriPlan.model.alimento.Alimento;
+import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
+import com.fourcamp.NutriPlan.model.alimento.CategoriaAlimentoEntity;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,19 +15,25 @@ import java.util.List;
 public class AlimentoService {
 
     @Autowired
-    private ClienteDao clienteDao;
-
-    @Autowired
     private AlimentoDao alimentoDao;
 
+    @Autowired
+    private CategoriaAlimentoDao categoriaAlimentoDao;
 
-    public String criarAlimento(Double kcal, Double carboidrato, Double proteina, Double gordura, Double quantidade, String nome) {
-        alimentoDao.criarAlimento(kcal, carboidrato, proteina, gordura, quantidade, nome);
+    public String criarAlimento(String nomeCategoria, Double kcal, Double carboidrato, Double proteina, Double gordura, Double quantidade, String nome) {
+        // Buscar a categoria de alimento pelo nome
+        CategoriaAlimentoEntity categoriaAlimento = categoriaAlimentoDao.buscarCategoriaAlimentoPorNome(nomeCategoria);
+
+        if (categoriaAlimento == null) {
+            throw new IllegalArgumentException("Categoria de alimento não encontrada: " + nomeCategoria);
+        }
+
+        // Criar o alimento usando o ID da categoria encontrada
+        alimentoDao.criarAlimento(categoriaAlimento.getIdCategoriaAlimento(), kcal, carboidrato, proteina, gordura, quantidade, nome);
         return Constantes.MSG_CRIACAO_ALIMENTO_SUCESSO;
     }
-
-    public List<Alimento> visualizarAlimentos() {
-        return alimentoDao.listarAlimentos();
+    public List<AlimentoEntity> visualizarAlimentos() {
+        return alimentoDao.listarTodosAlimentos();
     }
 
     private double calcularProteina(double peso) {
@@ -48,17 +54,17 @@ public class AlimentoService {
         return macro;
     }
     public MacrosDto consultarTabelaNutricional(String nomeAlimento){
-        Alimento alimento = alimentoDao.buscarAlimentoPorNome(nomeAlimento);
+        AlimentoEntity alimentoEntity = alimentoDao.buscarAlimentoPorNome(nomeAlimento);
 
         return new MacrosDto(
-                alimento.getKcal(),
-                alimento.getCarboidrato(),
-                alimento.getProteina(),
-                alimento.getGordura()
+                alimentoEntity.getKcal(),
+                alimentoEntity.getCarboidrato(),
+                alimentoEntity.getProteina(),
+                alimentoEntity.getGordura()
         );
     }
 
-    public MacrosDto consultarPlanoCliente(String email, MacrosDto planoAtual) {
+    /*public MacrosDto consultarPlanoCliente(String email, MacrosDto planoAtual) {
         List<Diario> diarios = clienteDao.buscarPlanoCliente(email);
 
         if (!diarios.isEmpty()) {
@@ -72,7 +78,7 @@ public class AlimentoService {
         }
 
         return planoAtual;
-    }
+    }*/
 
 
 }

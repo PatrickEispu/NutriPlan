@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +16,7 @@ import javax.persistence.Id;
 public class Cliente extends ContaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idConta;
+    private Integer idConta;
     private char genero;
     private double peso;
     private double altura;

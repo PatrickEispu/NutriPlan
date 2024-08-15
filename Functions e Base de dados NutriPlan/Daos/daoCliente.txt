@@ -1,0 +1,19 @@
+public int criarCliente(String genero, double peso, double altura, String dataNascimento, double tmb, double get, int idCategoria) {
+    String sql = "SELECT criar_cliente(?, ?, ?, ?, ?, ?, ?)";
+    return jdbcTemplate.queryForObject(sql, Integer.class, genero, peso, altura, dataNascimento, tmb, get, idCategoria);
+}
+
+public Cliente buscarClientePorId(int idCliente) {
+    String sql = "SELECT * FROM buscar_cliente_por_id(?)";
+    return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Cliente.class), idCliente);
+}
+
+public void atualizarCliente(int idCliente, String genero, double peso, double altura, String dataNascimento, double tmb, double get, int idCategoria) {
+    String sql = "SELECT atualizar_cliente(?, ?, ?, ?, ?, ?, ?, ?)";
+    jdbcTemplate.update(sql, idCliente, genero, peso, altura, dataNascimento, tmb, get, idCategoria);
+}
+
+public void deletarCliente(int idCliente) {
+    String sql = "SELECT deletar_cliente(?)";
+    jdbcTemplate.update(sql, idCliente);
+}

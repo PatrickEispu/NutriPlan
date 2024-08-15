@@ -1,0 +1,19 @@
+public int criarCategoriaAlimento(String categoria) {
+    String sql = "SELECT criar_categoria_alimento(?)";
+    return jdbcTemplate.queryForObject(sql, Integer.class, categoria);
+}
+
+public CategoriaAlimento buscarCategoriaAlimentoPorId(int idCategoriaAlimento) {
+    String sql = "SELECT * FROM buscar_categoria_alimento_por_id(?)";
+    return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CategoriaAlimento.class), idCategoriaAlimento);
+}
+
+public void atualizarCategoriaAlimento(int idCategoriaAlimento, String categoria) {
+    String sql = "SELECT atualizar_categoria_alimento(?, ?)";
+    jdbcTemplate.update(sql, idCategoriaAlimento, categoria);
+}
+
+public void deletarCategoriaAlimento(int idCategoriaAlimento) {
+    String sql = "SELECT deletar_categoria_alimento(?)";
+    jdbcTemplate.update(sql, idCategoriaAlimento);
+}

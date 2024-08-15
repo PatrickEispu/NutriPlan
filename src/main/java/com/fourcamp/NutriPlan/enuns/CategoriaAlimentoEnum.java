@@ -4,5 +4,5 @@ public enum CategoriaAlimentoEnum {
     CARBOIDRATO,
     FIBRA,
     GORDURA,
-    PROTEINA;
+    PROTEINA
 }
