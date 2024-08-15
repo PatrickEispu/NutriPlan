@@ -30,7 +30,7 @@ INSERT INTO categoria (nm_categoria) VALUES ('LEVEMENTE_ATIVO');
 INSERT INTO categoria (nm_categoria) VALUES ('ATIVO');
 INSERT INTO categoria (nm_categoria) VALUES ('BASTANTE_ATIVO');
 
-
+select * from cliente c
 -- Tabela cliente
 CREATE TABLE cliente (
     fk_nr_id_conta SERIAL PRIMARY KEY,
@@ -70,7 +70,6 @@ INSERT INTO tempo (ds_tempo) VALUES ('LONGO_PRAZO');
 CREATE TABLE meta (
     fk_nr_id_conta SERIAL PRIMARY KEY,
     nr_peso_desejado NUMERIC,
-    ds_tempo_meta VARCHAR(255),
     fk_nr_id_objetivo INTEGER,
     fk_nr_id_tempo INTEGER,
     FOREIGN KEY (fk_nr_id_conta) REFERENCES conta(nr_id_conta),

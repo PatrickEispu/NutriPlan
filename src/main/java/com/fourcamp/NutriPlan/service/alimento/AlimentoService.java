@@ -50,6 +50,7 @@ public class AlimentoService {
         return (gastoEnergetico - proteinasEmCalorias - gordurasEmCalorias) / 4;
     }
 
+    //diario
     public MacrosDto calcularQuantidadeAlimento(MacrosDto macro, Double quantidade) {
         macro.setKcalTotais((quantidade / 100) * macro.getKcalTotais());
         macro.setCarboidrato((quantidade / 100) * macro.getCarboidrato());
