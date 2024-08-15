@@ -5,7 +5,6 @@ import com.fourcamp.NutriPlan.dto.conta.ClienteDto;
 import com.fourcamp.NutriPlan.model.conta.Cliente;
 import com.fourcamp.NutriPlan.service.conta.ClienteService;
 import com.fourcamp.NutriPlan.service.meta.MetaService;
-import com.fourcamp.NutriPlan.utils.JwtUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
