@@ -12,16 +12,12 @@ import java.util.Date;
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
 public class ClienteDto extends ContaDto {
-
-    private String nome;
-    private String email;
-    private String genero;
+    private Integer idConta;
+    private char genero;
     private double peso;
-    private double pesoDesejado;
     private double altura;
-    private Date dataNascimento;
-    private String senha;
-    private String categoria;
-    private String tempoMeta;
-
+    private String dataNascimento;
+    private double tmb;
+    private double get;
+    private String IdCategoria;
 }
