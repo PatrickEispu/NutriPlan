@@ -1,0 +1,22 @@
+public void adicionarAlimentoNaDispensa(int idDispensa, int idAlimento, int quantidade) {
+    String sql = "SELECT adicionar_alimento_na_dispensa(?, ?, ?)";
+    jdbcTemplate.update(sql, idDispensa, idAlimento, quantidade);
+}
+
+public DispensaAlimento buscarAlimentoNaDispensa(int idDispensa, int idAlimento) {
+    String sql = "SELECT * FROM buscar_alimento_na_dispensa(?, ?)";
+    return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(DispensaAlimento.class), idDispensa, idAlimento);
+}
+
+public void atualizarQuantidadeAlimentoNaDispensa(int idDispensa, int idAlimento, int quantidade) {
+    String sql = "SELECT atualizar_quantidade_alimento_na_dispensa(?, ?, ?)";
+    jdbcTemplate.update(sql, idDispensa, idAlimento, quantidade);
+}
+
+public void removerAlimentoDaDispensa(int idDispensa, int idAlimento) {
+    String sql = "SELECT remover_alimento_da_dispensa(?, ?)";
+    jdbcTemplate.update(sql, idDispensa, idAlimento);
+}
+
+
+

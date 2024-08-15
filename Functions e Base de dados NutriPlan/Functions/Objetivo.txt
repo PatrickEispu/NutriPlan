@@ -1,0 +1,29 @@
+CREATE OR REPLACE FUNCTION buscar_objetivo_por_id(
+    p_nr_id_objetivo INT
+)
+RETURNS TABLE(
+    nr_id_objetivo INT,
+    ds_objetivo VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT nr_id_objetivo, ds_objetivo
+    FROM objetivo
+    WHERE nr_id_objetivo = p_nr_id_objetivo;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION buscar_objetivo_por_descricao(
+    p_ds_objetivo VARCHAR
+)
+RETURNS TABLE(
+    nr_id_objetivo INT,
+    ds_objetivo VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT nr_id_objetivo, ds_objetivo
+    FROM objetivo
+    WHERE ds_objetivo = p_ds_objetivo;
+END;
+$$ LANGUAGE plpgsql;

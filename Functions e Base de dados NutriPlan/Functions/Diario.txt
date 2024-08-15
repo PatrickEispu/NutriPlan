@@ -1,0 +1,39 @@
+CREATE OR REPLACE FUNCTION criar_diario(
+    p_fk_nr_id_conta INT,
+    p_ds_data VARCHAR,
+    p_fk_nr_id_refeicao INT
+)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO diario (fk_nr_id_conta, ds_data, fk_nr_id_refeicao)
+    VALUES (p_fk_nr_id_conta, p_ds_data, p_fk_nr_id_refeicao);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION buscar_diario_por_id_conta_e_data(
+    p_fk_nr_id_conta INT,
+    p_ds_data VARCHAR
+)
+RETURNS TABLE(
+    fk_nr_id_conta INT,
+    ds_data VARCHAR,
+    fk_nr_id_refeicao INT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT fk_nr_id_conta, ds_data, fk_nr_id_refeicao
+    FROM diario
+    WHERE fk_nr_id_conta = p_fk_nr_id_conta AND ds_data = p_ds_data;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION deletar_diario(
+    p_fk_nr_id_conta INT,
+    p_ds_data VARCHAR,
+    p_fk_nr_id_refeicao INT
+)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM diario WHERE fk_nr_id_conta = p_fk_nr_id_conta AND ds_data = p_ds_data AND fk_nr_id_refeicao = p_fk_nr_id_refeicao;
+END;
+$$ LANGUAGE plpgsql;

@@ -1,0 +1,50 @@
+CREATE OR REPLACE FUNCTION criar_tipo_conta(
+    p_nm_tipo_conta VARCHAR
+)
+RETURNS INT AS $$
+DECLARE
+    new_id INT;
+BEGIN
+    INSERT INTO tipo_conta (nm_tipo_conta)
+    VALUES (p_nm_tipo_conta)
+    RETURNING nr_id_tipo_conta INTO new_id;
+    RETURN new_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION buscar_tipo_conta_por_id(
+    p_nr_id_tipo_conta INT
+)
+RETURNS TABLE(
+    nr_id_tipo_conta INT,
+    nm_tipo_conta VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT nr_id_tipo_conta, nm_tipo_conta
+    FROM tipo_conta
+    WHERE nr_id_tipo_conta = p_nr_id_tipo_conta;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION atualizar_tipo_conta(
+    p_nr_id_tipo_conta INT,
+    p_nm_tipo_conta VARCHAR
+)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE tipo_conta
+    SET nm_tipo_conta = p_nm_tipo_conta
+    WHERE nr_id_tipo_conta = p_nr_id_tipo_conta;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION deletar_tipo_conta(
+    p_nr_id_tipo_conta INT
+)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM tipo_conta WHERE nr_id_tipo_conta = p_nr_id_tipo_conta;
+END;
+$$ LANGUAGE plpgsql;
+

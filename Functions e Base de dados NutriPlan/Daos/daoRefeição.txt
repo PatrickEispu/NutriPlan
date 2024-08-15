@@ -1,0 +1,15 @@
+public int criarRefeicao(int idConta) {
+    String sql = "SELECT criar_refeicao(?)";
+    return jdbcTemplate.queryForObject(sql, Integer.class, idConta);
+}
+
+public Refeicao buscarRefeicaoPorId(int idRefeicao) {
+    String sql = "SELECT * FROM buscar_refeicao_por_id(?)";
+    return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Refeicao.class), idRefeicao);
+}
+
+public void deletarRefeicao(int idRefeicao) {
+    String sql = "SELECT deletar_refeicao(?)";
+    jdbcTemplate.update(sql, idRefeicao);
+}
+
