@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -37,23 +38,30 @@ public class AlimentoDaoImpl implements AlimentoDao {
     @Transactional
     public List<AlimentoEntity> listarTodosAlimentos() {
         String sql = "SELECT * FROM listar_todos_alimentos()";
-        return jdbcTemplate.query(sql, new RowMapper<AlimentoEntity>() {
-            @Override
-            public AlimentoEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
-                AlimentoEntity alimento = new AlimentoEntity();
-                alimento.setIdAlimento(rs.getInt("nr_id_alimento")); // Use o nome exato da coluna no banco de dados
-                alimento.setIdCategoriaAlimento(rs.getInt("fk_nr_id_categoria_alimento"));
-                alimento.setKcal(rs.getDouble("nr_kcal"));
-                alimento.setCarboidrato(rs.getDouble("nr_carboidrato"));
-                alimento.setProteina(rs.getDouble("nr_proteina"));
-                alimento.setGordura(rs.getDouble("nr_gordura"));
-                alimento.setQuantidade(rs.getDouble("nr_quantidade"));
-                alimento.setNome(rs.getString("nm_nome"));
-                return alimento;
+        return jdbcTemplate.execute(sql, (PreparedStatementCallback<List<AlimentoEntity>>) ps -> {
+            // Não precisamos configurar parâmetros específicos aqui, já que estamos listando todos os alimentos.
+            try (ResultSet rs = ps.executeQuery()) {
+                List<AlimentoEntity> alimentos = new ArrayList<>();
+                while (rs.next()) {
+                    AlimentoEntity alimento = new AlimentoEntity();
+                    setResultSetParameters(rs, alimento);  // Método para preencher o objeto AlimentoEntity
+                    alimentos.add(alimento);
+                }
+                return alimentos;
             }
         });
     }
 
+    private void setResultSetParameters(ResultSet rs, AlimentoEntity alimento) throws SQLException {
+        alimento.setIdAlimento(rs.getInt(1));  // Assume que o ResultSet está configurado corretamente
+        alimento.setIdCategoriaAlimento(rs.getInt(2));
+        alimento.setKcal(rs.getDouble(3));
+        alimento.setCarboidrato(rs.getDouble(4));
+        alimento.setProteina(rs.getDouble(5));
+        alimento.setGordura(rs.getDouble(6));
+        alimento.setQuantidade(rs.getDouble(7));
+        alimento.setNome(rs.getString(8));
+    }
 
     @Override
     @Transactional
