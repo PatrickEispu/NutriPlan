@@ -4,6 +4,7 @@ import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
 import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import com.fourcamp.NutriPlan.service.alimento.AlimentoService;
 
+import com.fourcamp.NutriPlan.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,17 +29,9 @@ public class AlimentoController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @PostMapping("/criar-alimento")
-    public ResponseEntity<String> criarAlimento( @RequestBody AlimentoDto alimento) {
-        String mensagem = alimentoService.criarAlimento(
-                alimento.getIdCategoriaAlimento(),
-                alimento.getKcal(),
-                alimento.getCarboidrato(),
-                alimento.getProteina(),
-                alimento.getGordura(),
-                alimento.getQuantidade(),
-                alimento.getNome()
-        );
-        return ResponseEntity.ok(mensagem);
+    public ResponseEntity<String> criarAlimento( @RequestBody AlimentoDto alimentoDto) {
+        String response = String.valueOf(alimentoService.criarAlimento(alimentoDto));
+        return ResponseEntity.ok(Constantes.MSG_CRIACAO_ALIMENTO_SUCESSO);
     }
 
     @GetMapping("/mostrar-alimentos")
