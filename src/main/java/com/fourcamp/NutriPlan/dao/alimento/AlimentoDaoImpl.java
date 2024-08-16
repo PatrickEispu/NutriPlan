@@ -22,13 +22,12 @@ public class AlimentoDaoImpl implements AlimentoDao {
 
     @Override
     @Transactional
-    public int criarAlimento(int idCategoriaAlimento, double kcal, double carboidrato, double proteina, double gordura, double quantidade, String nome) {
+    public AlimentoEntity criarAlimento(AlimentoEntity alimento) {
         String sql = "SELECT criar_alimento(?, ?, ?, ?, ?, ?, ?)";
-        try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{idCategoriaAlimento, kcal, carboidrato, proteina, gordura, quantidade, nome}, Integer.class);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao criar alimento: " + e.getMessage());
-        }
+             jdbcTemplate.queryForObject(sql, new Object[]{
+                    alimento.getIdCategoriaAlimento(), alimento.getKcal(), alimento.getCarboidrato(), alimento.getProteina(), alimento.getGordura(), alimento.getQuantidade(), alimento.getNome()},
+                    Integer.class);
+        return alimento;
     }
 
 
