@@ -10,9 +10,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
 public class DispensaDto {
-    Integer idDispensa;
-    Integer quantidade;
-    String nomeAlimento;
-    Integer fkIdAlimento;
+    private Integer idDispensa;
+    private Integer quantidade;
+    private String nomeAlimento;
+    private Integer fkIdAlimento;
 
 }

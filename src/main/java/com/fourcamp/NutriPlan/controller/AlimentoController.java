@@ -1,9 +1,14 @@
 package com.fourcamp.NutriPlan.controller;
 
 import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
+import com.fourcamp.NutriPlan.dto.alimento.DispensaDto;
+import com.fourcamp.NutriPlan.dto.alimento.RefeicaoDto;
+import com.fourcamp.NutriPlan.dto.alimento.RefeicaoRequest;
 import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import com.fourcamp.NutriPlan.service.alimento.AlimentoService;
 
+import com.fourcamp.NutriPlan.service.alimento.DispensaService;
+import com.fourcamp.NutriPlan.service.alimento.RefeicaoService;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,6 +28,9 @@ public class AlimentoController {
 
    // RefeicaoService refeicaoService;
 
+    @Autowired
+    DispensaService dispensaService;
+
 
     @Operation(description = "Criar alimentos no banco")
     @ApiResponses(value = {
@@ -31,7 +39,7 @@ public class AlimentoController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @PostMapping("/criar-alimento")
-    public ResponseEntity<String> criarAlimento( @RequestBody AlimentoDto alimentoDto) {
+    public ResponseEntity<String> criarAlimento(@RequestBody AlimentoDto alimentoDto) {
         String response = String.valueOf(alimentoService.criarAlimento(alimentoDto));
         return ResponseEntity.ok(Constantes.MSG_CRIACAO_ALIMENTO_SUCESSO);
     }
@@ -54,4 +62,11 @@ public class AlimentoController {
 //        String mensagem = refeicaoService.adicionarRefeicao(email, alimentoDtoList);
 //        return ResponseEntity.ok(mensagem);
 //    }
+
+    @PostMapping("/adicionar-alimento-dispensa")
+    public ResponseEntity<String> adicionarAlimentoNaDispensa(@PathVariable("email") String email, @RequestBody List<DispensaDto> dispensaDtoList) {
+        String msg = dispensaService.addAlimentoNaDispensa(email, dispensaDtoList);
+        return ResponseEntity.ok(msg);
+    }
+
 }

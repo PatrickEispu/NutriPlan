@@ -22,12 +22,15 @@ public class RefeicaoDaoImpl implements RefeicaoDao {
 //        jdbcTemplate.update(sql, email, alimento, quantidade, kcal, carboidrato, proteina, gordura, data);
 //    }
 
-
-
-    public void salvarRefeicao(Integer idConta, Integer idAlimento) {
+    public Integer criarRefeicao(Integer idConta) {
         String sqlRefeicao = "SELECT criar_refeicao (?)";
-        Integer idRefeicao = jdbcTemplate.queryForObject(sqlRefeicao, Integer.class,idConta);
+        return jdbcTemplate.queryForObject(sqlRefeicao, Integer.class, idConta);
+    }
 
-        String sqlAlimento = "SELECT adicionar_alimento_na_refeicao()";
+    public Integer adicionarAlimentoNaRefeicao(Integer idRefeicao, Integer idAlimento, Integer quantidade) {
+
+        String sqlAlimento = "SELECT adicionar_alimento_na_refeicao(?,?,?)";
+        jdbcTemplate.update(sqlAlimento, idRefeicao, idAlimento, quantidade);
+        return idRefeicao;
     }
 }
