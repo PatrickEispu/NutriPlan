@@ -8,6 +8,7 @@ import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
 import com.fourcamp.NutriPlan.dto.alimento.RefeicaoDto;
 import com.fourcamp.NutriPlan.dto.alimento.RefeicaoRequest;
 import com.fourcamp.NutriPlan.model.alimento.Alimento;
+import com.fourcamp.NutriPlan.model.conta.Cliente;
 import com.fourcamp.NutriPlan.service.conta.ClienteService;
 import com.fourcamp.NutriPlan.service.conta.ContaService;
 import com.fourcamp.NutriPlan.service.diario.DiarioService;
@@ -33,30 +34,30 @@ public class RefeicaoService {
     @Autowired
     DiarioService diarioService;
 
-    public String adicionarRefeicao(String email, List<AlimentoDto> alimentoDtoList)
-    {
+    public String adicionarRefeicao(String email, List<AlimentoDto> alimentoDtoList) {
         MacrosDto macroTotal = new MacrosDto();
-        for (AlimentoDto alimento: alimentoDtoList)
-        {
+        for (AlimentoDto alimento : alimentoDtoList) {
             MacrosDto alimentoSalvo = alimentoService.consultarTabelaNutricional(alimento.getNome());
-            Double kcal = macroTotal.getKcalTotais() + alimentoSalvo.getKcalTotais();
-            Double carb = macroTotal.getCarboidrato() + alimentoSalvo.getCarboidrato();
-            Double prot = macroTotal.getProteina() + alimentoSalvo.getProteina();
-            Double gord = macroTotal.getGordura() + alimentoSalvo.getGordura();
+            MacrosDto alimentoCalculado = alimentoService.calcularQuantidadeAlimento(alimentoSalvo, alimento.getQuantidade());
+
+            Double kcal = macroTotal.getKcalTotais() + alimentoCalculado.getKcalTotais();
+            Double carb = macroTotal.getCarboidrato() + alimentoCalculado.getCarboidrato();
+            Double prot = macroTotal.getProteina() + alimentoCalculado.getProteina();
+            Double gord = macroTotal.getGordura() + alimentoCalculado.getGordura();
 
             macroTotal.setKcalTotais(kcal);
             macroTotal.setCarboidrato(carb);
             macroTotal.setProteina(prot);
             macroTotal.setGordura(gord);
 
-           //TODO criar funcao para pegar o id da conta e continuar a criacao da refeicao.
             Integer idConta = contaService.getIdContaPorEmail(email);
             Integer idAlimento = alimentoService.getIdAlimentoPorNome(alimento.getNome());
+            Integer quantidade = alimento.getQuantidade().intValue();
 
-            
 
-            //Integer idConta = conta
-            refeicaoDao.salvarRefeicao(idConta, idAlimento);
+            Integer idRefeicao= refeicaoDao.salvarRefeicao(idConta, idAlimento, quantidade);
+            diarioService.salvarDiario(idConta,idRefeicao);
+
         }
 
     }

@@ -7,6 +7,7 @@ import com.fourcamp.NutriPlan.model.alimento.Alimento;
 import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import com.fourcamp.NutriPlan.service.alimento.AlimentoService;
 
+import com.fourcamp.NutriPlan.service.alimento.RefeicaoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

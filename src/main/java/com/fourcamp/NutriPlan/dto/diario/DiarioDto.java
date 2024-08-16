@@ -12,6 +12,6 @@ import lombok.experimental.SuperBuilder;
 public class DiarioDto {
     Integer fkIdConta;
     String data;
-    Integer fkIdRefeição;
+    Integer fkIdRefeicao;
 
 }

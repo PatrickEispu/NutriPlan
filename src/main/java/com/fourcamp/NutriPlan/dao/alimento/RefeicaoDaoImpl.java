@@ -24,10 +24,12 @@ public class RefeicaoDaoImpl implements RefeicaoDao {
 
 
 
-    public void salvarRefeicao(Integer idConta, Integer idAlimento) {
+    public Integer salvarRefeicao(Integer idConta, Integer idAlimento, Integer quantidade) {
         String sqlRefeicao = "SELECT criar_refeicao (?)";
         Integer idRefeicao = jdbcTemplate.queryForObject(sqlRefeicao, Integer.class,idConta);
 
-        String sqlAlimento = "SELECT adicionar_alimento_na_refeicao()";
+        String sqlAlimento = "SELECT adicionar_alimento_na_refeicao(?,?,?)";
+        jdbcTemplate.update(sqlAlimento,idRefeicao,idAlimento,quantidade);
+        return idRefeicao;
     }
 }
