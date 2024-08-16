@@ -1,19 +1,12 @@
-public int criarTipoConta(String tipoConta) {
-    String sql = "SELECT criar_tipo_conta(?)";
-    return jdbcTemplate.queryForObject(sql, Integer.class, tipoConta);
-}
-
-public TipoConta buscarTipoContaPorId(int idTipoConta) {
-    String sql = "SELECT * FROM buscar_tipo_conta_por_id(?)";
-    return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(TipoConta.class), idTipoConta);
-}
-
-public void atualizarTipoConta(int idTipoConta, String tipoConta) {
-    String sql = "SELECT atualizar_tipo_conta(?, ?)";
-    jdbcTemplate.update(sql, idTipoConta, tipoConta);
-}
-
-public void deletarTipoConta(int idTipoConta) {
-    String sql = "SELECT deletar_tipo_conta(?)";
-    jdbcTemplate.update(sql, idTipoConta);
-}
+CREATE OR REPLACE FUNCTION buscar_tipo_conta_por_nome(p_nome VARCHAR)
+RETURNS TABLE (
+    nr_id_tipo_conta INT,
+    nm_tipo_conta VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT tc.nr_id_tipo_conta, tc.nm_tipo_conta
+    FROM tipo_conta tc
+    WHERE tc.nm_tipo_conta = p_nome;
+END;
+$$ LANGUAGE plpgsql;

@@ -15,5 +15,5 @@ public class ContaEntity {
     String nome;
     String email;
     String senha;
-    Integer fkIdTipoConta;
+    Integer TipoConta;
 }

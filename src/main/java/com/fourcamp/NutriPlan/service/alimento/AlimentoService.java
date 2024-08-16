@@ -1,6 +1,5 @@
 package com.fourcamp.NutriPlan.service.alimento;
 
-import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
 import com.fourcamp.NutriPlan.dao.alimento.AlimentoDao;
 import com.fourcamp.NutriPlan.dao.alimento.CategoriaAlimentoDao;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
@@ -17,13 +16,11 @@ import java.util.List;
 public class AlimentoService {
 
     @Autowired
-    private ClienteDao clienteDao;
-
-    @Autowired
     private AlimentoDao alimentoDao;
 
     @Autowired
     private CategoriaAlimentoDao categoriaAlimentoDao;
+
 
     public AlimentoDto criarAlimento(AlimentoDto alimentoDto) {
         // Buscar a categoria de alimento pelo nome

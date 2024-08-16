@@ -1,9 +1,6 @@
 package com.fourcamp.NutriPlan.controller;
 
 import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
-import com.fourcamp.NutriPlan.dto.alimento.RefeicaoDto;
-import com.fourcamp.NutriPlan.dto.alimento.RefeicaoRequest;
-import com.fourcamp.NutriPlan.model.alimento.Alimento;
 import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import com.fourcamp.NutriPlan.service.alimento.AlimentoService;
 
@@ -23,8 +20,8 @@ import java.util.List;
 public class AlimentoController {
     @Autowired
     private AlimentoService alimentoService;
-    @Autowired
-    RefeicaoService refeicaoService;
+
+   // RefeicaoService refeicaoService;
 
 
     @Operation(description = "Criar alimentos no banco")
@@ -50,11 +47,11 @@ public class AlimentoController {
         return alimentoService.visualizarAlimentos();
     }
 
-    @PostMapping("/adicionar-refeicao")
-    public ResponseEntity<String> adicionarRefeicao(@RequestHeader("Authorization") String token, @RequestBody List<AlimentoDto> alimentoDtoList) {
-        String jwtToken = token.replace("Bearer ", "");
-        String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
-        String mensagem = refeicaoService.adicionarRefeicao(email, alimentoDtoList);
-        return ResponseEntity.ok(mensagem);
-    }
+//    @PostMapping("/adicionar-refeicao")
+//    public ResponseEntity<String> adicionarRefeicao(@RequestHeader("Authorization") String token, @RequestBody List<AlimentoDto> alimentoDtoList) {
+//        String jwtToken = token.replace("Bearer ", "");
+//        String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
+//        String mensagem = refeicaoService.adicionarRefeicao(email, alimentoDtoList);
+//        return ResponseEntity.ok(mensagem);
+//    }
 }

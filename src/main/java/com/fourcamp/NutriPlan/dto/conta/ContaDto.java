@@ -15,6 +15,6 @@ public class ContaDto {
     String nome;
     String email;
     String senha;
-    Integer fkIdTipoConta;
+    String TipoConta;
 
 }
