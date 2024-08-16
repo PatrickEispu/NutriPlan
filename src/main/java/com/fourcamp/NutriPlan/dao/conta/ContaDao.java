@@ -8,4 +8,6 @@ public interface ContaDao {
     ContaEntity criarConta(ContaEntity conta);
 
     ContaEntity buscarContaPorId(int idConta);
+
+    Integer getIdContaPorEmail(String email);
 }

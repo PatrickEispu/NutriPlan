@@ -44,4 +44,9 @@ public class ContaService {
                 .TipoConta(String.valueOf(TipoContaEnum.valueOf(tipoConta.getNomeTipoConta())))
                 .build();
     }
+
+    public Integer getIdContaPorEmail(String email) {
+        return contaDao.getIdContaPorEmail(email);
+
+    }
 }

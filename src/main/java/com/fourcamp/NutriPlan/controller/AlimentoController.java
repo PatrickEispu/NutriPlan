@@ -26,7 +26,8 @@ public class AlimentoController {
     @Autowired
     private AlimentoService alimentoService;
 
-   // RefeicaoService refeicaoService;
+    @Autowired
+    RefeicaoService refeicaoService;
 
     @Autowired
     DispensaService dispensaService;
