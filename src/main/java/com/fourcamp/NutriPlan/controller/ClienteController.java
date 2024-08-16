@@ -29,7 +29,7 @@
 ////            @ApiResponse(responseCode = "400", description = "Falha na criação da conta, dados inválidos ou formato incorreto"),
 ////            @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
 ////    })
-////    public ResponseEntity<String> addCliente(@RequestBody Cliente cliente) {
+//    public ResponseEntity<String> addCliente(@RequestBody Cliente cliente) {
 ////        Date dataSql = new Date(cliente.getDataNascimento().getTime());
 ////        String mensagem = clienteService.criarCliente(
 ////                cliente.getNome(),

@@ -2,22 +2,14 @@ package com.fourcamp.NutriPlan.service.alimento;
 
 
 import com.fourcamp.NutriPlan.dao.alimento.RefeicaoDao;
-import com.fourcamp.NutriPlan.dao.diario.DiarioDao;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
 import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
-import com.fourcamp.NutriPlan.dto.alimento.RefeicaoDto;
-import com.fourcamp.NutriPlan.dto.alimento.RefeicaoRequest;
-import com.fourcamp.NutriPlan.model.alimento.Alimento;
-import com.fourcamp.NutriPlan.model.conta.Cliente;
 import com.fourcamp.NutriPlan.service.conta.ClienteService;
 import com.fourcamp.NutriPlan.service.conta.ContaService;
 import com.fourcamp.NutriPlan.service.diario.DiarioService;
-import com.fourcamp.NutriPlan.utils.Arredondamento;
-import com.fourcamp.NutriPlan.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,6 +28,9 @@ public class RefeicaoService {
 
     public String adicionarRefeicao(String email, List<AlimentoDto> alimentoDtoList) {
         MacrosDto macroTotal = new MacrosDto();
+        Integer idConta = contaService.getIdContaPorEmail(email);
+        Integer idRefeicao = refeicaoDao.criarRefeicao(idConta);
+
         for (AlimentoDto alimento : alimentoDtoList) {
             MacrosDto alimentoSalvo = alimentoService.consultarTabelaNutricional(alimento.getNome());
             MacrosDto alimentoCalculado = alimentoService.calcularQuantidadeAlimento(alimentoSalvo, alimento.getQuantidade());
@@ -50,16 +45,14 @@ public class RefeicaoService {
             macroTotal.setProteina(prot);
             macroTotal.setGordura(gord);
 
-            Integer idConta = contaService.getIdContaPorEmail(email);
             Integer idAlimento = alimentoService.getIdAlimentoPorNome(alimento.getNome());
             Integer quantidade = alimento.getQuantidade().intValue();
 
-
-            Integer idRefeicao= refeicaoDao.salvarRefeicao(idConta, idAlimento, quantidade);
+            refeicaoDao.adicionarAlimentoNaRefeicao(idRefeicao, idAlimento, quantidade);
             diarioService.salvarDiario(idConta,idRefeicao);
 
         }
-
+        return alimentoDtoList.toString();
     }
 
 //    public String adicionarRefeicao(String email, RefeicaoRequest refeicaoRequest) {
