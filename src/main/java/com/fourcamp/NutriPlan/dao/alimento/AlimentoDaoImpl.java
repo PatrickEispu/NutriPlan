@@ -72,4 +72,9 @@ public class AlimentoDaoImpl implements AlimentoDao {
             throw new RuntimeException("Erro ao buscar alimento por nome: " + e.getMessage());
         }
     }
+
+    public Integer getIdAlimentoPorNome(String nome) {
+       String sqlIdAlimento= "SELECT busca_id_alimento (?)";
+       return jdbcTemplate.queryForObject(sqlIdAlimento, Integer.class,nome);
+    }
 }

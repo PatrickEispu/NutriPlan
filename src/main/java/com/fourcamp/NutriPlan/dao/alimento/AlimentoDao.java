@@ -10,4 +10,6 @@ public interface AlimentoDao {
     List<AlimentoEntity> listarTodosAlimentos();
 
     AlimentoEntity buscarAlimentoPorNome(String nome);
+
+    Integer getIdAlimentoPorNome(String nome);
 }
