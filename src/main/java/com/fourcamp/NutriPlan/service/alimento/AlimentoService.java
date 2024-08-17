@@ -5,8 +5,11 @@ import com.fourcamp.NutriPlan.dao.alimento.CategoriaAlimentoDao;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
 import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
 import com.fourcamp.NutriPlan.enuns.CategoriaAlimentoEnum;
+import com.fourcamp.NutriPlan.exception.CategoriaAlimentoException;
+import com.fourcamp.NutriPlan.exception.CriacaoAlimentoException;
 import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import com.fourcamp.NutriPlan.model.alimento.CategoriaAlimentoEntity;
+import com.fourcamp.NutriPlan.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,27 +24,30 @@ public class AlimentoService {
     @Autowired
     private CategoriaAlimentoDao categoriaAlimentoDao;
 
-
     public AlimentoDto criarAlimento(AlimentoDto alimentoDto) {
-        // Buscar a categoria de alimento pelo nome
-        CategoriaAlimentoEntity categoriaAlimento = categoriaAlimentoDao.buscarCategoriaAlimentoPorNome(alimentoDto.getIdCategoriaAlimento());
+        try {
+            // Buscar a categoria de alimento pelo nome
+            CategoriaAlimentoEntity categoriaAlimento = categoriaAlimentoDao.buscarCategoriaAlimentoPorNome(alimentoDto.getIdCategoriaAlimento());
 
-        if (categoriaAlimento == null) {
-            throw new IllegalArgumentException("Categoria de alimento não encontrada: " + categoriaAlimento);
+            if (categoriaAlimento == null) {
+                throw new CategoriaAlimentoException(Constantes.MSG_CATEGORIA_ALIMENTO_INVALIDO + categoriaAlimento);
+            }
+
+            AlimentoEntity alimento = AlimentoEntity.builder()
+                    .idCategoriaAlimento(categoriaAlimento.getIdCategoriaAlimento())
+                    .kcal(alimentoDto.getKcal())
+                    .carboidrato(alimentoDto.getCarboidrato())
+                    .proteina(alimentoDto.getProteina())
+                    .gordura(alimentoDto.getGordura())
+                    .quantidade(alimentoDto.getQuantidade())
+                    .nome(alimentoDto.getNome())
+                    .build();
+            // Criar o alimento usando o ID da categoria encontrada
+            AlimentoEntity alimentoSalvo = alimentoDao.criarAlimento(alimento);
+            return mapearAlimento(categoriaAlimento, alimentoSalvo);
+        } catch (Exception e) {
+            throw new CriacaoAlimentoException(Constantes.MSG_ERRO_CRIACAO_ALIMENTO + e.getMessage());
         }
-
-        AlimentoEntity alimento = AlimentoEntity.builder()
-                .idCategoriaAlimento(categoriaAlimento.getIdCategoriaAlimento())
-                .kcal(alimentoDto.getKcal())
-                .carboidrato(alimentoDto.getCarboidrato())
-                .proteina(alimentoDto.getProteina())
-                .gordura(alimentoDto.getGordura())
-                .quantidade(alimentoDto.getQuantidade())
-                .nome(alimentoDto.getNome())
-                .build();
-        // Criar o alimento usando o ID da categoria encontrada
-       AlimentoEntity alimentoSalvo = alimentoDao.criarAlimento(alimento);
-       return mapearAlimento(categoriaAlimento, alimentoSalvo);
     }
 
     private AlimentoDto mapearAlimento(CategoriaAlimentoEntity categoriaAlimento, AlimentoEntity alimentoSalvo){

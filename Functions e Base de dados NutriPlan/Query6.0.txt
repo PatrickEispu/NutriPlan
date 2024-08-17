@@ -4,7 +4,7 @@ CREATE TABLE tipo_conta (
     nm_tipo_conta VARCHAR(255) NOT NULL
 );
 
-INSERT INTO tipo_conta (nm_tipo_conta) VALUES ('ADMNISTRADOR');
+INSERT INTO tipo_conta (nm_tipo_conta) VALUES ('ADMINISTRADOR');
 INSERT INTO tipo_conta (nm_tipo_conta) VALUES ('MODERADOR');
 INSERT INTO tipo_conta (nm_tipo_conta) VALUES ('CLIENTE');
 

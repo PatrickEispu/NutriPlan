@@ -2,7 +2,9 @@ package com.fourcamp.NutriPlan.utils;
 
 public class Constantes {
 
-    public static final String MSG_CRIACAO_CONTA_SUCESSO = "Conta criada com sucesso!";
+    public static final String MSG_CRIACAO_CONTA_SUCESSO = "Conta cadastrada com sucesso!";
+    public static final String MSG_ERRO_CRIACAO_CONTA= "Erro ao realizar cadastro da conta!";
+    public static final String MSG_TIPO_CONTA_NAO_ENCONTRADA = "Tipo da conta não encontada!";
     public static final String MSG_CRIACAO_CLIENTE_SUCESSO = "Cliente criado com sucesso!";
     public static final String MSG_CRIACAO_ALIMENTO_SUCESSO = "Alimento criado com sucesso!";
     public static final String MSG_PESO_ALTERADO_SUCESSO = "Peso alterado com sucesso";
@@ -14,8 +16,11 @@ public class Constantes {
     public static final String MSG_SENHA_INCORRETA = "Senha incorreta.";
     public static final String MSG_FORMATO_INVALIDO = "O campo 'novoPeso' deve ser um número válido.";
     public static final String MSG_CATEGORIA_INVALIDO = "Categoria inválida. Valores permitidos: PERDER PESO\", \"MANUTENCAO\", \"HIPERTROFIA ";
+    public static final String MSG_CATEGORIA_ALIMENTO_INVALIDO = "Categoria inválida. Valores permitidos: CARBOIDRATO\", \"FIBRA\", \"GORDURA, \"PROTEINA ";
     public static final String MSG_TEMPO_META_INVALIDO = "Tempo de meta inválido. Valores permitidos: RAPIDO\", \"MEDIO\", \"LONGO PRAZO ";
     public static final String MSG_ATUALIZACAO_PLANO = "Diario adicionado. Plano nutricional atualizado.";
     public static final String MSG_PLANO_DATA = "Refaça novamente o 'visualizar plano' para atualizar.";
     public static final String MSG_ALIMENTO_NAO_ENCONTRADO = "Alimento não existe no nosso banco de dados";
+
+
 }

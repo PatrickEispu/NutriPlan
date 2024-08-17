@@ -10,6 +10,18 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestExceptionHandler  extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(ContaException.class)
+    private ResponseEntity<RestErrorMessage> ContaException(ContaException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+
+    @ExceptionHandler(TipoContaException.class)
+    private ResponseEntity<RestErrorMessage> TipoContaException(TipoContaException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+
     @ExceptionHandler(AlimentoNotFoundException.class)
     private ResponseEntity<RestErrorMessage> alimentoNaoExisteException(AlimentoNotFoundException exception){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
@@ -54,6 +66,12 @@ public class RestExceptionHandler  extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CategoriaException.class)
     private ResponseEntity<RestErrorMessage> CategoriaException(CategoriaException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
+    }
+
+    @ExceptionHandler(CategoriaAlimentoException.class)
+    private ResponseEntity<RestErrorMessage> CategoriaAlimentoException(CategoriaAlimentoException exception){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
