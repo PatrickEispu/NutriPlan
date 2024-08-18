@@ -14,9 +14,9 @@ public class ContaDaoImpl implements ContaDao {
 
     @Override
     @Transactional
-    public ContaEntity getIdContaPorEmail(ContaEntity email) {
-       String sql=("SELECT buscar_id_conta_por_email(?)");
-       return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ContaEntity.class),email);
+    public boolean verificarEmailExistente(String email) {
+       String sql = "SELECT verificar_email_existente(?)";
+       return jdbcTemplate.queryForObject(sql, Boolean.class, email);
     }
 
     @Override

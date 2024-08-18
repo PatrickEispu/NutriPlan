@@ -25,7 +25,7 @@ public class AlimentoService {
     private CategoriaAlimentoDao categoriaAlimentoDao;
 
     public AlimentoDto criarAlimento(AlimentoDto alimentoDto) {
-        try {
+
             // Buscar a categoria de alimento pelo nome
             CategoriaAlimentoEntity categoriaAlimento = categoriaAlimentoDao.buscarCategoriaAlimentoPorNome(alimentoDto.getIdCategoriaAlimento());
 
@@ -33,6 +33,7 @@ public class AlimentoService {
                 throw new CategoriaAlimentoException(Constantes.MSG_CATEGORIA_ALIMENTO_INVALIDO + categoriaAlimento);
             }
 
+        try {
             AlimentoEntity alimento = AlimentoEntity.builder()
                     .idCategoriaAlimento(categoriaAlimento.getIdCategoriaAlimento())
                     .kcal(alimentoDto.getKcal())

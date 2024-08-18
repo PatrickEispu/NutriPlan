@@ -1,13 +1,22 @@
 package com.fourcamp.NutriPlan.utils;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+@Component
 public class EmailValidador {
 
-    private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
-
-    public static boolean isValidEmail(String email) {
-        return email != null && email.matches(EMAIL_REGEX);
+    /**
+     * Valida um endereço de e-mail.
+     * @param email O e-mail a ser validado.
+     * @return true se o e-mail for válido, caso contrário false.
+     */
+    public static boolean validarEmail(String email) {
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9_+&*-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

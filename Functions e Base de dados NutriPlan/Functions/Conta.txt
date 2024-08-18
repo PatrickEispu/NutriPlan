@@ -33,6 +33,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION verificar_email_existente(p_email VARCHAR)
+RETURNS BOOLEAN AS $$
+DECLARE
+    email_existente BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1
+        FROM conta
+        WHERE email = p_email
+    ) INTO email_existente;
+
+    RETURN email_existente;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION public.buscar_id_conta_por_email(email character varying)
  RETURNS integer
  LANGUAGE plpgsql
