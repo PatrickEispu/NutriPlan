@@ -32,8 +32,11 @@ public class ContaDaoImpl implements ContaDao {
     @Override
     @Transactional
     public Integer getIdContaPorEmail(String email) {
-        String sql=("SELECT buscar_id_conta_por_email(?)");
+        String sql=("select buscar_id_conta_por_email (?::varchar)");
+        System.out.println(jdbcTemplate.queryForObject(sql, Integer.class,email)) ;
+
         return jdbcTemplate.queryForObject(sql, Integer.class,email) ;
+
     }
 
     @Override

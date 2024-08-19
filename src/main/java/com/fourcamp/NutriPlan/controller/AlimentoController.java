@@ -56,15 +56,15 @@ public class AlimentoController {
         return alimentoService.visualizarAlimentos();
     }
 
-//    @PostMapping("/adicionar-refeicao")
-//    public ResponseEntity<String> adicionarRefeicao(@RequestHeader("Authorization") String token, @RequestBody List<AlimentoDto> alimentoDtoList) {
-//        String jwtToken = token.replace("Bearer ", "");
-//        String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
-//        String mensagem = refeicaoService.adicionarRefeicao(email, alimentoDtoList);
-//        return ResponseEntity.ok(mensagem);
-//    }
+    @PostMapping("/{email}/adicionar-refeicao")
+    public ResponseEntity<String> adicionarRefeicao(@PathVariable ("email")String email, @RequestBody List<AlimentoDto> alimentoDtoList) {
+      //  String jwtToken = token.replace("Bearer ", "");
+      //  String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
+        String mensagem = refeicaoService.adicionarRefeicao(email, alimentoDtoList);
+        return ResponseEntity.ok(mensagem);
+    }
 
-    @PostMapping("/adicionar-alimento-dispensa")
+    @PostMapping("/{email}/adicionar-alimento-dispensa")
     public ResponseEntity<String> adicionarAlimentoNaDispensa(@PathVariable("email") String email, @RequestBody List<DispensaDto> dispensaDtoList) {
         String msg = dispensaService.addAlimentoNaDispensa(email, dispensaDtoList);
         return ResponseEntity.ok(msg);

@@ -41,7 +41,7 @@ BEGIN
     SELECT EXISTS (
         SELECT 1
         FROM conta
-        WHERE email = p_email
+        WHERE ds_email = p_email
     ) INTO email_existente;
 
     RETURN email_existente;
