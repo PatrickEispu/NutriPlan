@@ -1,7 +1,9 @@
 package com.fourcamp.NutriPlan.dao.diario;
 
 import com.fourcamp.NutriPlan.dto.diario.DiarioDto;
+import com.fourcamp.NutriPlan.model.diario.DiarioEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -11,8 +13,8 @@ public class DiarioDaoImpl implements  DiarioDao{
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public void salvarDiario(DiarioDto diario) {
+    public DiarioEntity salvarDiario(DiarioDto diario) {
         String sql="SELECT criar_diario(?,?,?)";
-        jdbcTemplate.update(sql,diario.getFkIdConta(),diario.getData(),diario.getFkIdRefeicao());
+      return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(DiarioEntity.class),diario.getFkIdConta(),diario.getData(),diario.getFkIdRefeicao());
     }
 }

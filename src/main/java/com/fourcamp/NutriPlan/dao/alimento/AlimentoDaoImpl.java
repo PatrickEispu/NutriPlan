@@ -39,7 +39,7 @@ public class AlimentoDaoImpl implements AlimentoDao {
     }
 
     public Integer getIdAlimentoPorNome(String nome) {
-       String sql = "SELECT busca_id_alimento (?)";
+       String sql = "SELECT busca_id_alimento (?::varchar)";
        return jdbcTemplate.queryForObject(sql, Integer.class, nome, new AlimentoRowMapper());
     }
 }
