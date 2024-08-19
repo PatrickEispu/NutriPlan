@@ -98,7 +98,8 @@ public class AlimentoService {
                 alimentoEntity.getKcal(),
                 alimentoEntity.getCarboidrato(),
                 alimentoEntity.getProteina(),
-                alimentoEntity.getGordura()
+                alimentoEntity.getGordura(),
+                alimentoEntity.getIdAlimento()
         );
     }
 

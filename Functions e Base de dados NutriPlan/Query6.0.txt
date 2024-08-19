@@ -131,7 +131,6 @@ CREATE TABLE refeicao_alimento (
     fk_nr_id_refeicao INT NOT NULL,
     fk_nr_id_alimento INT NOT NULL,
     nr_quantidade INT NOT NULL,
-    PRIMARY KEY (fk_nr_id_refeicao, fk_nr_id_alimento),
     FOREIGN KEY (fk_nr_id_refeicao) REFERENCES refeicao(nr_id_refeicao) ON DELETE CASCADE,
     FOREIGN KEY (fk_nr_id_alimento) REFERENCES alimento(nr_id_alimento)
 );
@@ -141,7 +140,6 @@ CREATE TABLE diario (
     fk_nr_id_conta INT NOT NULL,
     ds_data VARCHAR(255) NOT NULL,
     fk_nr_id_refeicao INT NOT NULL,
-    PRIMARY KEY (fk_nr_id_conta, ds_data, fk_nr_id_refeicao),
     FOREIGN KEY (fk_nr_id_conta) REFERENCES conta(nr_id_conta),
     FOREIGN KEY (fk_nr_id_refeicao) REFERENCES refeicao(nr_id_refeicao)
 );

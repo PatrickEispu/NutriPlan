@@ -4,12 +4,15 @@ package com.fourcamp.NutriPlan.service.alimento;
 import com.fourcamp.NutriPlan.dao.alimento.RefeicaoDao;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
 import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
-import com.fourcamp.NutriPlan.service.conta.ClienteService;
+//import com.fourcamp.NutriPlan.service.conta.ClienteService;
+import com.fourcamp.NutriPlan.model.alimento.RefeicaoEntity;
+import com.fourcamp.NutriPlan.model.diario.DiarioEntity;
 import com.fourcamp.NutriPlan.service.conta.ContaService;
 import com.fourcamp.NutriPlan.service.diario.DiarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Service
@@ -19,8 +22,8 @@ public class RefeicaoService {
     AlimentoService alimentoService;
     @Autowired
     ContaService contaService;
-    @Autowired
-    ClienteService clienteService;
+//    @Autowired
+//    ClienteService clienteService;
     @Autowired
     RefeicaoDao refeicaoDao;
     @Autowired
@@ -28,12 +31,20 @@ public class RefeicaoService {
 
     public String adicionarRefeicao(String email, List<AlimentoDto> alimentoDtoList) {
         MacrosDto macroTotal = new MacrosDto();
+        macroTotal.setKcalTotais(0.0);
+        macroTotal.setCarboidrato(0.0);
+        macroTotal.setProteina(0.0);
+        macroTotal.setGordura(0.0);
+
+
         Integer idConta = contaService.getIdContaPorEmail(email);
         Integer idRefeicao = refeicaoDao.criarRefeicao(idConta);
 
         for (AlimentoDto alimento : alimentoDtoList) {
             MacrosDto alimentoSalvo = alimentoService.consultarTabelaNutricional(alimento.getNome());
             MacrosDto alimentoCalculado = alimentoService.calcularQuantidadeAlimento(alimentoSalvo, alimento.getQuantidade());
+            Integer idAlimento = alimentoSalvo.getIdAlimento();
+
 
             Double kcal = macroTotal.getKcalTotais() + alimentoCalculado.getKcalTotais();
             Double carb = macroTotal.getCarboidrato() + alimentoCalculado.getCarboidrato();
@@ -44,12 +55,13 @@ public class RefeicaoService {
             macroTotal.setCarboidrato(carb);
             macroTotal.setProteina(prot);
             macroTotal.setGordura(gord);
+            macroTotal.setIdAlimento(idAlimento);
 
-            Integer idAlimento = alimentoService.getIdAlimentoPorNome(alimento.getNome());
+     //       Integer idAlimento = alimentoService.getIdAlimentoPorNome(alimento.getNome());
             Integer quantidade = alimento.getQuantidade().intValue();
 
-            refeicaoDao.adicionarAlimentoNaRefeicao(idRefeicao, idAlimento, quantidade);
-            diarioService.salvarDiario(idConta,idRefeicao);
+         RefeicaoEntity refeicao=refeicaoDao.adicionarAlimentoNaRefeicao(idRefeicao, idAlimento, quantidade);
+         DiarioEntity diarioAtualizado = diarioService.salvarDiario(idConta,idRefeicao);
 
         }
         return alimentoDtoList.toString();
