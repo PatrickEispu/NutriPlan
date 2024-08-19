@@ -7,6 +7,7 @@ import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
 import com.fourcamp.NutriPlan.enuns.CategoriaAlimentoEnum;
 import com.fourcamp.NutriPlan.exception.CategoriaAlimentoException;
 import com.fourcamp.NutriPlan.exception.CriacaoAlimentoException;
+import com.fourcamp.NutriPlan.exception.EmailException;
 import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import com.fourcamp.NutriPlan.model.alimento.CategoriaAlimentoEntity;
 import com.fourcamp.NutriPlan.utils.Constantes;
@@ -31,6 +32,12 @@ public class AlimentoService {
 
             if (categoriaAlimento == null) {
                 throw new CategoriaAlimentoException(Constantes.MSG_CATEGORIA_ALIMENTO_INVALIDO + categoriaAlimento);
+            }
+
+            // Verificar se o alimento já existe na base de dados
+            Boolean alimentoExiste = alimentoDao.verificarAlimentoExistente(alimentoDto.getNome());
+            if (alimentoExiste != null && alimentoExiste) {
+                throw new CriacaoAlimentoException(Constantes.MSG_NOME_ALIMENTO_JA_CADASTRADO);
             }
 
         try {

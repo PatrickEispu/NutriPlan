@@ -38,6 +38,12 @@ public class AlimentoDaoImpl implements AlimentoDao {
         return jdbcTemplate.queryForObject(sql, new Object[] { nome }, new AlimentoRowMapper());
     }
 
+    @Override
+    @Transactional
+    public boolean verificarAlimentoExistente(String nome) {
+        String sql = "SELECT verificar_alimento_existente(?)";
+        return jdbcTemplate.queryForObject(sql, Boolean.class, nome);
+    }
     public Integer getIdAlimentoPorNome(String nome) {
        String sql = "SELECT busca_id_alimento (?)";
        return jdbcTemplate.queryForObject(sql, Integer.class, nome, new AlimentoRowMapper());
