@@ -1,0 +1,12 @@
+CREATE OR REPLACE FUNCTION buscar_tipo_conta_por_nome(p_nome VARCHAR)
+RETURNS TABLE (
+    nr_id_tipo_conta INT,
+    nm_tipo_conta VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT tc.nr_id_tipo_conta, tc.nm_tipo_conta
+    FROM tipo_conta tc
+    WHERE tc.nm_tipo_conta = p_nome;
+END;
+$$ LANGUAGE plpgsql;

@@ -1,0 +1,14 @@
+CREATE OR REPLACE FUNCTION buscar_tempo_por_descricao(
+    p_ds_tempo VARCHAR
+)
+RETURNS TABLE(
+    nr_id_tempo INT,
+    ds_tempo VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT tempo.nr_id_tempo, tempo.ds_tempo
+    FROM tempo
+    WHERE tempo.ds_tempo = p_ds_tempo;
+END;
+$$ LANGUAGE plpgsql;

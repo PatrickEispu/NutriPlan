@@ -1,0 +1,126 @@
+CREATE OR REPLACE FUNCTION criar_alimento(
+    p_fk_nr_id_categoria_alimento INT,
+    p_nr_kcal DOUBLE PRECISION,
+    p_nr_carboidrato DOUBLE PRECISION,
+    p_nr_proteina DOUBLE PRECISION,
+    p_nr_gordura DOUBLE PRECISION,
+    p_nr_quantidade DOUBLE PRECISION,
+    p_nm_nome VARCHAR
+)
+RETURNS INT AS $$
+DECLARE
+    new_id INT;
+BEGIN
+    INSERT INTO alimento (fk_nr_id_categoria_alimento, nr_kcal, nr_carboidrato, nr_proteina, nr_gordura, nr_quantidade, nm_nome)
+    VALUES (p_fk_nr_id_categoria_alimento, p_nr_kcal, p_nr_carboidrato, p_nr_proteina, p_nr_gordura, p_nr_quantidade, p_nm_nome)
+    RETURNING nr_id_alimento INTO new_id;
+    RETURN new_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION busca_id_alimento(nome_alimento VARCHAR)
+RETURNS INTEGER AS $$
+DECLARE
+    id_alimento INTEGER;
+BEGIN
+    SELECT nr_id_alimento INTO id_alimento
+    FROM alimento
+    WHERE nm_nome = nome_alimento;
+
+    RETURN id_alimento;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION listar_todos_alimentos()
+RETURNS TABLE(
+    nr_id_alimento INT,
+    fk_nr_id_categoria_alimento INT,
+    nr_kcal DOUBLE PRECISION,
+    nr_carboidrato DOUBLE PRECISION,
+    nr_proteina DOUBLE PRECISION,
+    nr_gordura DOUBLE PRECISION,
+    nr_quantidade DOUBLE PRECISION,
+    nm_nome VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        a.nr_id_alimento,
+        a.fk_nr_id_categoria_alimento,
+        a.nr_kcal,
+        a.nr_carboidrato,
+        a.nr_proteina,
+        a.nr_gordura,
+        a.nr_quantidade,
+        a.nm_nome
+    FROM alimento a;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION buscar_alimento_por_nome(
+    p_nm_nome VARCHAR
+)
+RETURNS TABLE(
+    nr_id_alimento INT,
+    fk_nr_id_categoria_alimento INT,
+    nr_kcal DOUBLE PRECISION,
+    nr_carboidrato DOUBLE PRECISION,
+    nr_proteina DOUBLE PRECISION,
+    nr_gordura DOUBLE PRECISION,
+    nr_quantidade DOUBLE PRECISION,
+    nm_nome VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT nr_id_alimento, fk_nr_id_categoria_alimento, nr_kcal, nr_carboidrato, nr_proteina, nr_gordura, nr_quantidade, nm_nome
+    FROM alimento
+    WHERE nm_nome = p_nm_nome;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION verificar_alimento_existente(p_nome_alimento VARCHAR)
+RETURNS BOOLEAN AS $$
+DECLARE
+    alimento_existente BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1
+        FROM alimento
+        WHERE nm_nome = p_nome_alimento
+    ) INTO alimento_existente;
+
+    RETURN alimento_existente;
+END;
+$$ LANGUAGE plpgsql;
+
+
+// 2 pra baixo Sem necessidade de realizar a criação
+CREATE OR REPLACE FUNCTION atualizar_alimento(
+    p_nr_id_alimento INT,
+    p_fk_nr_id_categoria_alimento INT,
+    p_nr_kcal DOUBLE PRECISION,
+    p_nr_carboidrato DOUBLE PRECISION,
+    p_nr_proteina DOUBLE PRECISION,
+    p_nr_gordura DOUBLE PRECISION,
+    p_nr_quantidade DOUBLE PRECISION,
+    p_nm_nome VARCHAR
+)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE alimento
+    SET fk_nr_id_categoria_alimento = p_fk_nr_id_categoria_alimento, nr_kcal = p_nr_kcal, nr_carboidrato = p_nr_carboidrato,
+        nr_proteina = p_nr_proteina, nr_gordura = p_nr_gordura, nr_quantidade = p_nr_quantidade, nm_nome = p_nm_nome
+    WHERE nr_id_alimento = p_nr_id_alimento;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION deletar_alimento(
+    p_nr_id_alimento INT
+)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM alimento WHERE nr_id_alimento = p_nr_id_alimento;
+END;
+$$ LANGUAGE plpgsql;

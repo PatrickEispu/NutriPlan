@@ -1,0 +1,59 @@
+CREATE OR REPLACE FUNCTION criar_meta(
+    p_nr_peso_desejado DOUBLE PRECISION,
+    p_fk_nr_id_conta INT,
+    p_fk_nr_id_objetivo INT,
+    p_fk_nr_id_tempo INT
+)
+RETURNS INT AS $$
+DECLARE
+    new_id INT;
+BEGIN
+    INSERT INTO meta (nr_peso_desejado, fk_nr_id_conta, fk_nr_id_objetivo, fk_nr_id_tempo)
+    VALUES (p_nr_peso_desejado, p_fk_nr_id_conta, p_fk_nr_id_objetivo, p_fk_nr_id_tempo)
+    RETURNING fk_nr_id_conta INTO new_id;
+    RETURN new_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION buscar_meta_por_id(
+    p_fk_nr_id_conta INT
+)
+RETURNS TABLE(
+    nr_id_meta INT,
+    nr_peso_desejado NUMERIC,
+    fk_nr_id_conta INT,
+    fk_nr_id_objetivo INT,
+    fk_nr_id_tempo INT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT nr_id_meta, nr_peso_desejado, fk_nr_id_conta, fk_nr_id_objetivo, fk_nr_id_tempo
+    FROM meta
+    WHERE fk_nr_id_conta = p_fk_nr_id_conta;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION atualizar_meta(
+    p_nr_id_meta INT,
+    p_nr_peso_desejado NUMERIC,
+    p_fk_nr_id_conta INT,
+    p_fk_nr_id_objetivo INT,
+    p_fk_nr_id_tempo INT
+)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE meta
+    SET nr_peso_desejado = p_nr_peso_desejado, fk_nr_id_conta = p_fk_nr_id_conta,
+        fk_nr_id_objetivo = p_fk_nr_id_objetivo, fk_nr_id_tempo = p_fk_nr_id_tempo
+    WHERE nr_id_meta = p_nr_id_meta;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION deletar_meta(
+    p_nr_id_meta INT
+)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM meta WHERE nr_id_meta = p_nr_id_meta;
+END;
+$$ LANGUAGE plpgsql;

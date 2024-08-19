@@ -1,0 +1,19 @@
+public int criarMeta(double pesoDesejado, String tempoMeta, int idCliente) {
+    String sql = "SELECT criar_meta(?, ?, ?)";
+    return jdbcTemplate.queryForObject(sql, Integer.class, pesoDesejado, tempoMeta, idCliente);
+}
+
+public Meta buscarMetaPorId(int idMeta) {
+    String sql = "SELECT * FROM buscar_meta_por_id(?)";
+    return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Meta.class), idMeta);
+}
+
+public void atualizarMeta(int idMeta, double pesoDesejado, String tempoMeta, int idCliente) {
+    String sql = "SELECT atualizar_meta(?, ?, ?, ?)";
+    jdbcTemplate.update(sql, idMeta, pesoDesejado, tempoMeta, idCliente);
+}
+
+public void deletarMeta(int idMeta) {
+    String sql = "SELECT deletar_meta(?)";
+    jdbcTemplate.update(sql, idMeta);
+}

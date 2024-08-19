@@ -10,6 +10,18 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestExceptionHandler  extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(ContaException.class)
+    private ResponseEntity<RestErrorMessage> ContaException(ContaException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+
+    @ExceptionHandler(TipoContaException.class)
+    private ResponseEntity<RestErrorMessage> TipoContaException(TipoContaException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+
     @ExceptionHandler(AlimentoNotFoundException.class)
     private ResponseEntity<RestErrorMessage> alimentoNaoExisteException(AlimentoNotFoundException exception){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
@@ -52,14 +64,26 @@ public class RestExceptionHandler  extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
 
-    @ExceptionHandler(CategoriaException.class)
-    private ResponseEntity<RestErrorMessage> CategoriaException(CategoriaException exception){
+    @ExceptionHandler(ObjetivoException.class)
+    private ResponseEntity<RestErrorMessage> ObjetivoException(ObjetivoException exception){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
 
-    @ExceptionHandler(TempoMetaException.class)
-    private ResponseEntity<RestErrorMessage> TempoMetaException(TempoMetaException exception){
+    @ExceptionHandler(CategoriaAlimentoException.class)
+    private ResponseEntity<RestErrorMessage> CategoriaAlimentoException(CategoriaAlimentoException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
+    }
+
+    @ExceptionHandler(TempoException.class)
+    private ResponseEntity<RestErrorMessage> TempoMetaException(TempoException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
+    }
+
+    @ExceptionHandler(MetaException.class)
+    private ResponseEntity<RestErrorMessage> MetaException(MetaException exception){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
