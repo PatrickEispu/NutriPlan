@@ -1,11 +1,5 @@
 package com.fourcamp.NutriPlan.service.conta;
 import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
-import com.fourcamp.NutriPlan.dto.JwtData;
-import com.fourcamp.NutriPlan.exception.CategoriaException;
-import com.fourcamp.NutriPlan.exception.DataException;
-import com.fourcamp.NutriPlan.exception.EmailException;
-import com.fourcamp.NutriPlan.exception.SenhaException;
-import com.fourcamp.NutriPlan.model.conta.Cliente;
 import com.fourcamp.NutriPlan.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.authentication.AuthenticationManager;
@@ -151,10 +145,10 @@ public class ClienteService {
                 }
                 break;
             default:
-                throw new CategoriaException();
+                //throw new CategoriaException();
         }
 
-        clienteDao.salvarTMBGET(email, tmb, get);
+        //clienteDao.salvarTMBGET(email, tmb, get);
         return get;
     }
 

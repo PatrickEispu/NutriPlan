@@ -16,7 +16,9 @@ public class Constantes {
     public static final String MSG_ERRO_CRIACAO_ALIMENTO = "Todos os campos devem ser preenchidos.";
     public static final String MSG_SENHA_INCORRETA = "Senha incorreta.";
     public static final String MSG_FORMATO_INVALIDO = "O campo 'novoPeso' deve ser um número válido.";
-    public static final String MSG_CATEGORIA_INVALIDO = "Categoria inválida. Valores permitidos: PERDER PESO\", \"MANUTENCAO\", \"HIPERTROFIA ";
+    public static final String MSG_META_SUCESSO = "Meta cadastrada com sucesso!";
+    public static final String MSG_ERRO_META = "Erro ao criar meta!";
+    public static final String MSG_OBJETIVO_META_INVALIDO = "Objetivo de meta inválido. Valores permitidos: PERDER PESO\", \"MANUTENCÃO\", \"HIPERTROFIA ";
     public static final String MSG_CATEGORIA_ALIMENTO_INVALIDO = "Categoria inválida. Valores permitidos: CARBOIDRATO\", \"FIBRA\", \"GORDURA, \"PROTEINA ";
     public static final String MSG_TEMPO_META_INVALIDO = "Tempo de meta inválido. Valores permitidos: RAPIDO\", \"MEDIO\", \"LONGO PRAZO ";
     public static final String MSG_ATUALIZACAO_PLANO = "Diario adicionado. Plano nutricional atualizado.";

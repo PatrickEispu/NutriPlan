@@ -11,9 +11,10 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
 public class ContaEntity {
-    Integer idConta;
-    String nome;
-    String email;
-    String senha;
-    Integer TipoConta;
+
+    private Integer idConta;
+    private String nome;
+    private String email;
+    private String senha;
+    private Integer TipoConta;
 }
