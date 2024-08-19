@@ -80,6 +80,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION verificar_alimento_existente(p_nome_alimento VARCHAR)
+RETURNS BOOLEAN AS $$
+DECLARE
+    alimento_existente BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1
+        FROM alimento
+        WHERE nm_nome = p_nome_alimento
+    ) INTO alimento_existente;
+
+    RETURN alimento_existente;
+END;
+$$ LANGUAGE plpgsql;
+
 
 // 2 pra baixo Sem necessidade de realizar a criação
 CREATE OR REPLACE FUNCTION atualizar_alimento(

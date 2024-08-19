@@ -2,8 +2,11 @@ package com.fourcamp.NutriPlan.dao.mapper;
 
 import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import org.springframework.jdbc.core.RowMapper;
+
+import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 public class AlimentoRowMapper implements RowMapper<AlimentoEntity> {
 

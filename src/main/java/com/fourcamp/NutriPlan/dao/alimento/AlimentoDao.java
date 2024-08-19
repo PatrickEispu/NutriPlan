@@ -11,5 +11,7 @@ public interface AlimentoDao {
 
     AlimentoEntity buscarAlimentoPorNome(String nome);
 
+    boolean verificarAlimentoExistente(String nome);
+
     Integer getIdAlimentoPorNome(String nome);
 }

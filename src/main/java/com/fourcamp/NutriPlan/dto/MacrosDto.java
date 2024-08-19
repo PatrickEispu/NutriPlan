@@ -13,5 +13,6 @@ public class MacrosDto {
     private Double carboidrato;
     private Double proteina;
     private Double gordura;
+    private Integer idAlimento;
 
 }
