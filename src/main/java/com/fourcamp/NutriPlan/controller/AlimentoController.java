@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/v1")
 public class AlimentoController {
     @Autowired
     private AlimentoService alimentoService;

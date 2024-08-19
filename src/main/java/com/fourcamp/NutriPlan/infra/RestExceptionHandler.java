@@ -64,8 +64,8 @@ public class RestExceptionHandler  extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
 
-    @ExceptionHandler(CategoriaException.class)
-    private ResponseEntity<RestErrorMessage> CategoriaException(CategoriaException exception){
+    @ExceptionHandler(ObjetivoException.class)
+    private ResponseEntity<RestErrorMessage> ObjetivoException(ObjetivoException exception){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
@@ -76,8 +76,14 @@ public class RestExceptionHandler  extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
 
-    @ExceptionHandler(TempoMetaException.class)
-    private ResponseEntity<RestErrorMessage> TempoMetaException(TempoMetaException exception){
+    @ExceptionHandler(TempoException.class)
+    private ResponseEntity<RestErrorMessage> TempoMetaException(TempoException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
+    }
+
+    @ExceptionHandler(MetaException.class)
+    private ResponseEntity<RestErrorMessage> MetaException(MetaException exception){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }

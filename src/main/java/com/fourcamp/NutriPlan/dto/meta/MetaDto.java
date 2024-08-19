@@ -10,9 +10,10 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
 public class MetaDto {
-    Integer idMeta;
-    Double pesoDesejado;
-    String tempoMeta;
-    Integer fkIdCliente;
+
+    private Integer idConta;
+    private Double pesoDesejado;
+    private String idTempo;
+    private String idObjetivo;
 
 }

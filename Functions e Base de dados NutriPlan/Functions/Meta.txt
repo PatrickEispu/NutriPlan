@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION criar_meta(
-    p_nr_peso_desejado NUMERIC,
+    p_nr_peso_desejado DOUBLE PRECISION,
     p_fk_nr_id_conta INT,
     p_fk_nr_id_objetivo INT,
     p_fk_nr_id_tempo INT

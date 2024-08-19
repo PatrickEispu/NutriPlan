@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/v1")
 public class ContaController {
 
     @Autowired
