@@ -18,27 +18,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION buscar_alimento_por_id(
-    p_nr_id_alimento INT
-)
-RETURNS TABLE(
-    nr_id_alimento INT,
-    fk_nr_id_categoria_alimento INT,
-    nr_kcal DOUBLE PRECISION,
-    nr_carboidrato DOUBLE PRECISION,
-    nr_proteina DOUBLE PRECISION,
-    nr_gordura DOUBLE PRECISION,
-    nr_quantidade DOUBLE PRECISION,
-    nm_nome VARCHAR
-) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT nr_id_alimento, fk_nr_id_categoria_alimento, nr_kcal, nr_carboidrato, nr_proteina, nr_gordura, nr_quantidade, nm_nome
-    FROM alimento
-    WHERE nr_id_alimento = p_nr_id_alimento;
-END;
-$$ LANGUAGE plpgsql;
-
 
 CREATE OR REPLACE FUNCTION busca_id_alimento(nome_alimento VARCHAR)
 RETURNS INTEGER AS $$

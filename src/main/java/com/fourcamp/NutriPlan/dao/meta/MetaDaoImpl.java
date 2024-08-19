@@ -21,5 +21,4 @@ public class MetaDaoImpl implements MetaDao {
                 Integer.class);
          return meta;
     }
-
 }
