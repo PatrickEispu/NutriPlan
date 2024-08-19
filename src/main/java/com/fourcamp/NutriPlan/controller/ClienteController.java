@@ -1,20 +1,25 @@
-//package com.fourcamp.NutriPlan.controller;
-//
-//import com.fourcamp.NutriPlan.dto.*;
-//import com.fourcamp.NutriPlan.dto.conta.ClienteDto;
-//import io.swagger.v3.oas.annotations.Operation;
-//import io.swagger.v3.oas.annotations.responses.ApiResponse;
-//import io.swagger.v3.oas.annotations.responses.ApiResponses;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//
-//@RestController
-//public class ClienteController {
-//
-//    @Autowired
-//    private ClienteService clienteService;
+package com.fourcamp.NutriPlan.controller;
+
+import com.fourcamp.NutriPlan.dto.conta.ClienteDto;
+import com.fourcamp.NutriPlan.model.conta.Cliente;
+import com.fourcamp.NutriPlan.service.conta.ClienteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+@RequestMapping("/api")
+public class ClienteController {
+
+    @Autowired
+    private ClienteService clienteService;
+
+    @PostMapping("/criar-cliente")
+    public ResponseEntity<Cliente> criarCliente(@RequestBody Cliente cliente) {
+        return ResponseEntity.ok(this.clienteService.criarCliente(cliente));
+    }
+}
 //
 //    @Autowired
 //    private MetaService metaService;

@@ -1,24 +1,8 @@
 package com.fourcamp.NutriPlan.service.conta;
 import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
-import com.fourcamp.NutriPlan.dto.JwtData;
-import com.fourcamp.NutriPlan.exception.CategoriaException;
-import com.fourcamp.NutriPlan.exception.DataException;
-import com.fourcamp.NutriPlan.exception.EmailException;
-import com.fourcamp.NutriPlan.exception.SenhaException;
 import com.fourcamp.NutriPlan.model.conta.Cliente;
-import com.fourcamp.NutriPlan.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.authentication.AuthenticationManager;
-//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
 
 @Service
 public class ClienteService {
@@ -26,14 +10,19 @@ public class ClienteService {
     @Autowired
     private ClienteDao clienteDao;
 
-    @Autowired
-    private EmailValidador emailValidador;
+    public Cliente criarCliente(Cliente cliente){
+        clienteDao.criarCliente(cliente);
+        return cliente;
+    }
 
-    @Autowired
-    private SenhaValidador senhaValidador;
-
-    @Autowired
-    private CalculoIdade calculoIdade;
+//    @Autowired
+//    private EmailValidador emailValidador;
+//
+//    @Autowired
+//    private SenhaValidador senhaValidador;
+//
+//    @Autowired
+//    private CalculoIdade calculoIdade;calculoIdade
 
 //    @Autowired
 //    private AuthenticationManager authenticationManager;
@@ -122,78 +111,78 @@ public class ClienteService {
 //            throw new RuntimeException("Cliente não encontrado com o email: " + email);
 //        }
 //    }
-    public double calcularGETSalvar(String email, String categoria, String tempoMeta, String genero, double peso, double altura, Date dataNascimento, String categoriaAtividade) {
-        double tmb = calcularTaxaMetabolica(genero, peso, altura, dataNascimento);
-        double get = calcularGET(tmb, categoriaAtividade);
-        String categoriaUpper = categoria.trim().toUpperCase(Locale.ROOT);
-        String tempoCategoriaUpper = tempoMeta.trim().toUpperCase(Locale.ROOT);
-
-        switch (categoriaUpper) {
-            case "PERDER PESO":
-                if ("RAPIDO".equals(tempoCategoriaUpper)) {
-                    get -= 1000;
-                } else if ("MEDIO".equals(tempoCategoriaUpper)) {
-                    get -= 600;
-                } else if ("LONGO PRAZO".equals(tempoCategoriaUpper)) {
-                    get -= 400;
-                }
-                break;
-            case "MANUTENCAO":
-                // Mantém o GET como está
-                break;
-            case "HIPERTROFIA":
-                if ("RAPIDO".equals(tempoCategoriaUpper)) {
-                    get += 800;
-                } else if ("MEDIO".equals(tempoCategoriaUpper)) {
-                    get += 500;
-                } else if ("LONGO PRAZO".equals(tempoCategoriaUpper)) {
-                    get += 300;
-                }
-                break;
-            default:
-                throw new CategoriaException();
-        }
-
-        clienteDao.salvarTMBGET(email, tmb, get);
-        return get;
-    }
-
-    private double calcularTaxaMetabolica(String genero, double peso, double altura, Date dataNascimento) {
-        double calculo = 0;
-
-        LocalDate nascimentoLocalDate = calculoIdade.convertToLocalDate(dataNascimento);
-        int idade = calculoIdade.calcularIdade(nascimentoLocalDate);
-
-        if (Objects.equals(genero, "M")) {
-            calculo = 66.5 + (13.75 * peso) + (5.003 * (altura * 100)) - (6.75 * idade);
-        } else if (Objects.equals(genero, "F")) {
-            calculo = 655.1 + (9.563 * peso) + (1.850 * (altura * 100)) - (4.676 * idade);
-        }
-
-        return calculo;
-    }
-
-    private double calcularGET(double tmb, String categoriaAtividade) {
-        double fatorAtividade;
-
-        switch (categoriaAtividade) {
-            case "nao_muito_ativo":
-                fatorAtividade = 1.2;
-                break;
-            case "levemente_ativo":
-                fatorAtividade = 1.375;
-                break;
-            case "ativo":
-                fatorAtividade = 1.55;
-                break;
-            case "bastante_ativo":
-                fatorAtividade = 1.725;
-                break;
-            default:
-                throw new UnsupportedOperationException("Categoria de atividade desconhecida: " + categoriaAtividade);
-        }
-
-        return tmb * fatorAtividade;
-    }
+//    public double calcularGETSalvar(String email, String categoria, String tempoMeta, String genero, double peso, double altura, Date dataNascimento, String categoriaAtividade) {
+//        double tmb = calcularTaxaMetabolica(genero, peso, altura, dataNascimento);
+//        double get = calcularGET(tmb, categoriaAtividade);
+//        String categoriaUpper = categoria.trim().toUpperCase(Locale.ROOT);
+//        String tempoCategoriaUpper = tempoMeta.trim().toUpperCase(Locale.ROOT);
+//
+//        switch (categoriaUpper) {
+//            case "PERDER PESO":
+//                if ("RAPIDO".equals(tempoCategoriaUpper)) {
+//                    get -= 1000;
+//                } else if ("MEDIO".equals(tempoCategoriaUpper)) {
+//                    get -= 600;
+//                } else if ("LONGO PRAZO".equals(tempoCategoriaUpper)) {
+//                    get -= 400;
+//                }
+//                break;
+//            case "MANUTENCAO":
+//                // Mantém o GET como está
+//                break;
+//            case "HIPERTROFIA":
+//                if ("RAPIDO".equals(tempoCategoriaUpper)) {
+//                    get += 800;
+//                } else if ("MEDIO".equals(tempoCategoriaUpper)) {
+//                    get += 500;
+//                } else if ("LONGO PRAZO".equals(tempoCategoriaUpper)) {
+//                    get += 300;
+//                }
+//                break;
+//            default:
+//                throw new CategoriaException();
+//        }
+//
+//        clienteDao.salvarTMBGET(email, tmb, get);
+//        return get;
+//    }
+//
+//    private double calcularTaxaMetabolica(String genero, double peso, double altura, Date dataNascimento) {
+//        double calculo = 0;
+//
+//        LocalDate nascimentoLocalDate = calculoIdade.convertToLocalDate(dataNascimento);
+//        int idade = calculoIdade.calcularIdade(nascimentoLocalDate);
+//
+//        if (Objects.equals(genero, "M")) {
+//            calculo = 66.5 + (13.75 * peso) + (5.003 * (altura * 100)) - (6.75 * idade);
+//        } else if (Objects.equals(genero, "F")) {
+//            calculo = 655.1 + (9.563 * peso) + (1.850 * (altura * 100)) - (4.676 * idade);
+//        }
+//
+//        return calculo;
+//    }
+//
+//    private double calcularGET(double tmb, String categoriaAtividade) {
+//        double fatorAtividade;
+//
+//        switch (categoriaAtividade) {
+//            case "nao_muito_ativo":
+//                fatorAtividade = 1.2;
+//                break;
+//            case "levemente_ativo":
+//                fatorAtividade = 1.375;
+//                break;
+//            case "ativo":
+//                fatorAtividade = 1.55;
+//                break;
+//            case "bastante_ativo":
+//                fatorAtividade = 1.725;
+//                break;
+//            default:
+//                throw new UnsupportedOperationException("Categoria de atividade desconhecida: " + categoriaAtividade);
+//        }
+//
+//        return tmb * fatorAtividade;
+//    }
 
 }
