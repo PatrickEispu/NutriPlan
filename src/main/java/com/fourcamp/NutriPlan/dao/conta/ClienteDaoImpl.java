@@ -50,4 +50,16 @@ public class ClienteDaoImpl implements ClienteDao {
 
     }
 
+    @Override
+    public Cliente buscarClientePorId(int idConta) {
+        String sql = "SELECT * FROM cliente WHERE fk_nr_id_conta = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{idConta}, new ClienteMapper());
+    }
+
+    @Override
+    public List<Cliente> buscarTodosClientes() {
+        String sql = "SELECT * FROM cliente";
+        return jdbcTemplate.query(sql, new ClienteMapper());
+    }
+
 }
