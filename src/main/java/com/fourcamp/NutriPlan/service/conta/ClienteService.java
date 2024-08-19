@@ -25,4 +25,8 @@ public class ClienteService {
         return clienteDao.buscarTodosClientes();
     }
 
+    public void atualizarCliente(Cliente cliente) {
+        clienteDao.atualizarCliente(cliente);
+    }
+
 }

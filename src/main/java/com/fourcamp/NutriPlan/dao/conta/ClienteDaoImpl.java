@@ -62,4 +62,10 @@ public class ClienteDaoImpl implements ClienteDao {
         return jdbcTemplate.query(sql, new ClienteMapper());
     }
 
+    @Override
+    public void atualizarCliente(Cliente cliente) {
+        String sql = "UPDATE cliente SET ds_genero = ?, nr_peso = ?, nr_altura = ?, ds_data_nascimento = ?, nr_tmb = ?, nr_get = ?, fk_nr_id_categoria = ? WHERE fk_nr_id_conta = ?";
+        jdbcTemplate.update(sql, String.valueOf(cliente.getGenero()), cliente.getPeso(), cliente.getAltura(), cliente.getDataNascimento(), cliente.getTmb(), cliente.getGet(), cliente.getIdCategoria(), cliente.getIdConta());
+    }
+
 }

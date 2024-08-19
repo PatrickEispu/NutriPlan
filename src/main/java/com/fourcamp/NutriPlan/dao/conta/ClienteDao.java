@@ -9,4 +9,5 @@ public interface ClienteDao {
     String criarCliente(Cliente cliente);
     Cliente buscarClientePorId(int idConta);
     List<Cliente> buscarTodosClientes();
+    void atualizarCliente(Cliente cliente);
 }
