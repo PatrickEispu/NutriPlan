@@ -1,8 +1,6 @@
 package com.fourcamp.NutriPlan.model.conta;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.GeneratedValue;
@@ -14,14 +12,12 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
 public class Cliente extends ContaEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idConta;
     private char genero;
-    private double peso;
-    private double altura;
+    private Double peso;
+    private Double altura;
     private String dataNascimento;
     private double tmb;
     private double get;
-    private String IdCategoria;
+    private int idCategoria;
 }
