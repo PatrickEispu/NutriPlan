@@ -34,8 +34,8 @@ INSERT INTO categoria (nm_categoria) VALUES ('BASTANTE_ATIVO');
 CREATE TABLE cliente (
     fk_nr_id_conta SERIAL PRIMARY KEY,
     ds_genero VARCHAR(1),
-    nr_peso NUMERIC,
-    nr_altura NUMERIC,
+    nr_peso DOUBLE PRECISION,
+    nr_altura DOUBLE PRECISION,
     ds_data_nascimento VARCHAR(255),
     nr_tmb DOUBLE PRECISION,
     nr_get DOUBLE PRECISION,

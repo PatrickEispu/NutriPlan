@@ -1,8 +1,7 @@
 package com.fourcamp.NutriPlan.dao.conta;
 
-import com.fourcamp.NutriPlan.dao.mapper.ClienteMapper;
+import com.fourcamp.NutriPlan.dao.mapper.ClienteRowMapper;
 import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
-import com.fourcamp.NutriPlan.model.conta.ContaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,14 +32,14 @@ public class ClienteDaoImpl implements ClienteDao {
     @Transactional
     public ClienteEntity buscarClientePorId(int idConta) {
         String sql = "SELECT * FROM cliente WHERE fk_nr_id_conta = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{idConta}, new ClienteMapper());
+        return jdbcTemplate.queryForObject(sql, new Object[]{idConta}, new ClienteRowMapper());
     }
 
     @Override
     @Transactional
     public List<ClienteEntity> buscarTodosClientes() {
-        String sql = "SELECT * FROM cliente";
-        return jdbcTemplate.query(sql, new ClienteMapper());
+        String sql = "SELECT * FROM listar_todos_clientes()";
+        return jdbcTemplate.query(sql, new ClienteRowMapper());
     }
 
 
