@@ -1,7 +1,6 @@
 package com.fourcamp.NutriPlan.controller;
 
-import com.fourcamp.NutriPlan.dto.conta.ContaDto;
-import com.fourcamp.NutriPlan.dto.meta.MetaDto;
+import com.fourcamp.NutriPlan.dtos.meta.MetaDto;
 import com.fourcamp.NutriPlan.service.meta.MetaService;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,9 +1,7 @@
 package com.fourcamp.NutriPlan.controller;
 
-import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
-import com.fourcamp.NutriPlan.dto.alimento.DispensaDto;
-import com.fourcamp.NutriPlan.dto.alimento.RefeicaoDto;
-import com.fourcamp.NutriPlan.dto.alimento.RefeicaoRequest;
+import com.fourcamp.NutriPlan.dtos.alimento.AlimentoDto;
+import com.fourcamp.NutriPlan.dtos.alimento.DispensaDto;
 import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import com.fourcamp.NutriPlan.service.alimento.AlimentoService;
 

@@ -1,4 +1,5 @@
-package com.fourcamp.NutriPlan.dto.meta;
+package com.fourcamp.NutriPlan.dtos.conta;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,11 +10,11 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class MetaDto {
-
-    private Integer idConta;
-    private Double pesoDesejado;
-    private String idTempo;
-    private String idObjetivo;
+public class ContaDto {
+    Integer idConta;
+    String nome;
+    String email;
+    String senha;
+    String TipoConta;
 
 }

@@ -34,7 +34,7 @@ select * from cliente c
 -- Tabela cliente
 CREATE TABLE cliente (
     fk_nr_id_conta SERIAL PRIMARY KEY,
-    ds_genero CHAR(1),
+    ds_genero VARCHAR(1),
     nr_peso NUMERIC,
     nr_altura NUMERIC,
     ds_data_nascimento VARCHAR(255),

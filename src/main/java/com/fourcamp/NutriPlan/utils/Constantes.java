@@ -5,7 +5,9 @@ public class Constantes {
     public static final String MSG_CRIACAO_CONTA_SUCESSO = "Conta cadastrada com sucesso!";
     public static final String MSG_ERRO_CRIACAO_CONTA= "Erro ao realizar cadastro da conta!";
     public static final String MSG_TIPO_CONTA_NAO_ENCONTRADA = "Tipo da conta não encontada!";
-    public static final String MSG_CRIACAO_CLIENTE_SUCESSO = "Cliente criado com sucesso!";
+    public static final String MSG_CRIACAO_CLIENTE_SUCESSO = "Cliente cadastrado com sucesso!";
+    public static final String MSG_ERRO_CLIENTE = "Erro ao cadastrar cliente!";
+    public static final String MSG_ERRO_CATEGORIA_CLIENTE = "Categoria inválida. Valores permitidos: NAO_MUITO_ATIVO\", \"LEVEMENTE_ATIVO\", \"ATIVO, \"BASTANTE_ATIVO ";
     public static final String MSG_CRIACAO_ALIMENTO_SUCESSO = "Alimento criado com sucesso!";
     public static final String MSG_NOME_ALIMENTO_JA_CADASTRADO = "Alimento já esta cadastrado!";
     public static final String MSG_PESO_ALTERADO_SUCESSO = "Peso alterado com sucesso";

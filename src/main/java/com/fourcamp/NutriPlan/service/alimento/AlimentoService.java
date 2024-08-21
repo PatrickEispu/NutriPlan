@@ -2,12 +2,11 @@ package com.fourcamp.NutriPlan.service.alimento;
 
 import com.fourcamp.NutriPlan.dao.alimento.AlimentoDao;
 import com.fourcamp.NutriPlan.dao.alimento.CategoriaAlimentoDao;
-import com.fourcamp.NutriPlan.dto.MacrosDto;
-import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
+import com.fourcamp.NutriPlan.dtos.MacrosDto;
+import com.fourcamp.NutriPlan.dtos.alimento.AlimentoDto;
 import com.fourcamp.NutriPlan.enuns.CategoriaAlimentoEnum;
 import com.fourcamp.NutriPlan.exception.CategoriaAlimentoException;
 import com.fourcamp.NutriPlan.exception.CriacaoAlimentoException;
-import com.fourcamp.NutriPlan.exception.EmailException;
 import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import com.fourcamp.NutriPlan.model.alimento.CategoriaAlimentoEntity;
 import com.fourcamp.NutriPlan.utils.Constantes;

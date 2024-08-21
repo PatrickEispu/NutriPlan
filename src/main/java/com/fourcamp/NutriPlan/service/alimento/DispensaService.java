@@ -2,8 +2,7 @@ package com.fourcamp.NutriPlan.service.alimento;
 
 
 import com.fourcamp.NutriPlan.dao.alimento.DispensaDao;
-import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
-import com.fourcamp.NutriPlan.dto.alimento.DispensaDto;
+import com.fourcamp.NutriPlan.dtos.alimento.DispensaDto;
 import com.fourcamp.NutriPlan.service.conta.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

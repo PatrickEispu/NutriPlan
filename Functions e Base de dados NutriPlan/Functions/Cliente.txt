@@ -1,8 +1,8 @@
 CREATE OR REPLACE FUNCTION criar_cliente(
-    p_ds_genero CHAR(1),
-    p_nr_peso NUMERIC,
-    p_nr_altura NUMERIC,
-    p_ds_data_nascimento VARCHAR,
+    p_ds_genero VARCHAR(1),
+    p_nr_peso DOUBLE PRECISION,
+    p_nr_altura DOUBLE PRECISION,
+    p_ds_data_nascimento VARCHAR(255),
     p_nr_tmb DOUBLE PRECISION,
     p_nr_get DOUBLE PRECISION,
     p_fk_nr_id_categoria INT,

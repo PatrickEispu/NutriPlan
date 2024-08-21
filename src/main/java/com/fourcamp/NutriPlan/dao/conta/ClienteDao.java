@@ -1,12 +1,11 @@
 package com.fourcamp.NutriPlan.dao.conta;
 
-import com.fourcamp.NutriPlan.dto.conta.ClienteDto;
-import com.fourcamp.NutriPlan.model.conta.Cliente;
+import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
 
 import java.util.List;
 
 public interface ClienteDao {
-    String criarCliente(Cliente cliente);
-    Cliente buscarClientePorId(int idConta);
-    List<Cliente> buscarTodosClientes();
+    ClienteEntity criarConta(ClienteEntity cliente);
+    ClienteEntity buscarClientePorId(int idConta);
+    List<ClienteEntity> buscarTodosClientes();
 }
