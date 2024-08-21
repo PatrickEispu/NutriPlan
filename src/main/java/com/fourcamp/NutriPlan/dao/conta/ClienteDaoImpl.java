@@ -20,6 +20,7 @@ public class ClienteDaoImpl implements ClienteDao {
     private JdbcTemplate jdbcTemplate;
 
     @Override
+    @Transactional
     public ClienteEntity criarConta(ClienteEntity cliente) {
         String sql = "SELECT criar_cliente(?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.queryForObject(sql, new Object[]{
@@ -29,12 +30,14 @@ public class ClienteDaoImpl implements ClienteDao {
     }
 
     @Override
+    @Transactional
     public ClienteEntity buscarClientePorId(int idConta) {
         String sql = "SELECT * FROM cliente WHERE fk_nr_id_conta = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{idConta}, new ClienteMapper());
     }
 
     @Override
+    @Transactional
     public List<ClienteEntity> buscarTodosClientes() {
         String sql = "SELECT * FROM cliente";
         return jdbcTemplate.query(sql, new ClienteMapper());
@@ -42,6 +45,7 @@ public class ClienteDaoImpl implements ClienteDao {
 
 
     @Override
+    @Transactional
     public String atualizarCliente(ClienteEntity cliente) {
         try {
             String sql = ATUALIZAR_CLIENTE;

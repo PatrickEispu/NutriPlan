@@ -71,7 +71,7 @@ public class ClienteService {
         return clienteDao.buscarTodosClientes();
     }
 
-    public void atualizarCliente(Cliente cliente) {
+    public void atualizarCliente(ClienteEntity cliente) {
         clienteDao.atualizarCliente(cliente);
     }
 

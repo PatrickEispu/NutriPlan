@@ -35,7 +35,7 @@ public class ClienteController {
 
 
     @PutMapping("/{idConta}")
-    public void atualizarCliente(@PathVariable int idConta, @RequestBody Cliente cliente) {
+    public void atualizarCliente(@PathVariable int idConta, @RequestBody ClienteEntity cliente) {
         cliente.setIdConta(idConta);
         clienteService.atualizarCliente(cliente);
     }

@@ -8,4 +8,5 @@ public interface ClienteDao {
     ClienteEntity criarConta(ClienteEntity cliente);
     ClienteEntity buscarClientePorId(int idConta);
     List<ClienteEntity> buscarTodosClientes();
+    String atualizarCliente(ClienteEntity cliente);
 }
