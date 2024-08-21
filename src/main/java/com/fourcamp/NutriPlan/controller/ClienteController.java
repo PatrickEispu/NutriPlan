@@ -32,4 +32,11 @@ public class ClienteController {
     public List<ClienteEntity> buscarTodosClientes() {
         return clienteService.buscarTodosClientes();
     }
+
+
+    @PutMapping("/{idConta}")
+    public void atualizarCliente(@PathVariable int idConta, @RequestBody Cliente cliente) {
+        cliente.setIdConta(idConta);
+        clienteService.atualizarCliente(cliente);
+    }
 }
