@@ -14,6 +14,6 @@ public class ClienteEntity extends ContaEntity {
     private String dataNascimento;
     private Double tmb;
     private Double get;
-    private Integer idCategoria;
+    private String idCategoria;
     private Integer idConta;
 }

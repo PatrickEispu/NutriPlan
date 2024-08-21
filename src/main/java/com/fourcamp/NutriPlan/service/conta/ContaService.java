@@ -55,7 +55,7 @@ public class ContaService {
                     .nome(contaDto.getNome())
                     .email(contaDto.getEmail())
                     .senha(contaDto.getSenha())
-                    .TipoConta(tipoConta.getIdTipoConta())
+                    .TipoConta(tipoConta.getNomeTipoConta())
                     .build();
 
             ContaEntity contaSalva = contaDao.criarConta(conta);

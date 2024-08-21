@@ -19,6 +19,43 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION listar_todos_clientes()
+RETURNS TABLE(
+    id_conta INT,
+    nome VARCHAR,
+    email VARCHAR,
+    senha VARCHAR,
+    genero VARCHAR,
+    peso DOUBLE PRECISION,
+    altura DOUBLE PRECISION,
+    data_nascimento VARCHAR,
+    tmb DOUBLE PRECISION,
+    get DOUBLE PRECISION,
+    categoria_nome VARCHAR,
+    tipo_conta_nome VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        co.nr_id_conta AS id_conta,
+        co.nm_nome AS nome,
+        co.ds_email AS email,
+        co.ds_senha AS senha,
+        c.ds_genero AS genero,
+        c.nr_peso AS peso,
+        c.nr_altura AS altura,
+        c.ds_data_nascimento AS data_nascimento,
+        c.nr_tmb AS tmb,
+        c.nr_get AS get,
+        ca.nm_categoria AS categoria_nome,
+        tc.nm_tipo_conta AS tipo_conta_nome
+    FROM cliente c
+    INNER JOIN conta co ON c.fk_nr_id_conta = co.nr_id_conta
+    INNER JOIN tipo_conta tc ON co.fk_nr_id_tipo_conta = tc.nr_id_tipo_conta
+    INNER JOIN categoria ca ON c.fk_nr_id_categoria = ca.nr_id_categoria;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION buscar_cliente_por_id(
     p_fk_nr_id_conta INT
 )

@@ -40,7 +40,7 @@ public class ClienteService {
                     .dataNascimento(clienteDto.getDataNascimento())
                     .tmb(clienteDto.getTmb())
                     .get(clienteDto.getGet())
-                    .idCategoria(categoriaCliente.getIdCategoria())
+                    .idCategoria(categoriaCliente.getNomeCategoria())
                     .build();
 
             ClienteEntity clienteSalvo = clienteDao.criarConta(cliente);
