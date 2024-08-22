@@ -13,6 +13,7 @@ public class Constantes {
     public static final String MSG_ERRO_CATEGORIA_CLIENTE = "Categoria inválida. Valores permitidos: NAO_MUITO_ATIVO\", \"LEVEMENTE_ATIVO\", \"ATIVO, \"BASTANTE_ATIVO ";
     public static final String MSG_CRIACAO_ALIMENTO_SUCESSO = "Alimento criado com sucesso!";
     public static final String MSG_NOME_ALIMENTO_JA_CADASTRADO = "Alimento já esta cadastrado!";
+    public static final String MSG_ERRO_LISTAR_ALIMENTO = "Erro ao listar alimentos!";
     public static final String MSG_PESO_ALTERADO_SUCESSO = "Peso alterado com sucesso";
     public static final String MSG_FORMULARIO_SUCESSO = "Parabéns, Você está mais próximo do seu objetivo";
     public static final String MSG_EMAIL_INVALIDO = "E-mail inválido.";

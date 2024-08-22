@@ -25,7 +25,7 @@ public class ClienteService {
     public ClienteDto criarCliente(ClienteDto clienteDto){
 
         // Buscar a categoria cliente pelo nome
-        CategoriaClienteEntity categoriaCliente = categoriaClienteDao.buscarCategoriaPorNome(clienteDto.getNomeCategoria());
+        CategoriaClienteEntity categoriaCliente = categoriaClienteDao.buscarCategoriaPorNome(clienteDto.getCategoria());
 
         if (categoriaCliente == null) {
             throw new CategoriaClienteException(Constantes.MSG_ERRO_CATEGORIA_CLIENTE + categoriaCliente);
@@ -40,7 +40,7 @@ public class ClienteService {
                     .dataNascimento(clienteDto.getDataNascimento())
                     .tmb(clienteDto.getTmb())
                     .get(clienteDto.getGet())
-                    .nomeCategoria(categoriaCliente.getNomeCategoria())
+                    .Categoria(categoriaCliente.getNomeCategoria())
                     .build();
 
             ClienteEntity clienteSalvo = clienteDao.criarConta(cliente);
@@ -59,7 +59,7 @@ public class ClienteService {
                 .dataNascimento(clienteSalvo.getDataNascimento())
                 .tmb(clienteSalvo.getTmb())
                 .get(clienteSalvo.getGet())
-                .nomeCategoria(String.valueOf(CategoriaClienteEnum.valueOf(categoriaCliente.getNomeCategoria())))
+                .Categoria(String.valueOf(CategoriaClienteEnum.valueOf(categoriaCliente.getNomeCategoria())))
                 .build();
     }
 

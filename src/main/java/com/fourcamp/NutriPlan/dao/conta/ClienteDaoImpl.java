@@ -21,7 +21,7 @@ public class ClienteDaoImpl implements ClienteDao {
     public ClienteEntity criarConta(ClienteEntity cliente) {
         String sql = "SELECT criar_cliente(?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.queryForObject(sql, new Object[]{
-                        cliente.getGenero(), cliente.getPeso(), cliente.getAltura(), cliente.getDataNascimento(), cliente.getTmb(), cliente.getGet(), cliente.getNomeCategoria(), cliente.getIdConta()},
+                        cliente.getGenero(), cliente.getPeso(), cliente.getAltura(), cliente.getDataNascimento(), cliente.getTmb(), cliente.getGet(), cliente.getCategoria(), cliente.getIdConta()},
                 Integer.class);
         return cliente;
     }
@@ -50,7 +50,7 @@ public class ClienteDaoImpl implements ClienteDao {
             cs.setString(5, cliente.getDataNascimento());
             cs.setDouble(6, cliente.getTmb());
             cs.setDouble(7, cliente.getGet());
-            cs.setString(8, cliente.getNomeCategoria());
+            cs.setString(8, cliente.getCategoria());
             cs.execute();
             return null;
         });

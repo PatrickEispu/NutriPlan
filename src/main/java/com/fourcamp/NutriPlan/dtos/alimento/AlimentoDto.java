@@ -10,7 +10,7 @@ import lombok.*;
 public class AlimentoDto {
 
     private Integer idAlimento;
-    private String idCategoriaAlimento;
+    private String CategoriaAlimento;
     private Double kcal;
     private Double carboidrato;
     private Double proteina;
