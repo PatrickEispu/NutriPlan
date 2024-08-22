@@ -44,7 +44,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION listar_todos_alimentos()
 RETURNS TABLE(
     nr_id_alimento INT,
-    fk_nr_id_categoria_alimento INT,
+    nm_categoria_alimento VARCHAR,
     nr_kcal DOUBLE PRECISION,
     nr_carboidrato DOUBLE PRECISION,
     nr_proteina DOUBLE PRECISION,
@@ -54,16 +54,17 @@ RETURNS TABLE(
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT 
+    SELECT
         a.nr_id_alimento,
-        a.fk_nr_id_categoria_alimento,
+        c.nm_categoria, -- Nome da categoria ao invés do ID
         a.nr_kcal,
         a.nr_carboidrato,
         a.nr_proteina,
         a.nr_gordura,
         a.nr_quantidade,
         a.nm_nome
-    FROM alimento a;
+    FROM alimento a
+    INNER JOIN categoria_alimento c ON a.fk_nr_id_categoria_alimento = c.nr_id_categoria_alimento; -- Join com a tabela de categoria
 END;
 $$ LANGUAGE plpgsql;
 
