@@ -1,6 +1,7 @@
 package com.fourcamp.NutriPlan.controller;
 
 import com.fourcamp.NutriPlan.dtos.conta.ClienteDto;
+import com.fourcamp.NutriPlan.exception.ClienteException;
 import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
 import com.fourcamp.NutriPlan.service.conta.ClienteService;
 import com.fourcamp.NutriPlan.utils.Constantes;
@@ -44,15 +45,21 @@ public class ClienteController {
             @ApiResponse(responseCode = "400", description = "Erro ao listar cliente!"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    @GetMapping("/todos")
+    @GetMapping("/listar")
     public List<ClienteEntity> buscarTodosClientes() {
         return clienteService.buscarTodosClientes();
     }
 
-
+    @Operation(description = "Atualizar cliente por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso!"),
+            @ApiResponse(responseCode = "400", description = "Erro ao atualizar cliente!"),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
     @PutMapping("/{idConta}")
-    public void atualizarCliente(@PathVariable int idConta, @RequestBody ClienteEntity cliente) {
+    public ResponseEntity atualizarCliente(@PathVariable int idConta, @RequestBody ClienteEntity cliente) {
         cliente.setIdConta(idConta);
         clienteService.atualizarCliente(cliente);
+        return ResponseEntity.ok(Constantes.MSG_ATUALIZAR_CLIENTE);
     }
 }

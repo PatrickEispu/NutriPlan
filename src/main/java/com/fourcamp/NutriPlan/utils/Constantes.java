@@ -7,6 +7,9 @@ public class Constantes {
     public static final String MSG_TIPO_CONTA_NAO_ENCONTRADA = "Tipo da conta não encontada!";
     public static final String MSG_CRIACAO_CLIENTE_SUCESSO = "Cliente cadastrado com sucesso!";
     public static final String MSG_ERRO_CLIENTE = "Erro ao cadastrar cliente!";
+    public static final String MSG_ERRO_ATUALIZAR_CLIENTE = "Erro ao atualizar cadastro!";
+    public static final String MSG_ATUALIZAR_CLIENTE = "Cadastro atualizado com sucesso!";
+    public static final String MSG_ERRO_LISTAR_CLIENTE = "Erro ao listar clientes!";
     public static final String MSG_ERRO_CATEGORIA_CLIENTE = "Categoria inválida. Valores permitidos: NAO_MUITO_ATIVO\", \"LEVEMENTE_ATIVO\", \"ATIVO, \"BASTANTE_ATIVO ";
     public static final String MSG_CRIACAO_ALIMENTO_SUCESSO = "Alimento criado com sucesso!";
     public static final String MSG_NOME_ALIMENTO_JA_CADASTRADO = "Alimento já esta cadastrado!";

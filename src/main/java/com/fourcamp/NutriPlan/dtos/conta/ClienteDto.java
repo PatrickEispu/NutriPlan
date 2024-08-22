@@ -17,5 +17,5 @@ public class ClienteDto extends ContaDto {
     private String dataNascimento;
     private Double tmb;
     private Double get;
-    private String idCategoria;
+    private String nomeCategoria;
 }

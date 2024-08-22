@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 public class ClienteRowMapper implements RowMapper<ClienteEntity> {
 
+    //Metodo para listagem de cliente
     @Override
     public ClienteEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
         ClienteEntity cliente = new ClienteEntity();
@@ -20,7 +21,7 @@ public class ClienteRowMapper implements RowMapper<ClienteEntity> {
         cliente.setDataNascimento(rs.getString(8));
         cliente.setTmb(rs.getDouble(9));
         cliente.setGet(rs.getDouble(10));
-        cliente.setIdCategoria(rs.getString(11));
+        cliente.setNomeCategoria(rs.getString(11));
         cliente.setTipoConta(rs.getString(12));
         return cliente;
     }

@@ -4,13 +4,13 @@ import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
 import com.fourcamp.NutriPlan.dtos.conta.ClienteDto;
 import com.fourcamp.NutriPlan.enuns.CategoriaClienteEnum;
 import com.fourcamp.NutriPlan.exception.CategoriaClienteException;
+import com.fourcamp.NutriPlan.exception.ClienteException;
 import com.fourcamp.NutriPlan.exception.ContaException;
 import com.fourcamp.NutriPlan.model.conta.CategoriaClienteEntity;
 import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -25,7 +25,7 @@ public class ClienteService {
     public ClienteDto criarCliente(ClienteDto clienteDto){
 
         // Buscar a categoria cliente pelo nome
-        CategoriaClienteEntity categoriaCliente = categoriaClienteDao.buscarCategoriaPorNome(clienteDto.getIdCategoria());
+        CategoriaClienteEntity categoriaCliente = categoriaClienteDao.buscarCategoriaPorNome(clienteDto.getNomeCategoria());
 
         if (categoriaCliente == null) {
             throw new CategoriaClienteException(Constantes.MSG_ERRO_CATEGORIA_CLIENTE + categoriaCliente);
@@ -40,7 +40,7 @@ public class ClienteService {
                     .dataNascimento(clienteDto.getDataNascimento())
                     .tmb(clienteDto.getTmb())
                     .get(clienteDto.getGet())
-                    .idCategoria(categoriaCliente.getNomeCategoria())
+                    .nomeCategoria(categoriaCliente.getNomeCategoria())
                     .build();
 
             ClienteEntity clienteSalvo = clienteDao.criarConta(cliente);
@@ -59,7 +59,7 @@ public class ClienteService {
                 .dataNascimento(clienteSalvo.getDataNascimento())
                 .tmb(clienteSalvo.getTmb())
                 .get(clienteSalvo.getGet())
-                .idCategoria(String.valueOf(CategoriaClienteEnum.valueOf(categoriaCliente.getNomeCategoria())))
+                .nomeCategoria(String.valueOf(CategoriaClienteEnum.valueOf(categoriaCliente.getNomeCategoria())))
                 .build();
     }
 
@@ -68,11 +68,18 @@ public class ClienteService {
     }
 
     public List<ClienteEntity> buscarTodosClientes() {
-        return clienteDao.buscarTodosClientes();
+        try {
+            return clienteDao.buscarTodosClientes();
+        }catch (Exception e){
+            throw new ClienteException(Constantes.MSG_ERRO_LISTAR_CLIENTE);
+        }
     }
 
     public void atualizarCliente(ClienteEntity cliente) {
-        clienteDao.atualizarCliente(cliente);
+        try {
+            clienteDao.atualizarCliente(cliente);
+        }catch (Exception e){
+            throw new ClienteException(Constantes.MSG_ERRO_ATUALIZAR_CLIENTE + e.getMessage());
+        }
     }
-
 }

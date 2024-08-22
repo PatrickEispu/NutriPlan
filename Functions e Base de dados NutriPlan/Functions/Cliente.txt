@@ -5,16 +5,24 @@ CREATE OR REPLACE FUNCTION criar_cliente(
     p_ds_data_nascimento VARCHAR(255),
     p_nr_tmb DOUBLE PRECISION,
     p_nr_get DOUBLE PRECISION,
-    p_fk_nr_id_categoria INT,
+    p_nm_categoria VARCHAR,  -- Recebe o nome da categoria
     p_fk_nr_id_conta INT
 )
 RETURNS INT AS $$
 DECLARE
     new_id INT;
+    v_id_categoria INT;  -- Variável para armazenar o ID da categoria
 BEGIN
+    -- Buscar o ID da categoria com base no nome
+    SELECT nr_id_categoria INTO v_id_categoria
+    FROM categoria
+    WHERE nm_categoria = p_nm_categoria;
+
+    -- Inserir os dados na tabela cliente
     INSERT INTO cliente (ds_genero, nr_peso, nr_altura, ds_data_nascimento, nr_tmb, nr_get, fk_nr_id_categoria, fk_nr_id_conta)
-    VALUES (p_ds_genero, p_nr_peso, p_nr_altura, p_ds_data_nascimento, p_nr_tmb, p_nr_get, p_fk_nr_id_categoria, p_fk_nr_id_conta)
+    VALUES (p_ds_genero, p_nr_peso, p_nr_altura, p_ds_data_nascimento, p_nr_tmb, p_nr_get, v_id_categoria, p_fk_nr_id_conta)
     RETURNING fk_nr_id_conta INTO new_id;
+
     RETURN new_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -77,30 +85,39 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION atualizar_cliente(
-    p_fk_nr_id_conta INT,
-    p_ds_genero CHAR(1),
-    p_nr_peso NUMERIC,
-    p_nr_altura NUMERIC,
-    p_ds_data_nascimento VARCHAR,
+CREATE OR REPLACE PROCEDURE atualizar_cliente_procedure(
+    p_id_conta INT,
+    p_ds_genero VARCHAR,
+    p_nr_peso DOUBLE PRECISION,
+    p_nr_altura DOUBLE PRECISION,
+    p_ds_data_nascimento VARCHAR(255),
     p_nr_tmb DOUBLE PRECISION,
     p_nr_get DOUBLE PRECISION,
-    p_fk_nr_id_categoria INT
+    p_nm_categoria VARCHAR  -- Nome da categoria
 )
-RETURNS VOID AS $$
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_id_categoria INT;  -- Variável para armazenar o ID da categoria
 BEGIN
-    UPDATE cliente
-    SET ds_genero = p_ds_genero, nr_peso = p_nr_peso, nr_altura = p_nr_altura, ds_data_nascimento = p_ds_data_nascimento, 
-        nr_tmb = p_nr_tmb, nr_get = p_nr_get, fk_nr_id_categoria = p_fk_nr_id_categoria
-    WHERE fk_nr_id_conta = p_fk_nr_id_conta;
-END;
-$$ LANGUAGE plpgsql;
+    -- Buscar o ID da categoria com base no nome
+    SELECT nr_id_categoria INTO v_id_categoria
+    FROM categoria
+    WHERE nm_categoria = p_nm_categoria;
 
-CREATE OR REPLACE FUNCTION deletar_cliente(
-    p_fk_nr_id_conta INT
-)
-RETURNS VOID AS $$
-BEGIN
-    DELETE FROM cliente WHERE fk_nr_id_conta = p_fk_nr_id_conta;
+    -- Atualizar os dados na tabela cliente
+    UPDATE cliente
+    SET
+        ds_genero = p_ds_genero,
+        nr_peso = p_nr_peso,
+        nr_altura = p_nr_altura,
+        ds_data_nascimento = p_ds_data_nascimento,
+        nr_tmb = p_nr_tmb,
+        nr_get = p_nr_get,
+        fk_nr_id_categoria = v_id_categoria
+    WHERE fk_nr_id_conta = p_id_conta;
+
+    -- Commit explícito se necessário (caso não esteja sendo gerenciado por transação externa)
+    COMMIT;
 END;
-$$ LANGUAGE plpgsql;
+$$;
