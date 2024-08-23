@@ -12,12 +12,12 @@ public class DispensaDaoImpl implements DispensaDao {
 
     public void addAlimentoNaDispensa(Integer idDispensa, Integer idAlimento, Integer quantidade) {
         String sql = "SELECT adicionar_alimento_na_dispensa(?,?,?)";
-        jdbcTemplate.update(sql,idDispensa,idAlimento,quantidade);
+        jdbcTemplate.queryForObject(sql, new Object[] {idDispensa,idAlimento,quantidade}, Integer.class);
     }
 
     public Integer criarDispensa(Integer idConta) {
-        String sql = "SELECT criar_dispensa (?)";
-        return jdbcTemplate.update(sql,idConta);
+        String sql = "SELECT criar_dispensa(?)";
+        return jdbcTemplate.queryForObject(sql, new Object[]{idConta}, Integer.class);
 
     }
 }
