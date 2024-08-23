@@ -1,4 +1,4 @@
-package com.fourcamp.NutriPlan.dtos;
+package com.fourcamp.NutriPlan.dtos.diario;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

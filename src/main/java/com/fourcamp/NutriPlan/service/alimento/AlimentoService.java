@@ -2,7 +2,7 @@ package com.fourcamp.NutriPlan.service.alimento;
 
 import com.fourcamp.NutriPlan.dao.alimento.AlimentoDao;
 import com.fourcamp.NutriPlan.dao.alimento.CategoriaAlimentoDao;
-import com.fourcamp.NutriPlan.dtos.MacrosDto;
+import com.fourcamp.NutriPlan.dtos.diario.MacrosDto;
 import com.fourcamp.NutriPlan.dtos.alimento.AlimentoDto;
 import com.fourcamp.NutriPlan.enuns.CategoriaAlimentoEnum;
 import com.fourcamp.NutriPlan.exception.CategoriaAlimentoException;
@@ -76,11 +76,11 @@ public class AlimentoService {
         }
     }
 
-    private double calcularProteina(double peso) {
+    public double calcularProteina(double peso) {
         return 2.0 * peso;
     }
 
-    private double calcularCarboidratos(double gastoEnergetico, double proteinas, double gorduras) {
+    public double calcularCarboidratos(double gastoEnergetico, double proteinas, double gorduras) {
         double proteinasEmCalorias = proteinas * 4;
         double gordurasEmCalorias = gorduras * 9;
         return (gastoEnergetico - proteinasEmCalorias - gordurasEmCalorias) / 4;

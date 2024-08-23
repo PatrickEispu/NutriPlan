@@ -1,7 +1,6 @@
 package com.fourcamp.NutriPlan.controller;
 
 import com.fourcamp.NutriPlan.dtos.conta.ClienteDto;
-import com.fourcamp.NutriPlan.exception.ClienteException;
 import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
 import com.fourcamp.NutriPlan.service.conta.ClienteService;
 import com.fourcamp.NutriPlan.utils.Constantes;
@@ -20,6 +19,7 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+
 
     @Operation(description = "Criar cliente no banco")
     @ApiResponses(value = {
@@ -58,7 +58,7 @@ public class ClienteController {
     })
     @PutMapping("/{idConta}")
     public ResponseEntity atualizarCliente(@PathVariable int idConta, @RequestBody ClienteEntity cliente) {
-        cliente.setIdConta(idConta);
+        cliente.setFkNrIdConta(idConta);
         clienteService.atualizarCliente(cliente);
         return ResponseEntity.ok(Constantes.MSG_ATUALIZAR_CLIENTE);
     }

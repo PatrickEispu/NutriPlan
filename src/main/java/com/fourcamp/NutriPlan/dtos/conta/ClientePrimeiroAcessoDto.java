@@ -1,4 +1,5 @@
-package com.fourcamp.NutriPlan.dtos.conta;
+package com.fourcamp.NutriPlan.dto.conta;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,14 +10,18 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class ClienteDto extends ContaDto {
+public class ClientePrimeiroAcessoDto {
     private Integer idConta;
-    private String genero;
+    private String nome;
+    private char genero;
     private Double peso;
     private Double altura;
     private String dataNascimento;
     private Double tmb;
     private Double get;
-    private Integer idCategoria;
     private String categoria;
+    private String tempo;
+    private String objetivo;
+    private Integer idCategoria;
+
 }

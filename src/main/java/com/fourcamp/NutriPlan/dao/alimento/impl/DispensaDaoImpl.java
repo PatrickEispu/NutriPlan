@@ -1,5 +1,6 @@
-package com.fourcamp.NutriPlan.dao.alimento;
+package com.fourcamp.NutriPlan.dao.alimento.impl;
 
+import com.fourcamp.NutriPlan.dao.alimento.DispensaDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

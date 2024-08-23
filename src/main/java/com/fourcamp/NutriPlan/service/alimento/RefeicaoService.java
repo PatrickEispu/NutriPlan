@@ -2,7 +2,7 @@ package com.fourcamp.NutriPlan.service.alimento;
 
 
 import com.fourcamp.NutriPlan.dao.alimento.RefeicaoDao;
-import com.fourcamp.NutriPlan.dtos.MacrosDto;
+import com.fourcamp.NutriPlan.dtos.diario.MacrosDto;
 import com.fourcamp.NutriPlan.dtos.alimento.AlimentoDto;
 //import com.fourcamp.NutriPlan.service.conta.ClienteService;
 import com.fourcamp.NutriPlan.model.alimento.RefeicaoEntity;

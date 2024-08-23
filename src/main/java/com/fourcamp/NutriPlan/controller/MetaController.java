@@ -1,7 +1,7 @@
 package com.fourcamp.NutriPlan.controller;
 
 import com.fourcamp.NutriPlan.dtos.meta.MetaDto;
-import com.fourcamp.NutriPlan.service.meta.MetaService;
+import com.fourcamp.NutriPlan.service.conta.ClienteService;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class MetaController {
 
     @Autowired
-    private MetaService metaService;
+    private ClienteService clienteService;
 
     @Operation(description = "Criação da meta do cliente")
     @ApiResponses(value = {
@@ -24,9 +24,9 @@ public class MetaController {
             @ApiResponse(responseCode = "400", description = "Falha na criação da meta, dados inválidos ou formato incorreto"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
-    @PostMapping("/criar-meta")
-    public ResponseEntity<String> criaMeta(@RequestBody MetaDto metaDto) {
-        String response = String.valueOf(metaService.criarMeta(metaDto));
-        return ResponseEntity.ok(Constantes.MSG_META_SUCESSO);
+    @PostMapping("/{email}/criar-meta")
+    public ResponseEntity<String> criaMeta(@PathVariable("email") String email,@RequestBody MetaDto metaDto) {
+        String response = String.valueOf(clienteService.criarClienteMeta(email,metaDto));
+        return ResponseEntity.ok(Constantes.MSG_META_SUCESSO+"\n"+response);
     }
 }

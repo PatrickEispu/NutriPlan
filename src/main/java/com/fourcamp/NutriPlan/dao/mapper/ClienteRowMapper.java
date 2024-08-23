@@ -11,17 +11,17 @@ public class ClienteRowMapper implements RowMapper<ClienteEntity> {
     @Override
     public ClienteEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
         ClienteEntity cliente = new ClienteEntity();
-        cliente.setIdConta(rs.getInt(1));
+        cliente.setFkNrIdConta(rs.getInt(1));
         cliente.setNome(rs.getString(2));
         cliente.setEmail(rs.getString(3));
         cliente.setSenha(rs.getString(4));
-        cliente.setGenero(rs.getString(5));
-        cliente.setPeso(rs.getDouble(6));
-        cliente.setAltura(rs.getDouble(7));
-        cliente.setDataNascimento(rs.getString(8));
-        cliente.setTmb(rs.getDouble(9));
-        cliente.setGet(rs.getDouble(10));
-        cliente.setCategoria(rs.getString(11));
+        cliente.setDsGenero(rs.getString(5));
+        cliente.setNrPeso(rs.getDouble(6));
+        cliente.setNrAltura(rs.getDouble(7));
+        cliente.setDsDataNascimento(rs.getString(8));
+        cliente.setNrTmb(rs.getDouble(9));
+        cliente.setNrGet(rs.getDouble(10));
+        cliente.setFkNrIdCategoria(rs.getString(11));
         cliente.setTipoConta(rs.getString(12));
         return cliente;
     }

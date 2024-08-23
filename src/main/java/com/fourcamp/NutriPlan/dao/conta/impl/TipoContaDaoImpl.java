@@ -1,5 +1,6 @@
-package com.fourcamp.NutriPlan.dao.conta;
+package com.fourcamp.NutriPlan.dao.conta.impl;
 
+import com.fourcamp.NutriPlan.dao.conta.TipoContaDao;
 import com.fourcamp.NutriPlan.dao.mapper.TipoContaRowMapper;
 import com.fourcamp.NutriPlan.model.conta.TipoContaEntity;
 import org.springframework.beans.factory.annotation.Autowired;

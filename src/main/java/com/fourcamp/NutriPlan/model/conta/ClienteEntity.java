@@ -8,12 +8,12 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
 public class ClienteEntity extends ContaEntity {
-    private String genero;
-    private Double peso;
-    private Double altura;
-    private String dataNascimento;
-    private Double tmb;
-    private Double get;
-    private String Categoria;
-    private Integer idConta;
+    private Integer fkNrIdConta;
+    private String dsGenero;
+    private Double nrPeso;
+    private Double nrAltura;
+    private String dsDataNascimento;
+    private Double nrTmb;
+    private Double nrGet;
+    private String fkNrIdCategoria;
 }
