@@ -1,5 +1,7 @@
-package com.fourcamp.NutriPlan.dao.conta;
+package com.fourcamp.NutriPlan.dao.conta.impl;
 
+import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
+import com.fourcamp.NutriPlan.dto.conta.ClientePrimeiroAcessoDto;
 import com.fourcamp.NutriPlan.model.conta.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -39,7 +41,7 @@ public class ClienteDaoImpl implements ClienteDao {
     }
 
     @Override
-    public String criarCliente(Cliente cliente) {
+    public String criarCliente(ClientePrimeiroAcessoDto cliente) {
         try{
             String sql = CRIAR_CLIENTE;
             jdbcTemplate.update(sql, cliente.getIdConta(), String.valueOf(cliente.getGenero()), cliente.getPeso(), cliente.getAltura(), cliente.getDataNascimento(), cliente.getTmb(), cliente.getGet(), cliente.getIdCategoria());
@@ -66,6 +68,19 @@ public class ClienteDaoImpl implements ClienteDao {
     public void atualizarCliente(Cliente cliente) {
         String sql = "UPDATE cliente SET ds_genero = ?, nr_peso = ?, nr_altura = ?, ds_data_nascimento = ?, nr_tmb = ?, nr_get = ?, fk_nr_id_categoria = ? WHERE fk_nr_id_conta = ?";
         jdbcTemplate.update(sql, String.valueOf(cliente.getGenero()), cliente.getPeso(), cliente.getAltura(), cliente.getDataNascimento(), cliente.getTmb(), cliente.getGet(), cliente.getIdCategoria(), cliente.getIdConta());
+    }
+
+    @Override
+    public String buscarClienteCategoria(int idCategoria) {
+        String sql = "SELECT buscar_categoria_por_id(?)";
+
+        return jdbcTemplate.queryForObject(sql,String.class,idCategoria);
+    }
+
+    @Override
+    public void atualizarTMBGET(Integer idConta, double tmb, double get) {
+        String sql = "CALL atualiza_cliente_get_tmb(?,?,?)";
+        jdbcTemplate.update(sql,idConta,tmb,get);
     }
 
 }

@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @SuperBuilder(toBuilder = true)
 public class Cliente extends ContaEntity {
     private Integer idConta;
-    private char genero;
+    private Character genero;
     private Double peso;
     private Double altura;
     private String dataNascimento;

@@ -13,6 +13,6 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 public class ObjetivoEntity implements Serializable {
 
-    private Integer idObjetivo;
-    private String descricaoObjetivo;
+    private Integer nrIdObjetivo;
+    private String dsDescricaoObjetivo;
 }

@@ -10,8 +10,8 @@ public class ObjetivoRowMapper implements RowMapper<ObjetivoEntity> {
     @Override
     public ObjetivoEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
         ObjetivoEntity objetivo = new ObjetivoEntity();
-        objetivo.setIdObjetivo(rs.getInt(1));
-        objetivo.setDescricaoObjetivo(rs.getString(2));
+        objetivo.setNrIdObjetivo(rs.getInt(1));
+        objetivo.setDsDescricaoObjetivo(rs.getString(2));
         return objetivo;
     }
 }

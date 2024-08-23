@@ -1,6 +1,7 @@
-package com.fourcamp.NutriPlan.dao.meta;
+package com.fourcamp.NutriPlan.dao.meta.impl;
 
 import com.fourcamp.NutriPlan.dao.mapper.ObjetivoRowMapper;
+import com.fourcamp.NutriPlan.dao.meta.ObjetivoDao;
 import com.fourcamp.NutriPlan.model.meta.ObjetivoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -1,5 +1,6 @@
-package com.fourcamp.NutriPlan.dao.alimento;
+package com.fourcamp.NutriPlan.dao.alimento.impl;
 
+import com.fourcamp.NutriPlan.dao.alimento.CategoriaAlimentoDao;
 import com.fourcamp.NutriPlan.dao.mapper.CategoriaAlimentoRowMapper;
 import com.fourcamp.NutriPlan.model.alimento.CategoriaAlimentoEntity;
 import org.springframework.beans.factory.annotation.Autowired;

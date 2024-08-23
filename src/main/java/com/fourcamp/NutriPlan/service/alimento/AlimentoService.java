@@ -73,11 +73,11 @@ public class AlimentoService {
         return alimentoDao.listarTodosAlimentos();
     }
 
-    private double calcularProteina(double peso) {
+    public double calcularProteina(double peso) {
         return 2.0 * peso;
     }
 
-    private double calcularCarboidratos(double gastoEnergetico, double proteinas, double gorduras) {
+    public double calcularCarboidratos(double gastoEnergetico, double proteinas, double gorduras) {
         double proteinasEmCalorias = proteinas * 4;
         double gordurasEmCalorias = gorduras * 9;
         return (gastoEnergetico - proteinasEmCalorias - gordurasEmCalorias) / 4;

@@ -1,4 +1,4 @@
-package com.fourcamp.NutriPlan.infra;
+package com.fourcamp.NutriPlan.handler;
 
 import com.fourcamp.NutriPlan.exception.*;
 import org.springframework.http.HttpStatus;

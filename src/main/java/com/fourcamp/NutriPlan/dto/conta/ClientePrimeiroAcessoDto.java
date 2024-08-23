@@ -1,23 +1,27 @@
 package com.fourcamp.NutriPlan.dto.conta;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder(toBuilder = true)
-public class ClienteDto extends ContaDto {
+public class ClientePrimeiroAcessoDto {
     private Integer idConta;
+    private String nome;
     private char genero;
-    private double peso;
-    private double altura;
+    private Double peso;
+    private Double altura;
     private String dataNascimento;
     private Double tmb;
     private Double get;
-    private Integer IdCategoria;
+    private String categoria;
+    private String tempo;
+    private String objetivo;
+    private Integer idCategoria;
+
 }
