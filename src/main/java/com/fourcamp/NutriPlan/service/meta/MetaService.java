@@ -4,6 +4,7 @@ import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
 import com.fourcamp.NutriPlan.dao.meta.MetaDao;
 import com.fourcamp.NutriPlan.dao.meta.ObjetivoDao;
 import com.fourcamp.NutriPlan.dao.meta.TempoDao;
+import com.fourcamp.NutriPlan.dtos.meta.MetaDto;
 import com.fourcamp.NutriPlan.dto.MacrosDto;
 import com.fourcamp.NutriPlan.dto.conta.ClientePrimeiroAcessoDto;
 import com.fourcamp.NutriPlan.dto.meta.MetaDto;

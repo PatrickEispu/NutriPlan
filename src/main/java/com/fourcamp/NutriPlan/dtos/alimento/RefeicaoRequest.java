@@ -1,4 +1,4 @@
-package com.fourcamp.NutriPlan.dto.alimento;
+package com.fourcamp.NutriPlan.dtos.alimento;
 
 import lombok.Data;
 

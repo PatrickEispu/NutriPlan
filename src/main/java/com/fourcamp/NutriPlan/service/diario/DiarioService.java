@@ -2,7 +2,7 @@ package com.fourcamp.NutriPlan.service.diario;
 
 import com.fourcamp.NutriPlan.dao.alimento.AlimentoDao;
 import com.fourcamp.NutriPlan.dao.diario.DiarioDao;
-import com.fourcamp.NutriPlan.dto.diario.DiarioDto;
+import com.fourcamp.NutriPlan.dtos.diario.DiarioDto;
 import com.fourcamp.NutriPlan.model.diario.DiarioEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

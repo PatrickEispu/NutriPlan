@@ -1,8 +1,6 @@
-package com.fourcamp.NutriPlan.dto;
+package com.fourcamp.NutriPlan.dtos;
 
 import lombok.Data;
-
-import java.util.Date;
 
 @Data
 public class LoginRequestDto {

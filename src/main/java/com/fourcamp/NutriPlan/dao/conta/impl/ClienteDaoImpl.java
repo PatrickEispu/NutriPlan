@@ -1,73 +1,61 @@
 package com.fourcamp.NutriPlan.dao.conta.impl;
-
 import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
 import com.fourcamp.NutriPlan.dto.conta.ClientePrimeiroAcessoDto;
 import com.fourcamp.NutriPlan.model.conta.Cliente;
+import com.fourcamp.NutriPlan.dao.mapper.ClienteRowMapper;
+import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.CallableStatementCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-
 
 @Repository
 public class ClienteDaoImpl implements ClienteDao {
-    private static final String CRIAR_CLIENTE = "SELECT public.criar_cliente(?, ?, ?, ?, ?, ?, ?, ?)";
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public ClienteDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-    private static final class ClienteMapper implements RowMapper<Cliente> {
-        @Override
-        public Cliente mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Cliente(
-                    rs.getInt("fk_nr_id_conta"),
-                    rs.getString("ds_genero").charAt(0),
-                    rs.getDouble("nr_peso"),
-                    rs.getDouble("nr_altura"),
-                    rs.getString("ds_data_nascimento"),
-                    rs.getDouble("nr_tmb"),
-                    rs.getDouble("nr_get"),
-                    rs.getInt("fk_nr_id_categoria")
-            );
-        }
+    @Override
+    @Transactional
+    public ClienteEntity criarConta(ClienteEntity cliente) {
+        String sql = "SELECT criar_cliente(?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.queryForObject(sql, new Object[]{
+                        cliente.getGenero(), cliente.getPeso(), cliente.getAltura(), cliente.getDataNascimento(), cliente.getTmb(), cliente.getGet(), cliente.getCategoria(), cliente.getIdConta()},
+                Integer.class);
+        return cliente;
     }
 
     @Override
-    public String criarCliente(ClientePrimeiroAcessoDto cliente) {
-        try{
-            String sql = CRIAR_CLIENTE;
-            jdbcTemplate.update(sql, cliente.getIdConta(), String.valueOf(cliente.getGenero()), cliente.getPeso(), cliente.getAltura(), cliente.getDataNascimento(), cliente.getTmb(), cliente.getGet(), cliente.getIdCategoria());
-            return "Cliente" + cliente.getNome() + "Criado com sucesso";
-        }catch (Exception e){
-            return "Erro ao salvar o cliente" + e.getMessage();
-        }
-
-    }
-
-    @Override
-    public Cliente buscarClientePorId(int idConta) {
+    @Transactional
+    public ClienteEntity buscarClientePorId(int idConta) {
         String sql = "SELECT * FROM cliente WHERE fk_nr_id_conta = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{idConta}, new ClienteMapper());
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(ClienteEntity.class), idConta);
     }
 
     @Override
-    public List<Cliente> buscarTodosClientes() {
-        String sql = "SELECT * FROM cliente";
-        return jdbcTemplate.query(sql, new ClienteMapper());
+    @Transactional
+    public List<ClienteEntity> buscarTodosClientes() {
+        String sql = "SELECT * FROM listar_todos_clientes()";
+        return jdbcTemplate.query(sql, new ClienteRowMapper());
     }
 
-    @Override
-    public void atualizarCliente(Cliente cliente) {
-        String sql = "UPDATE cliente SET ds_genero = ?, nr_peso = ?, nr_altura = ?, ds_data_nascimento = ?, nr_tmb = ?, nr_get = ?, fk_nr_id_categoria = ? WHERE fk_nr_id_conta = ?";
-        jdbcTemplate.update(sql, String.valueOf(cliente.getGenero()), cliente.getPeso(), cliente.getAltura(), cliente.getDataNascimento(), cliente.getTmb(), cliente.getGet(), cliente.getIdCategoria(), cliente.getIdConta());
+    public void atualizarCliente(ClienteEntity cliente) {
+        String sql = "CALL atualizar_cliente_procedure(?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.execute(sql, (CallableStatementCallback<Object>) cs -> {
+            cs.setInt(1, cliente.getIdConta());
+            cs.setString(2, cliente.getGenero());
+            cs.setDouble(3, cliente.getPeso());
+            cs.setDouble(4, cliente.getAltura());
+            cs.setString(5, cliente.getDataNascimento());
+            cs.setDouble(6, cliente.getTmb());
+            cs.setDouble(7, cliente.getGet());
+            cs.setString(8, cliente.getCategoria());
+            cs.execute();
+            return null;
+        });
     }
 
     @Override

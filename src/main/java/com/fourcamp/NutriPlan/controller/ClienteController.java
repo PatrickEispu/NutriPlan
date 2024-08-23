@@ -1,43 +1,73 @@
 package com.fourcamp.NutriPlan.controller;
 
-import com.fourcamp.NutriPlan.dto.conta.ClienteDto;
+import com.fourcamp.NutriPlan.dtos.conta.ClienteDto;
 import com.fourcamp.NutriPlan.dto.conta.ClientePrimeiroAcessoDto;
-import com.fourcamp.NutriPlan.model.conta.Cliente;
+import com.fourcamp.NutriPlan.exception.ClienteException;
+import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
 import com.fourcamp.NutriPlan.service.conta.ClienteService;
+import com.fourcamp.NutriPlan.utils.Constantes;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/api/cliente")
+@CrossOrigin
+@RequestMapping("/v1")
 public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
 
+//    @PostMapping("/criar-cliente")
+//    public ResponseEntity<ClientePrimeiroAcessoDto> criarCliente(@RequestBody ClientePrimeiroAcessoDto cliente,
+//                                                                 @PathVariable("email")String email)
+//    {
+//        return ResponseEntity.ok(this.clienteService.criarCliente(cliente,email));
+//    }
+
+    @Operation(description = "Criar cliente no banco")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cadastro do cliente realizado com sucesso!"),
+            @ApiResponse(responseCode = "400", description = "Erro ao realizar cadastro do cliente, dados inválidos ou formato incorreto"),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
     @PostMapping("/criar-cliente")
-    public ResponseEntity<ClientePrimeiroAcessoDto> criarCliente(@RequestBody ClientePrimeiroAcessoDto cliente,
-                                                                 @PathVariable("email")String email)
-    {
-        return ResponseEntity.ok(this.clienteService.criarCliente(cliente,email));
+    public ResponseEntity<String> criarCliente(@RequestBody ClienteDto clienteDto) {
+        String response = String.valueOf(clienteService.criarCliente(clienteDto));
+        return ResponseEntity.ok(Constantes.MSG_CRIACAO_CLIENTE_SUCESSO);
     }
 
+
     @GetMapping("/{idConta}")
-    public Cliente buscarClientePorId(@PathVariable int idConta) {
+    public ClienteEntity buscarClientePorId(@PathVariable int idConta) {
         return clienteService.buscarClientePorId(idConta);
     }
 
-    @GetMapping("/todos")
-    public List<Cliente> buscarTodosClientes() {
+    @Operation(description = "Listar todos os clientes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Clientes encontrado com sucesso!"),
+            @ApiResponse(responseCode = "400", description = "Erro ao listar cliente!"),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    @GetMapping("/listar")
+    public List<ClienteEntity> buscarTodosClientes() {
         return clienteService.buscarTodosClientes();
     }
 
+    @Operation(description = "Atualizar cliente por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso!"),
+            @ApiResponse(responseCode = "400", description = "Erro ao atualizar cliente!"),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
     @PutMapping("/{idConta}")
-    public void atualizarCliente(@PathVariable int idConta, @RequestBody Cliente cliente) {
+    public ResponseEntity atualizarCliente(@PathVariable int idConta, @RequestBody ClienteEntity cliente) {
         cliente.setIdConta(idConta);
         clienteService.atualizarCliente(cliente);
+        return ResponseEntity.ok(Constantes.MSG_ATUALIZAR_CLIENTE);
     }
 }

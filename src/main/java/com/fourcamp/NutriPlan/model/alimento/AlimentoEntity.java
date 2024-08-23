@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 public class AlimentoEntity {
 
     private Integer idAlimento;
-    private Integer idCategoriaAlimento;
+    private String CategoriaAlimento;
     private Double kcal;
     private Double carboidrato;
     private Double proteina;

@@ -2,8 +2,8 @@ package com.fourcamp.NutriPlan.service.alimento;
 
 
 import com.fourcamp.NutriPlan.dao.alimento.RefeicaoDao;
-import com.fourcamp.NutriPlan.dto.MacrosDto;
-import com.fourcamp.NutriPlan.dto.alimento.AlimentoDto;
+import com.fourcamp.NutriPlan.dtos.MacrosDto;
+import com.fourcamp.NutriPlan.dtos.alimento.AlimentoDto;
 //import com.fourcamp.NutriPlan.service.conta.ClienteService;
 import com.fourcamp.NutriPlan.model.alimento.RefeicaoEntity;
 import com.fourcamp.NutriPlan.model.diario.DiarioEntity;
@@ -12,7 +12,6 @@ import com.fourcamp.NutriPlan.service.diario.DiarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Service

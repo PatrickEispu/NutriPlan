@@ -2,7 +2,7 @@ package com.fourcamp.NutriPlan.service.conta;
 
 import com.fourcamp.NutriPlan.dao.conta.ContaDao;
 import com.fourcamp.NutriPlan.dao.conta.TipoContaDao;
-import com.fourcamp.NutriPlan.dto.conta.ContaDto;
+import com.fourcamp.NutriPlan.dtos.conta.ContaDto;
 import com.fourcamp.NutriPlan.enuns.TipoContaEnum;
 import com.fourcamp.NutriPlan.exception.ContaException;
 import com.fourcamp.NutriPlan.exception.EmailException;
@@ -55,7 +55,7 @@ public class ContaService {
                     .nome(contaDto.getNome())
                     .email(contaDto.getEmail())
                     .senha(contaDto.getSenha())
-                    .TipoConta(tipoConta.getIdTipoConta())
+                    .TipoConta(tipoConta.getNomeTipoConta())
                     .build();
 
             ContaEntity contaSalva = contaDao.criarConta(conta);

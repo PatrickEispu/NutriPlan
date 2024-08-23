@@ -2,15 +2,28 @@ CREATE OR REPLACE FUNCTION criar_conta(
     p_nm_nome VARCHAR,
     p_ds_email VARCHAR,
     p_ds_senha VARCHAR,
-    p_fk_nr_id_tipo_conta INT
+    p_nm_tipo_conta VARCHAR
 )
 RETURNS INT AS $$
 DECLARE
     new_id INT;
+    tipo_conta_id INT;
 BEGIN
+    -- Busca o ID do tipo de conta com base no nome do tipo de conta
+    SELECT nr_id_tipo_conta INTO tipo_conta_id
+    FROM tipo_conta
+    WHERE nm_tipo_conta = p_nm_tipo_conta;
+
+    -- Verifica se o tipo de conta foi encontrado
+    IF tipo_conta_id IS NULL THEN
+        RAISE EXCEPTION 'Tipo de conta não encontrado: %', p_nm_tipo_conta;
+    END IF;
+
+    -- Insere a nova conta com o ID do tipo de conta encontrado
     INSERT INTO conta (nm_nome, ds_email, ds_senha, fk_nr_id_tipo_conta)
-    VALUES (p_nm_nome, p_ds_email, p_ds_senha, p_fk_nr_id_tipo_conta)
+    VALUES (p_nm_nome, p_ds_email, p_ds_senha, tipo_conta_id)
     RETURNING nr_id_conta INTO new_id;
+
     RETURN new_id;
 END;
 $$ LANGUAGE plpgsql;

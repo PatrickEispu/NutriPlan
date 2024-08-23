@@ -1,6 +1,7 @@
 package com.fourcamp.NutriPlan.controller;
 
-import com.fourcamp.NutriPlan.dto.conta.ContaDto;
+import com.fourcamp.NutriPlan.dtos.conta.ClienteDto;
+import com.fourcamp.NutriPlan.dtos.conta.ContaDto;
 import com.fourcamp.NutriPlan.service.conta.ContaService;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,8 +26,8 @@ public class ContaController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @PostMapping("/criar-conta")
-    public ResponseEntity<String> criaConta(@RequestBody ContaDto contaDto) {
-        String response = String.valueOf(contaService.criarConta(contaDto));
+    public ResponseEntity<String> criaConta(@RequestBody ClienteDto clienteDto) {
+        String response = String.valueOf(contaService.criarConta(clienteDto));
         return ResponseEntity.ok(Constantes.MSG_CRIACAO_CONTA_SUCESSO);
     }
 }

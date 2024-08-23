@@ -1,19 +1,5 @@
-CREATE OR REPLACE FUNCTION criar_categoria(
+CREATE OR REPLACE FUNCTION buscar_categoria_por_nome(
     p_nm_categoria VARCHAR
-)
-RETURNS INT AS $$
-DECLARE
-    new_id INT;
-BEGIN
-    INSERT INTO categoria (nm_categoria)
-    VALUES (p_nm_categoria)
-    RETURNING nr_id_categoria INTO new_id;
-    RETURN new_id;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION buscar_categoria_por_id(
-    p_nr_id_categoria INT
 )
 RETURNS TABLE(
     nr_id_categoria INT,
@@ -21,29 +7,8 @@ RETURNS TABLE(
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT nr_id_categoria, nm_categoria
-    FROM categoria
-    WHERE nr_id_categoria = p_nr_id_categoria;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION atualizar_categoria(
-    p_nr_id_categoria INT,
-    p_nm_categoria VARCHAR
-)
-RETURNS VOID AS $$
-BEGIN
-    UPDATE categoria
-    SET nm_categoria = p_nm_categoria
-    WHERE nr_id_categoria = p_nr_id_categoria;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION deletar_categoria(
-    p_nr_id_categoria INT
-)
-RETURNS VOID AS $$
-BEGIN
-    DELETE FROM categoria WHERE nr_id_categoria = p_nr_id_categoria;
+    SELECT c.nr_id_categoria, c.nm_categoria
+    FROM categoria c
+    WHERE c.nm_categoria = p_nm_categoria;
 END;
 $$ LANGUAGE plpgsql;

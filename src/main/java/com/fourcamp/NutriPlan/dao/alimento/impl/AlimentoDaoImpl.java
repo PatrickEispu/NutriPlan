@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public class AlimentoDaoImpl implements AlimentoDao {
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -20,7 +19,7 @@ public class AlimentoDaoImpl implements AlimentoDao {
     public AlimentoEntity criarAlimento(AlimentoEntity alimento) {
         String sql = "SELECT criar_alimento(?, ?, ?, ?, ?, ?, ?)";
              jdbcTemplate.queryForObject(sql, new Object[]{
-                    alimento.getIdCategoriaAlimento(), alimento.getKcal(), alimento.getCarboidrato(), alimento.getProteina(), alimento.getGordura(), alimento.getQuantidade(), alimento.getNome()},
+                    alimento.getCategoriaAlimento(), alimento.getKcal(), alimento.getCarboidrato(), alimento.getProteina(), alimento.getGordura(), alimento.getQuantidade(), alimento.getNome()},
                     Integer.class);
         return alimento;
     }

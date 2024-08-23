@@ -14,7 +14,7 @@ public class AlimentoRowMapper implements RowMapper<AlimentoEntity> {
     public AlimentoEntity mapRow(ResultSet rs, int rowNum) throws SQLException{
         AlimentoEntity alimento = new AlimentoEntity();
         alimento.setIdAlimento(rs.getInt(1));
-        alimento.setIdCategoriaAlimento(rs.getInt(2));
+        alimento.setCategoriaAlimento(rs.getString(2));
         alimento.setKcal(rs.getDouble(3));
         alimento.setCarboidrato(rs.getDouble(4));
         alimento.setProteina(rs.getDouble(5));

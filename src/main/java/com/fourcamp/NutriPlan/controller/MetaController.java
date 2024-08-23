@@ -1,5 +1,6 @@
 package com.fourcamp.NutriPlan.controller;
 
+import com.fourcamp.NutriPlan.dtos.meta.MetaDto;
 import com.fourcamp.NutriPlan.dto.conta.ContaDto;
 import com.fourcamp.NutriPlan.dto.meta.MetaDto;
 import com.fourcamp.NutriPlan.service.conta.ClienteService;

@@ -1,6 +1,6 @@
 package com.fourcamp.NutriPlan.enuns;
 
-public enum CategoriaEnum {
+public enum CategoriaClienteEnum {
 
     NAO_MUITO_ATIVO,
     LEVEMENTE_ATIVO,

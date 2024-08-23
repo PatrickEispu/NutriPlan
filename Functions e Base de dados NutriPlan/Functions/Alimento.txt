@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION criar_alimento(
-    p_fk_nr_id_categoria_alimento INT,
+    p_nm_categoria_alimento VARCHAR,  -- Recebe o nome da categoria
     p_nr_kcal DOUBLE PRECISION,
     p_nr_carboidrato DOUBLE PRECISION,
     p_nr_proteina DOUBLE PRECISION,
@@ -10,10 +10,18 @@ CREATE OR REPLACE FUNCTION criar_alimento(
 RETURNS INT AS $$
 DECLARE
     new_id INT;
+    v_id_categoria_alimento INT;  -- Variável para armazenar o ID da categoria
 BEGIN
+    -- Buscar o ID da categoria com base no nome
+    SELECT nr_id_categoria_alimento INTO v_id_categoria_alimento
+    FROM categoria_alimento
+    WHERE nm_categoria = p_nm_categoria_alimento;
+
+    -- Inserir os dados na tabela alimento
     INSERT INTO alimento (fk_nr_id_categoria_alimento, nr_kcal, nr_carboidrato, nr_proteina, nr_gordura, nr_quantidade, nm_nome)
-    VALUES (p_fk_nr_id_categoria_alimento, p_nr_kcal, p_nr_carboidrato, p_nr_proteina, p_nr_gordura, p_nr_quantidade, p_nm_nome)
+    VALUES (v_id_categoria_alimento, p_nr_kcal, p_nr_carboidrato, p_nr_proteina, p_nr_gordura, p_nr_quantidade, p_nm_nome)
     RETURNING nr_id_alimento INTO new_id;
+
     RETURN new_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -36,7 +44,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION listar_todos_alimentos()
 RETURNS TABLE(
     nr_id_alimento INT,
-    fk_nr_id_categoria_alimento INT,
+    nm_categoria_alimento VARCHAR,
     nr_kcal DOUBLE PRECISION,
     nr_carboidrato DOUBLE PRECISION,
     nr_proteina DOUBLE PRECISION,
@@ -46,16 +54,17 @@ RETURNS TABLE(
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT 
+    SELECT
         a.nr_id_alimento,
-        a.fk_nr_id_categoria_alimento,
+        c.nm_categoria, -- Nome da categoria ao invés do ID
         a.nr_kcal,
         a.nr_carboidrato,
         a.nr_proteina,
         a.nr_gordura,
         a.nr_quantidade,
         a.nm_nome
-    FROM alimento a;
+    FROM alimento a
+    INNER JOIN categoria_alimento c ON a.fk_nr_id_categoria_alimento = c.nr_id_categoria_alimento; -- Join com a tabela de categoria
 END;
 $$ LANGUAGE plpgsql;
 

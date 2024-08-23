@@ -16,5 +16,5 @@ public class ContaEntity {
     private String nome;
     private String email;
     private String senha;
-    private Integer TipoConta;
+    private String TipoConta;
 }
