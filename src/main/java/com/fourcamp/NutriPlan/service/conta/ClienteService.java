@@ -2,6 +2,7 @@ package com.fourcamp.NutriPlan.service.conta;
 import com.fourcamp.NutriPlan.dao.conta.CategoriaClienteDao;
 import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
 import com.fourcamp.NutriPlan.dtos.conta.ClienteDto;
+import com.fourcamp.NutriPlan.dtos.meta.MetaDto;
 import com.fourcamp.NutriPlan.enuns.CategoriaClienteEnum;
 import com.fourcamp.NutriPlan.exception.CategoriaClienteException;
 import com.fourcamp.NutriPlan.exception.ClienteException;
@@ -9,16 +10,9 @@ import com.fourcamp.NutriPlan.exception.ContaException;
 import com.fourcamp.NutriPlan.model.conta.CategoriaClienteEntity;
 import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
 import com.fourcamp.NutriPlan.utils.Constantes;
-import com.fourcamp.NutriPlan.dto.conta.ClientePrimeiroAcessoDto;
-import com.fourcamp.NutriPlan.dto.meta.MetaDto;
-import com.fourcamp.NutriPlan.enuns.CategoriaEnum;
 import com.fourcamp.NutriPlan.enuns.ObjetivoEnum;
 import com.fourcamp.NutriPlan.enuns.TempoEnum;
 import com.fourcamp.NutriPlan.exception.ObjetivoException;
-import com.fourcamp.NutriPlan.model.conta.Cliente;
-import com.fourcamp.NutriPlan.model.meta.MetaEntity;
-import com.fourcamp.NutriPlan.model.meta.ObjetivoEntity;
-import com.fourcamp.NutriPlan.model.meta.TempoEntity;
 import com.fourcamp.NutriPlan.service.meta.MetaService;
 import com.fourcamp.NutriPlan.utils.CalculoIdade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +37,7 @@ public class ClienteService {
     private CategoriaClienteDao categoriaClienteDao;
 
 
-    public ClientePrimeiroAcessoDto criarCliente(ClientePrimeiroAcessoDto cliente, String email) {
 
-        double get = calcularGETSalvar(email);
-
-        metaService.criarMetaDiaria(cliente,email,get);
-        clienteDao.criarCliente(cliente);
-        return cliente;
-    }
 
     public ClienteDto criarCliente(ClienteDto clienteDto){
 
@@ -64,14 +51,14 @@ public class ClienteService {
 
         try {
             ClienteEntity cliente = ClienteEntity.builder()
-                    .idConta(clienteDto.getIdConta())
-                    .genero(clienteDto.getGenero())
-                    .peso(clienteDto.getPeso())
-                    .altura(clienteDto.getAltura())
-                    .dataNascimento(clienteDto.getDataNascimento())
-                    .tmb(clienteDto.getTmb())
-                    .get(clienteDto.getGet())
-                    .Categoria(categoriaCliente.getNomeCategoria())
+                    .fkNrIdConta(clienteDto.getIdConta())
+                    .dsGenero(clienteDto.getGenero())
+                    .nrPeso(clienteDto.getPeso())
+                    .nrAltura(clienteDto.getAltura())
+                    .dsDataNascimento(clienteDto.getDataNascimento())
+                    .nrTmb(clienteDto.getTmb())
+                    .nrGet(clienteDto.getGet())
+                    .fkNrIdCategoria(categoriaCliente.getNomeCategoria())
                     .build();
 
             ClienteEntity clienteSalvo = clienteDao.criarConta(cliente);
@@ -83,14 +70,14 @@ public class ClienteService {
 
     private ClienteDto mapearCliente(CategoriaClienteEntity categoriaCliente, ClienteEntity clienteSalvo){
         return ClienteDto.builder()
-                .idConta(clienteSalvo.getIdConta())
-                .genero(clienteSalvo.getGenero())
-                .peso(clienteSalvo.getPeso())
-                .altura(clienteSalvo.getAltura())
-                .dataNascimento(clienteSalvo.getDataNascimento())
-                .tmb(clienteSalvo.getTmb())
-                .get(clienteSalvo.getGet())
-                .Categoria(String.valueOf(CategoriaClienteEnum.valueOf(categoriaCliente.getNomeCategoria())))
+                .idConta(clienteSalvo.getFkNrIdConta())
+                .genero(clienteSalvo.getDsGenero())
+                .peso(clienteSalvo.getNrPeso())
+                .altura(clienteSalvo.getNrAltura())
+                .dataNascimento(clienteSalvo.getDsDataNascimento())
+                .tmb(clienteSalvo.getNrTmb())
+                .get(clienteSalvo.getNrGet())
+                .categoria(String.valueOf(CategoriaClienteEnum.valueOf(categoriaCliente.getNomeCategoria())))
                 .build();
     }
 
@@ -113,27 +100,20 @@ public class ClienteService {
             throw new ClienteException(Constantes.MSG_ERRO_ATUALIZAR_CLIENTE + e.getMessage());
         }
     }
+//TODO arrumar o método para nova versão....dnv
 
-    public double calcularGETSalvar(String email) {
-        Integer idConta = contaService.getIdContaPorEmail(email);
-        Cliente cliente = buscarClientePorId(idConta);
-        String categoriaStr = buscarClienteCategoria(cliente.getIdCategoria());
-        //TODO arrumar function de pegar categoria por id
-        CategoriaEnum categoria = CategoriaEnum.valueOf(categoriaStr);
+    public double calcularGETSalvar(String email, Integer idConta,ClienteEntity cliente, MetaDto metaDto) {
+
+        String clienteCategoria = buscarClienteCategoria(cliente.getFkNrIdConta());
+        CategoriaClienteEnum categoria = CategoriaClienteEnum.valueOf(clienteCategoria);
 
         //calculo da taxa metabolica basal
         double tmb = calcularTaxaMetabolica(cliente);
         //calcular a primeira parte do GET baseado na categoria do usuario
         double get = calcularCategoriaGET(tmb, categoria);
 
-        MetaEntity meta = metaService.getMeta(idConta);
-
-        ObjetivoEntity objetivo = metaService.getObjetivoPorId(meta.getIdObjetivo());
-        ObjetivoEnum objetivoEnum = ObjetivoEnum.valueOf(objetivo.getDsDescricaoObjetivo());
-
-        TempoEntity tempo = metaService.getTempoPorId(meta.getIdTempo());
-        TempoEnum tempoEnum = TempoEnum.valueOf(tempo.getDescricaoTempo());
-
+        ObjetivoEnum objetivoEnum = ObjetivoEnum.valueOf(metaDto.getIdObjetivo());
+        TempoEnum tempoEnum = TempoEnum.valueOf(metaDto.getIdTempo());
 
         //calcular a segunda parte do GET pela meta(objetivo e tempo) do usuario
         get = calcularObjetivoGET(objetivoEnum, tempoEnum, get, tmb);
@@ -184,23 +164,23 @@ public class ClienteService {
         return clienteDao.buscarClienteCategoria(idCategoria);
     }
 
-    public double calcularTaxaMetabolica(Cliente cliente) {
+    public double calcularTaxaMetabolica(ClienteEntity cliente) {
         double calculo = 0;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate dataNascimento = LocalDate.parse(cliente.getDataNascimento(), dtf);
+        LocalDate dataNascimento = LocalDate.parse(cliente.getDsDataNascimento(), dtf);
 
         int idade = calculoIdade.calcularIdade(dataNascimento);
 
-        if (cliente.getGenero().equals('M')) {
-            calculo = 66.5 + (13.75 * cliente.getPeso()) + (5.003 * (cliente.getAltura() * 100)) - (6.75 * idade);
-        } else if (cliente.getGenero().equals('F')) {
-            calculo = 655.1 + (9.563 * cliente.getPeso()) + (1.850 * (cliente.getAltura() * 100)) - (4.676 * idade);
+        if (cliente.getDsGenero().equals('M')) {
+            calculo = 66.5 + (13.75 * cliente.getNrPeso()) + (5.003 * (cliente.getNrAltura() * 100)) - (6.75 * idade);
+        } else if (cliente.getDsGenero().equals('F')) {
+            calculo = 655.1 + (9.563 * cliente.getNrPeso()) + (1.850 * (cliente.getNrAltura() * 100)) - (4.676 * idade);
         }
 
         return calculo;
     }
 
-    public double calcularCategoriaGET(double tmb, CategoriaEnum categoriaAtividade) {
+    public double calcularCategoriaGET(double tmb, CategoriaClienteEnum categoriaAtividade) {
         double fatorAtividade;
 
         switch (categoriaAtividade) {
@@ -223,18 +203,20 @@ public class ClienteService {
         return tmb * fatorAtividade;
     }
 
-    public MetaDto criarClienteMeta(String email, MetaDto metaDto) {
+    public String criarClienteMeta(String email, MetaDto metaDto) {
         //setar novos objetivos e tempo do cliente
       MetaDto metaSalva=  metaService.criarMeta(email,metaDto);
 
        Integer idConta = contaService.getIdContaPorEmail(email);
-       Cliente cliente = buscarClientePorId(idConta);
+       ClienteEntity cliente = buscarClientePorId(idConta);
 
-       double newGet = calcularGETSalvar(email);
+       double newGet = calcularGETSalvar(email,idConta,cliente,metaDto);
 
         //atualizar meta diaria
         metaService.atualizarMetaDiaria(cliente,email,newGet,metaSalva);
 
-        return metaSalva;
+        return "Meta do cliente: \n"
+                + metaSalva.getIdObjetivo()+",\n"
+                +metaSalva.getIdTempo();
     }
 }

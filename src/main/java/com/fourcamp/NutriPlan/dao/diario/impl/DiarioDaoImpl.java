@@ -2,7 +2,6 @@ package com.fourcamp.NutriPlan.dao.diario.impl;
 
 import com.fourcamp.NutriPlan.dtos.diario.DiarioDto;
 import com.fourcamp.NutriPlan.dao.diario.DiarioDao;
-import com.fourcamp.NutriPlan.dto.diario.DiarioDto;
 import com.fourcamp.NutriPlan.model.diario.DiarioEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;

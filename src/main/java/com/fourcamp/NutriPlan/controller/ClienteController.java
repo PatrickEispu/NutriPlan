@@ -1,8 +1,6 @@
 package com.fourcamp.NutriPlan.controller;
 
 import com.fourcamp.NutriPlan.dtos.conta.ClienteDto;
-import com.fourcamp.NutriPlan.dto.conta.ClientePrimeiroAcessoDto;
-import com.fourcamp.NutriPlan.exception.ClienteException;
 import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
 import com.fourcamp.NutriPlan.service.conta.ClienteService;
 import com.fourcamp.NutriPlan.utils.Constantes;
@@ -22,12 +20,6 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-//    @PostMapping("/criar-cliente")
-//    public ResponseEntity<ClientePrimeiroAcessoDto> criarCliente(@RequestBody ClientePrimeiroAcessoDto cliente,
-//                                                                 @PathVariable("email")String email)
-//    {
-//        return ResponseEntity.ok(this.clienteService.criarCliente(cliente,email));
-//    }
 
     @Operation(description = "Criar cliente no banco")
     @ApiResponses(value = {
@@ -66,7 +58,7 @@ public class ClienteController {
     })
     @PutMapping("/{idConta}")
     public ResponseEntity atualizarCliente(@PathVariable int idConta, @RequestBody ClienteEntity cliente) {
-        cliente.setIdConta(idConta);
+        cliente.setFkNrIdConta(idConta);
         clienteService.atualizarCliente(cliente);
         return ResponseEntity.ok(Constantes.MSG_ATUALIZAR_CLIENTE);
     }

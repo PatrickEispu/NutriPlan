@@ -1,12 +1,11 @@
 package com.fourcamp.NutriPlan.dao.meta.impl;
 
 import com.fourcamp.NutriPlan.dao.meta.MetaDao;
-import com.fourcamp.NutriPlan.dto.MacrosDto;
+import com.fourcamp.NutriPlan.dtos.diario.MacrosDto;
 import com.fourcamp.NutriPlan.model.meta.MetaEntity;
 import com.fourcamp.NutriPlan.model.meta.ObjetivoEntity;
 import com.fourcamp.NutriPlan.model.meta.TempoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

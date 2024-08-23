@@ -2,7 +2,7 @@ package com.fourcamp.NutriPlan.service.alimento;
 
 import com.fourcamp.NutriPlan.dao.alimento.AlimentoDao;
 import com.fourcamp.NutriPlan.dao.alimento.CategoriaAlimentoDao;
-import com.fourcamp.NutriPlan.dtos.MacrosDto;
+import com.fourcamp.NutriPlan.dtos.diario.MacrosDto;
 import com.fourcamp.NutriPlan.dtos.alimento.AlimentoDto;
 import com.fourcamp.NutriPlan.enuns.CategoriaAlimentoEnum;
 import com.fourcamp.NutriPlan.exception.CategoriaAlimentoException;

@@ -4,16 +4,15 @@ import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
 import com.fourcamp.NutriPlan.dao.meta.MetaDao;
 import com.fourcamp.NutriPlan.dao.meta.ObjetivoDao;
 import com.fourcamp.NutriPlan.dao.meta.TempoDao;
+import com.fourcamp.NutriPlan.dtos.diario.MacrosDto;
 import com.fourcamp.NutriPlan.dtos.meta.MetaDto;
-import com.fourcamp.NutriPlan.dto.MacrosDto;
 import com.fourcamp.NutriPlan.dto.conta.ClientePrimeiroAcessoDto;
-import com.fourcamp.NutriPlan.dto.meta.MetaDto;
 import com.fourcamp.NutriPlan.enuns.ObjetivoEnum;
 import com.fourcamp.NutriPlan.enuns.TempoEnum;
 import com.fourcamp.NutriPlan.exception.MetaException;
 import com.fourcamp.NutriPlan.exception.ObjetivoException;
 import com.fourcamp.NutriPlan.exception.TempoException;
-import com.fourcamp.NutriPlan.model.conta.Cliente;
+import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
 import com.fourcamp.NutriPlan.model.meta.MetaEntity;
 import com.fourcamp.NutriPlan.model.meta.ObjetivoEntity;
 import com.fourcamp.NutriPlan.model.meta.TempoEntity;
@@ -114,7 +113,7 @@ public class MetaService {
     }
 
 
-    public void atualizarMetaDiaria(Cliente cliente,String email, double gastoEnergetico,MetaDto metaSalva) {
+    public void atualizarMetaDiaria(ClienteEntity cliente, String email, double gastoEnergetico, MetaDto metaSalva) {
 
      //   Cliente cliente = clienteService.buscarClientePorId(metaSalva.getIdConta());
 
@@ -132,9 +131,9 @@ public class MetaService {
         //descobrir o GET do usuario
       //  double gastoEnergetico = clienteService.calcularGETSalvar(email);
         //Calcular proteina diaria
-        double proteinas = getProteinas(cliente.getPeso(), objetivoEnum, tempoEnum);
+        double proteinas = getProteinas(cliente.getNrPeso(), objetivoEnum, tempoEnum);
         //calcular gordura diaria
-        double gorduras = cliente.getPeso();
+        double gorduras = cliente.getNrPeso();
         //calcular carboidrato diario
         double carboidratos = alimentoService.calcularCarboidratos(gastoEnergetico, proteinas, gorduras);
 
