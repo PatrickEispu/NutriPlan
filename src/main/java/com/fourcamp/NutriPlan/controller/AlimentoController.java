@@ -69,7 +69,7 @@ public class AlimentoController {
         return ResponseEntity.ok(msg);
     }
 
-    @PostMapping("/{email}/listarDispensa")
+    @GetMapping("/{email}/listarDispensa")
     public ResponseEntity<String> listarClienteDispensa(@PathVariable("email") String email) {
         String msg = dispensaService.listarClienteDispensa(email);
         return ResponseEntity.ok(msg);

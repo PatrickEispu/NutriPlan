@@ -21,53 +21,42 @@ public class DispensaService {
     public String addAlimentoNaDispensa(String email, List<DispensaDto> dispensaDtoList) {
         Integer idConta = contaService.getIdContaPorEmail(email);
         Integer idDispensa;
-      if(!dispensaExiste(idConta))
-      {
-         idDispensa = dispensaDao.criarDispensa(idConta);
-       }
-      else
-      {
-          idDispensa = dispensaDao.getDispensa(idConta);
-      }
+        if (!dispensaExiste(idConta)) {
+            idDispensa = dispensaDao.criarDispensa(idConta);
+        } else {
+            idDispensa = dispensaDao.getDispensa(idConta);
+        }
 
         List<String> dispensaToString = new ArrayList<>();
 
         for (DispensaDto dispensaDto : dispensaDtoList) {
             Integer idAlimento = alimentoService.getIdAlimentoPorNome(dispensaDto.getNomeAlimento());
-            if(!alimentoExisteNaDispensa(idDispensa,idAlimento)) {
+            if (!alimentoExisteNaDispensa(idDispensa, idAlimento)) {
                 dispensaDao.addAlimentoNaDispensa(idDispensa, idAlimento, dispensaDto.getNrQuantidade());
+            } else {
+                Integer quantidade = dispensaDao.getALimentoQuantidade(idDispensa, idAlimento);
+                dispensaDao.atualizarAlimentoNaDispensa(idDispensa, idAlimento, dispensaDto.getNrQuantidade() + quantidade);
             }
-            else
-            {
-                Integer quantidade = dispensaDao.getALimentoQuantidade(idDispensa,idAlimento);
-                dispensaDao.atualizarAlimentoNaDispensa(idDispensa,idAlimento,dispensaDto.getNrQuantidade()+quantidade);
-            }
-            dispensaToString.add("-"+dispensaDto.getNomeAlimento()+ "\n" + " Quantidade: "+dispensaDto.getNrQuantidade()+"\n");
+            dispensaToString.add("-" + dispensaDto.getNomeAlimento() + "\n" + " Quantidade: " + dispensaDto.getNrQuantidade() + "\n");
         }
         return "alimentos adicionados na dispensa: \n"
                 + dispensaToString;
     }
 
-    private Boolean alimentoExisteNaDispensa(Integer idDispensa,Integer idAlimento) {
-        Integer alimentoCount = dispensaDao.alimentoExisteNaDispensa(idDispensa,idAlimento);
-        if (alimentoCount>0)
-        {
+    private Boolean alimentoExisteNaDispensa(Integer idDispensa, Integer idAlimento) {
+        Integer alimentoCount = dispensaDao.alimentoExisteNaDispensa(idDispensa, idAlimento);
+        if (alimentoCount > 0) {
             return true;
-        }
-        else
-            {
+        } else {
             return false;
         }
     }
 
     private boolean dispensaExiste(Integer idConta) {
-       Integer dispensaCount = dispensaDao.dispensaExiste(idConta);
-        if (dispensaCount>0)
-        {
+        Integer dispensaCount = dispensaDao.dispensaExiste(idConta);
+        if (dispensaCount > 0) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
 
@@ -75,15 +64,25 @@ public class DispensaService {
 
     public String listarClienteDispensa(String email) {
         Integer idconta = contaService.getIdContaPorEmail(email);
-
-        List<DispensaDto> dispensaDtoList = new ArrayList<>();
+        if (!dispensaExiste(idconta))
+        {
+            return "Dispensa não foi criada ainda";
+        }
         Integer idDispensa = dispensaDao.getDispensa(idconta);
-        Integer alimentoCount = dispensaDao.getAlimentoDispensaCount(idDispensa);
 
-//        for (int i = 0; i < alimentoCount; i++) {
-//            DispensaDto dispensaDto = dispensaDao.
-//        }
-    return "ainda n terminei essa parte";
+        List<DispensaDto> alimentoList = dispensaDao.getAlimentoList(idDispensa);
+        List<String> dispensaToString = new ArrayList<>();
+
+        for (DispensaDto dispensaDto : alimentoList) {
+            String nome = alimentoService.getAlimentoNomePorId(dispensaDto.getFkNrIdAlimento());
+            dispensaToString.add("\n" + "-" + nome);
+            dispensaToString.add(dispensaDto.getNrQuantidade().toString());
+        }
+
+
+        return "Lista de alimentos: \n" +
+                "Alimento " + ":" + " Quantidade" + "\n" +
+                dispensaToString;
 
     }
 }

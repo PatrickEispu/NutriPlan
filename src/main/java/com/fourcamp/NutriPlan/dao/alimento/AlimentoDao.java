@@ -14,4 +14,6 @@ public interface AlimentoDao {
     boolean verificarAlimentoExistente(String nome);
 
     Integer getIdAlimentoPorNome(String nome);
+
+    String getAlimentoNomePorId(Integer fkNrIdAlimento);
 }

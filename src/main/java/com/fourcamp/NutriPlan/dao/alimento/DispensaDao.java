@@ -1,5 +1,9 @@
 package com.fourcamp.NutriPlan.dao.alimento;
 
+import com.fourcamp.NutriPlan.dtos.alimento.DispensaDto;
+
+import java.util.List;
+
 public interface DispensaDao {
     void addAlimentoNaDispensa(Integer idDispensa, Integer idAlimento, Integer quantidade);
 
@@ -16,4 +20,6 @@ public interface DispensaDao {
     void atualizarAlimentoNaDispensa(Integer idDispensa, Integer idAlimento, Integer nrQuantidade);
 
     Integer getALimentoQuantidade(Integer idDispensa, Integer idAlimento);
+
+    List<DispensaDto> getAlimentoList(Integer idDispensa);
 }

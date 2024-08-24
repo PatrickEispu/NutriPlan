@@ -126,4 +126,8 @@ public class AlimentoService {
     public Integer getIdAlimentoPorNome(String nome) {
         return alimentoDao.getIdAlimentoPorNome(nome);
     }
+
+    public String getAlimentoNomePorId(Integer fkNrIdAlimento) {
+        return alimentoDao.getAlimentoNomePorId(fkNrIdAlimento);
+    }
 }
