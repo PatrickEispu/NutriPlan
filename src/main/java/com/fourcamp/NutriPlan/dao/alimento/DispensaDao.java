@@ -8,4 +8,12 @@ public interface DispensaDao {
     Integer dispensaExiste(Integer idConta);
 
     Integer getDispensa(Integer idConta);
+
+    Integer getAlimentoDispensaCount(Integer idDispensa);
+
+    Integer alimentoExisteNaDispensa(Integer idDispensa, Integer idAlimento);
+
+    void atualizarAlimentoNaDispensa(Integer idDispensa, Integer idAlimento, Integer nrQuantidade);
+
+    Integer getALimentoQuantidade(Integer idDispensa, Integer idAlimento);
 }

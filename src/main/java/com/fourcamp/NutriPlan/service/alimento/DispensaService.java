@@ -34,12 +34,30 @@ public class DispensaService {
 
         for (DispensaDto dispensaDto : dispensaDtoList) {
             Integer idAlimento = alimentoService.getIdAlimentoPorNome(dispensaDto.getNomeAlimento());
-            dispensaDao.addAlimentoNaDispensa(idDispensa, idAlimento, dispensaDto.getNrQuantidade());
-
+            if(!alimentoExisteNaDispensa(idDispensa,idAlimento)) {
+                dispensaDao.addAlimentoNaDispensa(idDispensa, idAlimento, dispensaDto.getNrQuantidade());
+            }
+            else
+            {
+                Integer quantidade = dispensaDao.getALimentoQuantidade(idDispensa,idAlimento);
+                dispensaDao.atualizarAlimentoNaDispensa(idDispensa,idAlimento,dispensaDto.getNrQuantidade()+quantidade);
+            }
             dispensaToString.add("-"+dispensaDto.getNomeAlimento()+ "\n" + " Quantidade: "+dispensaDto.getNrQuantidade()+"\n");
         }
         return "alimentos adicionados na dispensa: \n"
                 + dispensaToString;
+    }
+
+    private Boolean alimentoExisteNaDispensa(Integer idDispensa,Integer idAlimento) {
+        Integer alimentoCount = dispensaDao.alimentoExisteNaDispensa(idDispensa,idAlimento);
+        if (alimentoCount>0)
+        {
+            return true;
+        }
+        else
+            {
+            return false;
+        }
     }
 
     private boolean dispensaExiste(Integer idConta) {
@@ -52,6 +70,20 @@ public class DispensaService {
         {
             return false;
         }
+
+    }
+
+    public String listarClienteDispensa(String email) {
+        Integer idconta = contaService.getIdContaPorEmail(email);
+
+        List<DispensaDto> dispensaDtoList = new ArrayList<>();
+        Integer idDispensa = dispensaDao.getDispensa(idconta);
+        Integer alimentoCount = dispensaDao.getAlimentoDispensaCount(idDispensa);
+
+//        for (int i = 0; i < alimentoCount; i++) {
+//            DispensaDto dispensaDto = dispensaDao.
+//        }
+    return "ainda n terminei essa parte";
 
     }
 }

@@ -35,4 +35,28 @@ public class DispensaDaoImpl implements DispensaDao {
         String sql = "select nr_id_dispensa from buscar_dispensa_por_id_conta(?)";
         return jdbcTemplate.queryForObject(sql, Integer.class,idConta);
     }
+
+    @Override
+    public Integer getAlimentoDispensaCount(Integer idDispensa) {
+        String sql = "SELECT contar_alimento_dispensa(?)";
+        return jdbcTemplate.queryForObject(sql, Integer.class,idDispensa);
+    }
+
+    @Override
+    public Integer alimentoExisteNaDispensa(Integer idDispensa, Integer idAlimento) {
+        String sql = "SELECT contar_id_alimento(?,?)";
+        return jdbcTemplate.queryForObject(sql, Integer.class,idDispensa,idAlimento);
+    }
+
+    @Override
+    public void atualizarAlimentoNaDispensa(Integer idDispensa, Integer idAlimento, Integer nrQuantidade) {
+        String sql = "SELECT atualizar_quantidade_alimento_na_dispensa(?,?,?)";
+        jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(DispensaDto.class),idDispensa,idAlimento,nrQuantidade);
+    }
+
+    @Override
+    public Integer getALimentoQuantidade(Integer idDispensa, Integer idAlimento) {
+        String sql = ("SELECT nr_quantidade FROM dispensa_alimento WHERE fk_nr_id_dispensa = ? AND fk_nr_id_alimento = ?");
+        return  jdbcTemplate.queryForObject(sql, Integer.class,idDispensa,idAlimento);
+    }
 }
