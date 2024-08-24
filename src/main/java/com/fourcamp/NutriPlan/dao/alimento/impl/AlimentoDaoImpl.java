@@ -4,6 +4,7 @@ import com.fourcamp.NutriPlan.dao.alimento.AlimentoDao;
 import com.fourcamp.NutriPlan.dao.mapper.AlimentoRowMapper;
 import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,7 @@ public class AlimentoDaoImpl implements AlimentoDao {
         return jdbcTemplate.queryForObject(sql, Boolean.class, nome);
     }
     public Integer getIdAlimentoPorNome(String nome) {
-       String sql = "SELECT busca_id_alimento (?::varchar)";
-       return jdbcTemplate.queryForObject(sql, Integer.class, nome, new AlimentoRowMapper());
+       String sql = "SELECT busca_id_alimento (?)";
+       return jdbcTemplate.queryForObject(sql, Integer.class,nome);
     }
 }

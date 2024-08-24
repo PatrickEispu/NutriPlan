@@ -62,6 +62,8 @@ public class AlimentoController {
         return ResponseEntity.ok(mensagem);
     }
 
+
+    //TODO arrumar o endpoint
     @PostMapping("/{email}/adicionar-alimento-dispensa")
     public ResponseEntity<String> adicionarAlimentoNaDispensa(@PathVariable("email") String email, @RequestBody List<DispensaDto> dispensaDtoList) {
         String msg = dispensaService.addAlimentoNaDispensa(email, dispensaDtoList);
