@@ -16,4 +16,12 @@ public interface MetaDao {
     TempoEntity buscarTempoPorId(Integer idTempo);
 
     ObjetivoEntity buscarObjetivoPorId(Integer idObjetivo);
+
+    Integer metaExiste(Integer idConta);
+
+    MacrosDto getMetaDiaria(Integer idConta);
+
+    Integer metaDiariaExiste(Integer idConta);
+
+    void atualizarMetaDiaria(Integer idConta, MacrosDto macroDiario);
 }

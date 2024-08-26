@@ -1,6 +1,7 @@
 package com.fourcamp.NutriPlan.dao.conta.impl;
 import com.fourcamp.NutriPlan.dao.conta.ClienteDao;
 import com.fourcamp.NutriPlan.dao.mapper.ClienteRowMapper;
+import com.fourcamp.NutriPlan.dtos.conta.ClienteDto;
 import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -40,17 +41,17 @@ public class ClienteDaoImpl implements ClienteDao {
         return jdbcTemplate.query(sql, new ClienteRowMapper());
     }
 
-    public void atualizarCliente(ClienteEntity cliente) {
+    public void atualizarCliente(ClienteDto cliente) {
         String sql = "CALL atualizar_cliente_procedure(?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.execute(sql, (CallableStatementCallback<Object>) cs -> {
-            cs.setInt(1, cliente.getFkNrIdConta());
-            cs.setString(2, cliente.getDsGenero());
-            cs.setDouble(3, cliente.getNrPeso());
-            cs.setDouble(4, cliente.getNrAltura());
-            cs.setString(5, cliente.getDsDataNascimento());
-            cs.setDouble(6, cliente.getNrTmb());
-            cs.setDouble(7, cliente.getNrGet());
-            cs.setString(8, cliente.getFkNrIdCategoria());
+            cs.setInt(1, cliente.getIdConta());
+            cs.setString(2, cliente.getGenero());
+            cs.setDouble(3, cliente.getPeso());
+            cs.setDouble(4, cliente.getAltura());
+            cs.setString(5, cliente.getDataNascimento());
+            cs.setDouble(6, cliente.getTmb());
+            cs.setDouble(7, cliente.getGet());
+            cs.setString(8, (cliente.getCategoria()));
             cs.execute();
             return null;
         });

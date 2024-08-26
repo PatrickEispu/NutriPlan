@@ -57,8 +57,7 @@ public class ClienteController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @PutMapping("/{idConta}")
-    public ResponseEntity atualizarCliente(@PathVariable int idConta, @RequestBody ClienteEntity cliente) {
-        cliente.setFkNrIdConta(idConta);
+    public ResponseEntity atualizarCliente(@PathVariable int idConta, @RequestBody ClienteDto cliente) {
         clienteService.atualizarCliente(cliente);
         return ResponseEntity.ok(Constantes.MSG_ATUALIZAR_CLIENTE);
     }

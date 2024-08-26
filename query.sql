@@ -44,6 +44,7 @@ CREATE TABLE cliente (
     FOREIGN KEY (fk_nr_id_categoria) REFERENCES categoria(nr_id_categoria)
 );
 
+
 -- Tabela objetivo
 CREATE TABLE objetivo (
     nr_id_objetivo SERIAL PRIMARY KEY,
@@ -94,6 +95,9 @@ INSERT INTO categoria_alimento (nm_categoria) VALUES ('FIBRA');
 INSERT INTO categoria_alimento (nm_categoria) VALUES ('GORDURA');
 INSERT INTO categoria_alimento (nm_categoria) VALUES ('PROTEINA');
 
+select * from categoria_alimento ca ;
+select * from alimento a ;
+
 
 -- Tabela alimento
 CREATE TABLE alimento (
@@ -113,7 +117,6 @@ CREATE TABLE dispensa_alimento (
     fk_nr_id_dispensa INT NOT NULL,
     fk_nr_id_alimento INT NOT NULL,
     nr_quantidade INT,
-    PRIMARY KEY (fk_nr_id_dispensa, fk_nr_id_alimento),
     FOREIGN KEY (fk_nr_id_dispensa) REFERENCES dispensa(nr_id_dispensa),
     FOREIGN KEY (fk_nr_id_alimento) REFERENCES alimento(nr_id_alimento)
 );
@@ -142,3 +145,12 @@ CREATE TABLE diario (
     FOREIGN KEY (fk_nr_id_conta) REFERENCES conta(nr_id_conta),
     FOREIGN KEY (fk_nr_id_refeicao) REFERENCES refeicao(nr_id_refeicao)
 );
+
+create table diario_meta (
+	fk_nr_id_conta Integer not null,
+	nr_kcal DOUBLE PRECISION,
+    nr_carboidrato DOUBLE PRECISION,
+    nr_proteina DOUBLE PRECISION,
+    nr_gordura DOUBLE PRECISION,
+    foreign key (fk_nr_id_conta) references conta (nr_id_conta)
+   );

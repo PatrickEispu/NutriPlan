@@ -1,6 +1,6 @@
 package com.fourcamp.NutriPlan.model.diario;
 
-import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
+import com.fourcamp.NutriPlan.model.alimento.RefeicaoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +15,6 @@ import java.util.List;
 public class DiarioEntity {
     Integer fkIdConta;
     String data;
-    List<AlimentoEntity> alimentoEntities;
-    Integer fkIdRefeição;
+    List<RefeicaoEntity> refeicao;
+    Integer fkIdRefeicao;
 }

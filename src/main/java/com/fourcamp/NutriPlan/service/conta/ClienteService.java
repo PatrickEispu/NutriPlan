@@ -93,7 +93,7 @@ public class ClienteService {
         }
     }
 
-    public void atualizarCliente(ClienteEntity cliente) {
+    public void atualizarCliente(ClienteDto cliente) {
         try {
             clienteDao.atualizarCliente(cliente);
         }catch (Exception e){
@@ -204,19 +204,34 @@ public class ClienteService {
     }
 
     public String criarClienteMeta(String email, MetaDto metaDto) {
-        //setar novos objetivos e tempo do cliente
-      MetaDto metaSalva=  metaService.criarMeta(email,metaDto);
+        Integer idConta = contaService.getIdContaPorEmail(email);
+        MetaDto newMeta = new MetaDto();
+        if (!metaService.metaExiste(idConta))
+        {
+            //setar novos objetivos e tempo do cliente
+         newMeta=  metaService.criarMeta(idConta,metaDto);
 
-       Integer idConta = contaService.getIdContaPorEmail(email);
+        }
+        else
+        {
+         newMeta.setIdConta(idConta);
+         newMeta.setIdObjetivo(metaDto.getIdObjetivo());
+         newMeta.setIdTempo(metaDto.getIdTempo());
+        }
+
        ClienteEntity cliente = buscarClientePorId(idConta);
 
        double newGet = calcularGETSalvar(email,idConta,cliente,metaDto);
 
         //atualizar meta diaria
-        metaService.atualizarMetaDiaria(cliente,email,newGet,metaSalva);
+      String metaStr=  metaService.atualizarMetaDiaria(cliente,email,newGet,newMeta);
 
         return "Meta do cliente: \n"
-                + metaSalva.getIdObjetivo()+",\n"
-                +metaSalva.getIdTempo();
+                + newMeta.getIdObjetivo()+",\n"
+                +newMeta.getIdTempo()+"\n"+
+                "Meta diaria do cliente: \n"+
+                metaStr;
     }
+
+
 }

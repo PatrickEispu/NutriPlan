@@ -1,5 +1,6 @@
-package com.fourcamp.NutriPlan.dao.conta;
+package com.fourcamp.NutriPlan.dao.conta.impl;
 
+import com.fourcamp.NutriPlan.dao.conta.CategoriaClienteDao;
 import com.fourcamp.NutriPlan.dao.mapper.CategoriaClienteRowMapper;
 import com.fourcamp.NutriPlan.model.conta.CategoriaClienteEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class CategoriaClienteDaoImpl implements CategoriaClienteDao{
+public class CategoriaClienteDaoImpl implements CategoriaClienteDao {
 
     @Autowired
     JdbcTemplate jdbcTemplate;

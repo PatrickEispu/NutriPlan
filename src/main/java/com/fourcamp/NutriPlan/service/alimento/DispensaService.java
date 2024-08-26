@@ -34,7 +34,7 @@ public class DispensaService {
             if (!alimentoExisteNaDispensa(idDispensa, idAlimento)) {
                 dispensaDao.addAlimentoNaDispensa(idDispensa, idAlimento, dispensaDto.getNrQuantidade());
             } else {
-                Integer quantidade = dispensaDao.getALimentoQuantidade(idDispensa, idAlimento);
+                Integer quantidade = dispensaDao.getAlimentoQuantidade(idDispensa, idAlimento);
                 dispensaDao.atualizarAlimentoNaDispensa(idDispensa, idAlimento, dispensaDto.getNrQuantidade() + quantidade);
             }
             dispensaToString.add("-" + dispensaDto.getNomeAlimento() + "\n" + " Quantidade: " + dispensaDto.getNrQuantidade() + "\n");

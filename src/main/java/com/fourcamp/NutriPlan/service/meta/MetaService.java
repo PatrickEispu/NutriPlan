@@ -12,33 +12,39 @@ import com.fourcamp.NutriPlan.enuns.TempoEnum;
 import com.fourcamp.NutriPlan.exception.MetaException;
 import com.fourcamp.NutriPlan.exception.ObjetivoException;
 import com.fourcamp.NutriPlan.exception.TempoException;
+import com.fourcamp.NutriPlan.model.alimento.RefeicaoEntity;
 import com.fourcamp.NutriPlan.model.conta.ClienteEntity;
+import com.fourcamp.NutriPlan.model.diario.DiarioEntity;
 import com.fourcamp.NutriPlan.model.meta.MetaEntity;
 import com.fourcamp.NutriPlan.model.meta.ObjetivoEntity;
 import com.fourcamp.NutriPlan.model.meta.TempoEntity;
 import com.fourcamp.NutriPlan.service.alimento.AlimentoService;
+import com.fourcamp.NutriPlan.service.alimento.RefeicaoService;
 import com.fourcamp.NutriPlan.service.conta.ContaService;
+import com.fourcamp.NutriPlan.service.diario.DiarioService;
 import com.fourcamp.NutriPlan.utils.Arredondamento;
 import com.fourcamp.NutriPlan.utils.CalculoIdade;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 @Service
 public class MetaService {
 
     @Autowired
     ContaService contaService;
-//    @Autowired
-   // ClienteService clienteService;
     @Autowired
     AlimentoService alimentoService;
     @Autowired
-    public ClienteDao clienteDao;
+    RefeicaoService refeicaoService;
 
     @Autowired
-    public CalculoIdade calculoIdade;
-
+    DiarioService diarioService;
     @Autowired
     public MetaDao metaDao;
 
@@ -47,7 +53,7 @@ public class MetaService {
     @Autowired
     public ObjetivoDao objetivoDao;
 
-    public MetaDto criarMeta(String email, MetaDto metaDto) {
+    public MetaDto criarMeta(Integer idConta, MetaDto metaDto) {
 
         //Buscar tempo pelo nome
         TempoEntity tempo = getTempo(metaDto);
@@ -59,14 +65,13 @@ public class MetaService {
         try {
             MetaEntity meta = MetaEntity.builder()
                     .pesoDesejado(metaDto.getPesoDesejado())
-                    .idConta(metaDto.getIdConta())
+                    .idConta(idConta)
                     .idTempo(tempo.getIdTempo())
                     .idObjetivo(objetivo.getNrIdObjetivo())
                     .build();
 
             //salvar meta criada
             MetaEntity metaSalva = metaDao.criarMeta(meta);
-
 
 
             return mapearMeta(tempo, objetivo, metaSalva);
@@ -113,23 +118,16 @@ public class MetaService {
     }
 
 
-    public void atualizarMetaDiaria(ClienteEntity cliente, String email, double gastoEnergetico, MetaDto metaSalva) {
+    public String atualizarMetaDiaria(ClienteEntity cliente, String email, double gastoEnergetico, MetaDto metaSalva) {
 
-     //   Cliente cliente = clienteService.buscarClientePorId(metaSalva.getIdConta());
 
         TempoEntity tempo = getTempo(metaSalva.getIdTempo());
         ObjetivoEntity objetivo = getObjetivo(metaSalva.getIdObjetivo());
-
-//        TempoEntity tempo = metaDao.buscarTempoPorId(metaSalva.getIdTempo());
-//        ObjetivoEntity objetivo = metaDao.buscarObjetivoPorId(metaSalva.getIdObjetivo());
-
 
         ObjetivoEnum objetivoEnum = ObjetivoEnum.valueOf(objetivo.getDsDescricaoObjetivo());
         TempoEnum tempoEnum = TempoEnum.valueOf(tempo.getDescricaoTempo());
 
 
-        //descobrir o GET do usuario
-      //  double gastoEnergetico = clienteService.calcularGETSalvar(email);
         //Calcular proteina diaria
         double proteinas = getProteinas(cliente.getNrPeso(), objetivoEnum, tempoEnum);
         //calcular gordura diaria
@@ -150,9 +148,27 @@ public class MetaService {
         macroDiario.setGordura(gorduras);
 
         Integer idConta = contaService.getIdContaPorEmail(email);
-        metaDao.salvarMetaDiaria(idConta, macroDiario);
+        if (!metaDiariaExiste(idConta)) {
+            metaDao.salvarMetaDiaria(idConta, macroDiario);
+        } else {
+            metaDao.atualizarMetaDiaria(idConta, macroDiario);
+        }
+        return "Seu plano nutricional: \n" +
+                "Calorias necessárias: " + gastoEnergetico + " kcal\n" +
+                "Proteínas: " + proteinas + " g\n" +
+                "Carboidratos: " + carboidratos + " g\n" +
+                "Gorduras: " + gorduras + " g";
 
 
+    }
+
+    private boolean metaDiariaExiste(Integer idConta) {
+        Integer metaDiariaCount = metaDao.metaDiariaExiste(idConta);
+        if (metaDiariaCount > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //antigo acessar plano
@@ -230,15 +246,69 @@ public class MetaService {
     }
 
 
-    public MetaEntity getMeta(Integer idConta) {
-        return metaDao.getMeta(idConta);
+    public boolean metaExiste(Integer idConta) {
+        Integer metaCount = metaDao.metaExiste(idConta);
+        if (metaCount > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public ObjetivoEntity getObjetivoPorId(Integer idObjetivo) {
-        return metaDao.buscarObjetivoPorId(idObjetivo);
-    }
+    public String acessarMeta(String email) {
+        Integer idConta = contaService.getIdContaPorEmail(email);
+        MacrosDto metaDiaria = metaDao.getMetaDiaria(idConta);
 
-    public TempoEntity getTempoPorId(Integer idTempo) {
-        return metaDao.buscarTempoPorId(idTempo);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String data = LocalDate.now().format(dtf);
+
+        List<DiarioEntity> diarioEntityList = diarioService.getDiarioList(idConta);
+        MacrosDto macroTotal = new MacrosDto();
+        macroTotal.setKcalTotais(0.0);
+        macroTotal.setCarboidrato(0.0);
+        macroTotal.setProteina(0.0);
+        macroTotal.setGordura(0.0);
+
+
+        for (DiarioEntity diario : diarioEntityList) {
+            if (diario.getData().equals(data)) {
+                for (RefeicaoEntity refeicao : diario.getRefeicao()) {
+                    MacrosDto refeicaoMacro = refeicaoService.refeicaoMacroTotal(refeicao);
+
+                    Double kcal = macroTotal.getKcalTotais() + refeicaoMacro.getKcalTotais();
+                    Double carb = macroTotal.getCarboidrato() + refeicaoMacro.getCarboidrato();
+                    Double prot = macroTotal.getProteina() + refeicaoMacro.getProteina();
+                    Double gord = macroTotal.getGordura() + refeicaoMacro.getGordura();
+
+                    kcal = Math.round(kcal * 100.0) / 100.0;
+                    carb = Math.round(carb * 100.0) / 100.0;
+                    prot = Math.round(prot * 100.0) / 100.0;
+                    gord = Math.round(gord * 100.0) / 100.0;
+
+                    macroTotal.setKcalTotais(kcal);
+                    macroTotal.setCarboidrato(carb);
+                    macroTotal.setProteina(prot);
+                    macroTotal.setGordura(gord);
+                }
+            }
+        }
+
+
+        String metaDiariaStr = "Sua Meta Diaria é: \n" +
+                "Calorias necessárias: " + metaDiaria.getKcalTotais() + " kcal\n" +
+                "Proteínas: " + metaDiaria.getProteina() + " g\n" +
+                "Carboidratos: " + metaDiaria.getCarboidrato() + " g\n" +
+                "Gorduras: " + metaDiaria.getGordura() + " g";
+
+        String macroTotalStr = "Você consumiu hoje: \n" +
+                "Calorias: " + macroTotal.getKcalTotais() + " kcal\n" +
+                "Proteínas: " + macroTotal.getProteina() + " g\n" +
+                "Carboidratos: " + macroTotal.getCarboidrato() + " g\n" +
+                "Gorduras: " + macroTotal.getGordura() + " g";
+
+        return metaDiariaStr +
+                "\n" +
+                "\n" +
+                macroTotalStr;
     }
 }

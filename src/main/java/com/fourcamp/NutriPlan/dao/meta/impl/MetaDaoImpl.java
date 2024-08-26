@@ -6,6 +6,7 @@ import com.fourcamp.NutriPlan.model.meta.MetaEntity;
 import com.fourcamp.NutriPlan.model.meta.ObjetivoEntity;
 import com.fourcamp.NutriPlan.model.meta.TempoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,18 @@ public class MetaDaoImpl implements MetaDao {
     }
 
     @Override
+    public void atualizarMetaDiaria(Integer idConta, MacrosDto macroDiario) {
+        String sql = "CALL atualizar_diario_meta(?,?,?,?,?)";
+        double kcal = macroDiario.getKcalTotais();
+        double carboidrato = macroDiario.getCarboidrato();
+        double proteina = macroDiario.getProteina();
+        double gordura = macroDiario.getGordura();
+
+        jdbcTemplate.update(sql, idConta, kcal, carboidrato, proteina, gordura);
+
+    }
+
+    @Override
     public MetaEntity getMeta(Integer idConta) {
         String sql = "SELECT * FROM buscar_meta_por_id (?)";
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) ->
@@ -56,13 +69,13 @@ public class MetaDaoImpl implements MetaDao {
     @Override
     public TempoEntity buscarTempoPorId(Integer idTempo) {
         String sqlTempoStr = ("SELECT ds_tempo FROM buscar_tempo_por_id (?)");
-        String tempoStr = jdbcTemplate.queryForObject(sqlTempoStr, String.class,idTempo);
+        String tempoStr = jdbcTemplate.queryForObject(sqlTempoStr, String.class, idTempo);
 
         TempoEntity tempo = new TempoEntity();
         tempo.setIdTempo(idTempo);
         tempo.setDescricaoTempo(tempoStr);
 
-        return  tempo;
+        return tempo;
     }
 
     @Override
@@ -76,4 +89,36 @@ public class MetaDaoImpl implements MetaDao {
         return objetivo;
 
     }
+
+    @Override
+    public Integer metaExiste(Integer idConta) {
+        String sql = "SELECT COUNT(*) FROM meta WHERE fk_nr_id_conta = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, idConta);
+    }
+
+    @Override
+    public MacrosDto getMetaDiaria(Integer idConta) {
+        String sql = "SELECT * FROM diario_meta WHERE fk_nr_id_conta = ?";
+        return jdbcTemplate.queryForObject(
+                sql,
+                (rs, rowNum) ->
+                {
+                    MacrosDto macrosDto = new MacrosDto();
+                    macrosDto.setKcalTotais(rs.getDouble("nr_kcal"));
+                    macrosDto.setProteina(rs.getDouble("nr_proteina"));
+                    macrosDto.setCarboidrato(rs.getDouble("nr_carboidrato"));
+                    macrosDto.setGordura(rs.getDouble("nr_gordura"));
+
+                    return macrosDto;
+                }, idConta);
+
+    }
+
+    @Override
+    public Integer metaDiariaExiste(Integer idConta) {
+        String sql = "SELECT COUNT(*) FROM diario_meta WHERE fk_nr_id_conta = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, idConta);
+    }
+
+
 }

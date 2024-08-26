@@ -2,6 +2,7 @@ package com.fourcamp.NutriPlan.controller;
 
 import com.fourcamp.NutriPlan.dtos.meta.MetaDto;
 import com.fourcamp.NutriPlan.service.conta.ClienteService;
+import com.fourcamp.NutriPlan.service.meta.MetaService;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,6 +18,8 @@ public class MetaController {
 
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    MetaService metaService;
 
     @Operation(description = "Criação da meta do cliente")
     @ApiResponses(value = {
@@ -29,4 +32,14 @@ public class MetaController {
         String response = String.valueOf(clienteService.criarClienteMeta(email,metaDto));
         return ResponseEntity.ok(Constantes.MSG_META_SUCESSO+"\n"+response);
     }
+
+
+    @GetMapping("/{email}/acessarMeta")
+    private ResponseEntity<String> acessarMeta(@PathVariable("email")String email)
+    {
+        String response = metaService.acessarMeta(email);
+        return ResponseEntity.ok(response);
+    }
+
+
 }

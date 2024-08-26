@@ -5,7 +5,7 @@ import com.fourcamp.NutriPlan.model.alimento.AlimentoEntity;
 import java.util.List;
 
 public interface AlimentoDao {
-    AlimentoEntity criarAlimento(AlimentoEntity alimento);
+    AlimentoEntity criarAlimento(AlimentoEntity alimento, Integer idCategoriaAlimento);
 
     List<AlimentoEntity> listarTodosAlimentos();
 
@@ -16,4 +16,9 @@ public interface AlimentoDao {
     Integer getIdAlimentoPorNome(String nome);
 
     String getAlimentoNomePorId(Integer fkNrIdAlimento);
+
+
+    Integer getIdCategoriaPorNome(String categoria);
+
+    Integer getAlimentoRecomendado(Integer idAlimento, Integer categoria);
 }

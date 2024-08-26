@@ -7,6 +7,7 @@ import com.fourcamp.NutriPlan.service.alimento.AlimentoService;
 
 import com.fourcamp.NutriPlan.service.alimento.DispensaService;
 import com.fourcamp.NutriPlan.service.alimento.RefeicaoService;
+import com.fourcamp.NutriPlan.service.diario.DiarioService;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,6 +30,9 @@ public class AlimentoController {
 
     @Autowired
     DispensaService dispensaService;
+
+    @Autowired
+    DiarioService diarioService;
 
 
     @Operation(description = "Criar alimentos no banco")
@@ -56,8 +60,6 @@ public class AlimentoController {
 
     @PostMapping("/{email}/adicionar-refeicao")
     public ResponseEntity<String> adicionarRefeicao(@PathVariable ("email")String email, @RequestBody List<AlimentoDto> alimentoDtoList) {
-      //  String jwtToken = token.replace("Bearer ", "");
-      //  String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
         String mensagem = refeicaoService.adicionarRefeicao(email, alimentoDtoList);
         return ResponseEntity.ok(mensagem);
     }
@@ -74,5 +76,12 @@ public class AlimentoController {
         String msg = dispensaService.listarClienteDispensa(email);
         return ResponseEntity.ok(msg);
     }
+    @GetMapping("/{email}/alimentoRecomendado")
+    public ResponseEntity<String> alimentoRecomendado(@PathVariable("email")String email)
+    {
+        String msg = diarioService.alimentoRecomendado(email);
+        return ResponseEntity.ok(msg);
+    }
+
 
 }

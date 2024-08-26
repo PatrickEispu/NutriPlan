@@ -26,18 +26,18 @@ public class AlimentoService {
 
     public AlimentoDto criarAlimento(AlimentoDto alimentoDto) {
 
-            // Buscar a categoria de alimento pelo nome
-            CategoriaAlimentoEntity categoriaAlimento = categoriaAlimentoDao.buscarCategoriaAlimentoPorNome(alimentoDto.getCategoriaAlimento());
+        // Buscar a categoria de alimento pelo nome
+        CategoriaAlimentoEntity categoriaAlimento = categoriaAlimentoDao.buscarCategoriaAlimentoPorNome(alimentoDto.getCategoriaAlimento());
 
-            if (categoriaAlimento == null) {
-                throw new CategoriaAlimentoException(Constantes.MSG_CATEGORIA_ALIMENTO_INVALIDO + categoriaAlimento);
-            }
+        if (categoriaAlimento == null) {
+            throw new CategoriaAlimentoException(Constantes.MSG_CATEGORIA_ALIMENTO_INVALIDO + categoriaAlimento);
+        }
 
-            // Verificar se o alimento já existe na base de dados
-            Boolean alimentoExiste = alimentoDao.verificarAlimentoExistente(alimentoDto.getNome());
-            if (alimentoExiste != null && alimentoExiste) {
-                throw new CriacaoAlimentoException(Constantes.MSG_NOME_ALIMENTO_JA_CADASTRADO);
-            }
+        // Verificar se o alimento já existe na base de dados
+        Boolean alimentoExiste = alimentoDao.verificarAlimentoExistente(alimentoDto.getNome());
+        if (alimentoExiste != null && alimentoExiste) {
+            throw new CriacaoAlimentoException(Constantes.MSG_NOME_ALIMENTO_JA_CADASTRADO);
+        }
 
         try {
             AlimentoEntity alimento = AlimentoEntity.builder()
@@ -50,14 +50,14 @@ public class AlimentoService {
                     .nome(alimentoDto.getNome())
                     .build();
 
-            AlimentoEntity alimentoSalvo = alimentoDao.criarAlimento(alimento);
+            AlimentoEntity alimentoSalvo = alimentoDao.criarAlimento(alimento, categoriaAlimento.getIdCategoriaAlimento());
             return mapearAlimento(categoriaAlimento, alimentoSalvo);
         } catch (Exception e) {
             throw new CriacaoAlimentoException(Constantes.MSG_ERRO_CRIACAO_ALIMENTO + e.getMessage());
         }
     }
 
-    private AlimentoDto mapearAlimento(CategoriaAlimentoEntity categoriaAlimento, AlimentoEntity alimentoSalvo){
+    private AlimentoDto mapearAlimento(CategoriaAlimentoEntity categoriaAlimento, AlimentoEntity alimentoSalvo) {
         return AlimentoDto.builder()
                 .CategoriaAlimento(String.valueOf(CategoriaAlimentoEnum.valueOf(categoriaAlimento.getNomeCategoria())))
                 .kcal(alimentoSalvo.getKcal())
@@ -68,10 +68,11 @@ public class AlimentoService {
                 .nome(alimentoSalvo.getNome())
                 .build();
     }
+
     public List<AlimentoEntity> visualizarAlimentos() {
         try {
             return alimentoDao.listarTodosAlimentos();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new CriacaoAlimentoException(Constantes.MSG_ERRO_LISTAR_ALIMENTO + e.getMessage());
         }
     }
@@ -94,7 +95,8 @@ public class AlimentoService {
         macro.setGordura((quantidade / 100) * macro.getGordura());
         return macro;
     }
-    public MacrosDto consultarTabelaNutricional(String nomeAlimento){
+
+    public MacrosDto consultarTabelaNutricional(String nomeAlimento) {
         AlimentoEntity alimentoEntity = alimentoDao.buscarAlimentoPorNome(nomeAlimento);
 
         return new MacrosDto(
@@ -106,22 +108,6 @@ public class AlimentoService {
         );
     }
 
-    /*public MacrosDto consultarPlanoCliente(String email, MacrosDto planoAtual) {
-        List<Diario> diarios = clienteDao.buscarPlanoCliente(email);
-
-        if (!diarios.isEmpty()) {
-            Diario diario = diarios.get(0);
-            planoAtual.setKcalTotais(diario.getKcal() - planoAtual.getKcalTotais());
-            planoAtual.setCarboidrato(diario.getCarboidrato() - planoAtual.getCarboidrato());
-            planoAtual.setProteina(diario.getProteina() - planoAtual.getProteina());
-            planoAtual.setGordura(diario.getGordura() - planoAtual.getGordura());
-        } else {
-            throw new PlanoException();
-        }
-
-        return planoAtual;
-    }*/
-
 
     public Integer getIdAlimentoPorNome(String nome) {
         return alimentoDao.getIdAlimentoPorNome(nome);
@@ -129,5 +115,13 @@ public class AlimentoService {
 
     public String getAlimentoNomePorId(Integer fkNrIdAlimento) {
         return alimentoDao.getAlimentoNomePorId(fkNrIdAlimento);
+    }
+
+    public String getAlimentoRecomendado(Integer idAlimento, String categoria) {
+        Integer idCategoria = alimentoDao.getIdCategoriaPorNome(categoria);
+        Integer idAlimentoRecomendado = alimentoDao.getAlimentoRecomendado(idAlimento, idCategoria);
+        return getAlimentoNomePorId(idAlimentoRecomendado);
+
+
     }
 }

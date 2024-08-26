@@ -10,11 +10,16 @@ import com.fourcamp.NutriPlan.exception.SenhaException;
 import com.fourcamp.NutriPlan.exception.TipoContaException;
 import com.fourcamp.NutriPlan.model.conta.ContaEntity;
 import com.fourcamp.NutriPlan.model.conta.TipoContaEntity;
+import com.fourcamp.NutriPlan.model.diario.DiarioEntity;
+import com.fourcamp.NutriPlan.service.diario.DiarioService;
 import com.fourcamp.NutriPlan.utils.Constantes;
 import com.fourcamp.NutriPlan.utils.EmailValidador;
 import com.fourcamp.NutriPlan.utils.SenhaValidador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ContaService {
@@ -66,7 +71,6 @@ public class ContaService {
     }
 
     private ContaDto mapearAlimento(TipoContaEntity tipoConta, ContaEntity contaSalva){
-      //TODO esse metodo precisar ser colocado na alimento service
         return ContaDto.builder()
                 .nome(contaSalva.getNome())
                 .email(contaSalva.getEmail())

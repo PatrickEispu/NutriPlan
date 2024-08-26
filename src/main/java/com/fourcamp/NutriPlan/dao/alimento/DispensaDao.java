@@ -19,7 +19,7 @@ public interface DispensaDao {
 
     void atualizarAlimentoNaDispensa(Integer idDispensa, Integer idAlimento, Integer nrQuantidade);
 
-    Integer getALimentoQuantidade(Integer idDispensa, Integer idAlimento);
+    Integer getAlimentoQuantidade(Integer idDispensa, Integer idAlimento);
 
     List<DispensaDto> getAlimentoList(Integer idDispensa);
 }

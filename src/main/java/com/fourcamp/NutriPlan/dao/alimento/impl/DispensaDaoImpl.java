@@ -57,7 +57,7 @@ public class DispensaDaoImpl implements DispensaDao {
     }
 
     @Override
-    public Integer getALimentoQuantidade(Integer idDispensa, Integer idAlimento) {
+    public Integer getAlimentoQuantidade(Integer idDispensa, Integer idAlimento) {
         String sql = ("SELECT nr_quantidade FROM dispensa_alimento WHERE fk_nr_id_dispensa = ? AND fk_nr_id_alimento = ?");
         return jdbcTemplate.queryForObject(sql, Integer.class, idDispensa, idAlimento);
     }
