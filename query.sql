@@ -95,9 +95,6 @@ INSERT INTO categoria_alimento (nm_categoria) VALUES ('FIBRA');
 INSERT INTO categoria_alimento (nm_categoria) VALUES ('GORDURA');
 INSERT INTO categoria_alimento (nm_categoria) VALUES ('PROTEINA');
 
-select * from categoria_alimento ca ;
-select * from alimento a ;
-
 
 -- Tabela alimento
 CREATE TABLE alimento (
