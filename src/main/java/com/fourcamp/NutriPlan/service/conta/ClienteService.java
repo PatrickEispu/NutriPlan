@@ -100,12 +100,14 @@ public class ClienteService {
             throw new ClienteException(Constantes.MSG_ERRO_ATUALIZAR_CLIENTE + e.getMessage());
         }
     }
-//TODO arrumar o método para nova versão....dnv
 
     public double calcularGETSalvar(String email, Integer idConta,ClienteEntity cliente, MetaDto metaDto) {
 
-        String clienteCategoria = buscarClienteCategoria(cliente.getFkNrIdConta());
+
+        String clienteCategoria = buscarClienteCategoria(Integer.parseInt(cliente.getFkNrIdCategoria()));
+
         CategoriaClienteEnum categoria = CategoriaClienteEnum.valueOf(clienteCategoria);
+
 
         //calculo da taxa metabolica basal
         double tmb = calcularTaxaMetabolica(cliente);

@@ -28,9 +28,11 @@ import com.fourcamp.NutriPlan.utils.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -263,6 +265,7 @@ public class MetaService {
         String data = LocalDate.now().format(dtf);
 
         List<DiarioEntity> diarioEntityList = diarioService.getDiarioList(idConta);
+        List<DiarioEntity> diarioDoDia = new ArrayList<>();
         MacrosDto macroTotal = new MacrosDto();
         macroTotal.setKcalTotais(0.0);
         macroTotal.setCarboidrato(0.0);
@@ -272,26 +275,41 @@ public class MetaService {
 
         for (DiarioEntity diario : diarioEntityList) {
             if (diario.getData().equals(data)) {
-                for (RefeicaoEntity refeicao : diario.getRefeicao()) {
-                    MacrosDto refeicaoMacro = refeicaoService.refeicaoMacroTotal(refeicao);
-
-                    Double kcal = macroTotal.getKcalTotais() + refeicaoMacro.getKcalTotais();
-                    Double carb = macroTotal.getCarboidrato() + refeicaoMacro.getCarboidrato();
-                    Double prot = macroTotal.getProteina() + refeicaoMacro.getProteina();
-                    Double gord = macroTotal.getGordura() + refeicaoMacro.getGordura();
-
-                    kcal = Math.round(kcal * 100.0) / 100.0;
-                    carb = Math.round(carb * 100.0) / 100.0;
-                    prot = Math.round(prot * 100.0) / 100.0;
-                    gord = Math.round(gord * 100.0) / 100.0;
-
-                    macroTotal.setKcalTotais(kcal);
-                    macroTotal.setCarboidrato(carb);
-                    macroTotal.setProteina(prot);
-                    macroTotal.setGordura(gord);
-                }
+                diarioDoDia.add(diario);
             }
         }
+
+        for (DiarioEntity diario : diarioDoDia)
+        {
+            Integer loop = 0;
+            for (RefeicaoEntity refeicao : diario.getRefeicao()) {
+                if (loop>0)
+                {
+                    break;
+                }
+
+                MacrosDto refeicaoMacro = refeicaoService.refeicaoMacroTotal(refeicao);
+
+                Double kcal = macroTotal.getKcalTotais() + refeicaoMacro.getKcalTotais();
+                Double carb = macroTotal.getCarboidrato() + refeicaoMacro.getCarboidrato();
+                Double prot = macroTotal.getProteina() + refeicaoMacro.getProteina();
+                Double gord = macroTotal.getGordura() + refeicaoMacro.getGordura();
+
+                kcal = Math.round(kcal * 100.0) / 100.0;
+                carb = Math.round(carb * 100.0) / 100.0;
+                prot = Math.round(prot * 100.0) / 100.0;
+                gord = Math.round(gord * 100.0) / 100.0;
+
+                macroTotal.setKcalTotais(kcal);
+                macroTotal.setCarboidrato(carb);
+                macroTotal.setProteina(prot);
+                macroTotal.setGordura(gord);
+                loop++;
+            }
+
+        }
+
+
 
 
         String metaDiariaStr = "Sua Meta Diaria é: \n" +
