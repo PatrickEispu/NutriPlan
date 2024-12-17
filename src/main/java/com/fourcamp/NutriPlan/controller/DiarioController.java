@@ -1,29 +1,30 @@
 package com.fourcamp.NutriPlan.controller;
 
-import com.fourcamp.NutriPlan.dto.RefeicaoRequest;
-import com.fourcamp.NutriPlan.service.DiarioService;
-import com.fourcamp.NutriPlan.security.jwt.JwtUtils;
+import com.fourcamp.NutriPlan.service.conta.ClienteService;
+import com.fourcamp.NutriPlan.service.conta.ContaService;
+import com.fourcamp.NutriPlan.service.diario.DiarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
+@RequestMapping("/v1")
 public class DiarioController {
 
     @Autowired
     DiarioService diarioService;
-
     @Autowired
-    JwtUtils jwtUtils;
+    ContaService contaService;
 
-    @PostMapping("/adicionar-refeicao")
-    public ResponseEntity<String> adicionarRefeicao(@RequestHeader("Authorization") String token, @RequestBody RefeicaoRequest refeicaoRequest) {
-        String jwtToken = token.replace("Bearer ", "");
-        String email = jwtUtils.getUserNameFromJwtToken(jwtToken);
-        String mensagem = diarioService.adicionarRefeicao(email, refeicaoRequest);
-        return ResponseEntity.ok(mensagem);
-    }
+@GetMapping("/{email}/acessarDiario")
+    public ResponseEntity<String> acessarDiario(@PathVariable("email")String email)
+{
+    String msg = diarioService.getDiarioListToString(email);
+    return ResponseEntity.ok(msg);
+}
+
 }

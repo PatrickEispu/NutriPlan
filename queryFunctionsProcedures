@@ -1,0 +1,648 @@
+
+---Alimento:
+--criar alimento(v)
+CREATE OR REPLACE FUNCTION criar_alimento(
+    p_nm_categoria_alimento VARCHAR,  -- Recebe o nome da categoria
+    p_nr_kcal DOUBLE PRECISION,
+    p_nr_carboidrato DOUBLE PRECISION,
+    p_nr_proteina DOUBLE PRECISION,
+    p_nr_gordura DOUBLE PRECISION,
+    p_nr_quantidade DOUBLE PRECISION,
+    p_nm_nome VARCHAR
+)
+RETURNS INT AS $$
+DECLARE
+    new_id INT;
+    v_id_categoria_alimento INT;  -- Variável para armazenar o ID da categoria
+BEGIN
+    -- Buscar o ID da categoria com base no nome
+    SELECT nr_id_categoria_alimento INTO v_id_categoria_alimento
+    FROM categoria_alimento
+    WHERE nm_categoria = p_nm_categoria_alimento;
+
+    -- Inserir os dados na tabela alimento
+    INSERT INTO alimento (fk_nr_id_categoria_alimento, nr_kcal, nr_carboidrato, nr_proteina, nr_gordura, nr_quantidade, nm_nome)
+    VALUES (v_id_categoria_alimento, p_nr_kcal, p_nr_carboidrato, p_nr_proteina, p_nr_gordura, p_nr_quantidade, p_nm_nome)
+    RETURNING nr_id_alimento INTO new_id;
+
+    RETURN new_id;
+END;
+$$ LANGUAGE plpgsql;
+--buscar outro alimento mesma categoria
+CREATE OR REPLACE FUNCTION public.buscar_outro_alimento_mesma_categoria(
+    p_nr_id_alimento integer,
+    p_nr_id_categoria integer
+)
+RETURNS integer
+LANGUAGE plpgsql
+AS $function$
+DECLARE
+    v_nr_id_alimento integer;
+BEGIN
+    -- Buscar outro alimento da mesma categoria, excluindo o alimento original
+    SELECT a.nr_id_alimento
+    INTO v_nr_id_alimento
+    FROM alimento a
+    WHERE a.fk_nr_id_categoria_alimento = p_nr_id_categoria
+      AND a.nr_id_alimento != p_nr_id_alimento
+    LIMIT 1;
+
+    -- Retornar o id do alimento encontrado
+    RETURN v_nr_id_alimento;
+END;
+$function$;
+
+--listar todos alimentos(v)
+CREATE OR REPLACE FUNCTION listar_todos_alimentos()
+RETURNS TABLE(
+    nr_id_alimento INT,
+    nm_categoria_alimento VARCHAR,
+    nr_kcal DOUBLE PRECISION,
+    nr_carboidrato DOUBLE PRECISION,
+    nr_proteina DOUBLE PRECISION,
+    nr_gordura DOUBLE PRECISION,
+    nr_quantidade DOUBLE PRECISION,
+    nm_nome VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        a.nr_id_alimento,
+        c.nm_categoria, -- Nome da categoria ao invés do ID
+        a.nr_kcal,
+        a.nr_carboidrato,
+        a.nr_proteina,
+        a.nr_gordura,
+        a.nr_quantidade,
+        a.nm_nome
+    FROM alimento a
+    INNER JOIN categoria_alimento c ON a.fk_nr_id_categoria_alimento = c.nr_id_categoria_alimento; -- Join com a tabela de categoria
+END;
+$$ LANGUAGE plpgsql;
+
+--buscar alimento por nome(v)
+CREATE OR REPLACE FUNCTION buscar_alimento_por_nome(
+    p_nm_nome VARCHAR
+)
+RETURNS TABLE(
+    nr_id_alimento INT,
+    fk_nr_id_categoria_alimento INT,
+    nr_kcal DOUBLE PRECISION,
+    nr_carboidrato DOUBLE PRECISION,
+    nr_proteina DOUBLE PRECISION,
+    nr_gordura DOUBLE PRECISION,
+    nr_quantidade DOUBLE PRECISION,
+    nm_nome VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT nr_id_alimento, fk_nr_id_categoria_alimento, nr_kcal, nr_carboidrato, nr_proteina, nr_gordura, nr_quantidade, nm_nome
+    FROM alimento
+    WHERE nm_nome = p_nm_nome;
+END;
+$$ LANGUAGE plpgsql;
+
+--verificar alimento existente(v)
+CREATE OR REPLACE FUNCTION verificar_alimento_existente(p_nome_alimento VARCHAR)
+RETURNS BOOLEAN AS $$
+DECLARE
+    alimento_existente BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1
+        FROM alimento
+        WHERE nm_nome = p_nome_alimento
+    ) INTO alimento_existente;
+
+    RETURN alimento_existente;
+END;
+$$ LANGUAGE plpgsql;
+
+--busca id alimento(v)
+CREATE OR REPLACE FUNCTION busca_id_alimento(nome_alimento VARCHAR)
+RETURNS INTEGER AS $$
+DECLARE
+    id_alimento INTEGER;
+BEGIN
+    SELECT nr_id_alimento INTO id_alimento
+    FROM alimento
+    WHERE nm_nome = nome_alimento;
+
+    RETURN id_alimento;
+END;
+$$ LANGUAGE plpgsql;
+
+---Categoria Alimento:
+--buscar categoria alimento por nome()
+CREATE OR REPLACE FUNCTION public.buscar_categoria_alimento_por_nome(
+p_nm_categoria character varying)
+ RETURNS TABLE(nr_id_categoria_alimento integer, nm_categoria character varying)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT c.nr_id_categoria_alimento, c.nm_categoria
+    FROM categoria_alimento c
+    WHERE c.nm_categoria = p_nm_categoria;
+END;
+$function$
+;
+
+---Dispensa:
+--add alimento na dispensa()
+CREATE OR REPLACE FUNCTION public.adicionar_alimento_na_dispensa(p_fk_nr_id_dispensa integer, p_fk_nr_id_alimento integer, p_nr_quantidade integer)
+ RETURNS void
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    INSERT INTO dispensa_alimento (fk_nr_id_dispensa, fk_nr_id_alimento, nr_quantidade)
+    VALUES (p_fk_nr_id_dispensa, p_fk_nr_id_alimento, p_nr_quantidade);
+END;
+$function$
+;
+
+--criar dispensa()
+CREATE OR REPLACE FUNCTION public.criar_dispensa(p_fk_nr_id_conta integer)
+ RETURNS integer
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    new_id INT;
+BEGIN
+    INSERT INTO dispensa (fk_nr_id_conta)
+    VALUES (p_fk_nr_id_conta)
+    RETURNING nr_id_dispensa INTO new_id;
+    RETURN new_id;
+END;
+$function$
+;
+
+--contar dispensas por conta()
+CREATE OR REPLACE FUNCTION public.contar_dispensas_por_conta(p_nr_id_conta integer)
+ RETURNS integer
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    num_dispensas integer;
+BEGIN
+    SELECT COUNT(*)
+    INTO num_dispensas
+    FROM dispensa
+    WHERE fk_nr_id_conta = p_nr_id_conta;
+
+    RETURN num_dispensas;
+END;
+$function$
+;
+
+--buscar dispensa por id conta()
+CREATE OR REPLACE FUNCTION public.buscar_dispensa_por_id_conta(p_fk_nr_id_conta integer)
+ RETURNS TABLE(nr_id_dispensa integer, fk_nr_id_conta integer)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT d.nr_id_dispensa, d.fk_nr_id_conta
+    FROM dispensa d
+    WHERE d.fk_nr_id_conta = p_fk_nr_id_conta;
+END;
+$function$
+;
+--contar alimento dispensa()
+CREATE OR REPLACE FUNCTION public.contar_alimento_dispensa(p_nr_id_dispensa integer)
+ RETURNS integer
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    num_alimento_dispensa integer;
+BEGIN
+    SELECT COUNT(*)
+    INTO num_alimento_dispensa
+    FROM dispensa_alimento
+    WHERE fk_nr_id_dispensa = p_nr_id_dispensa;
+
+    RETURN num_alimento_dispensa;
+END;
+$function$
+;
+
+--contar id alimento()
+CREATE OR REPLACE FUNCTION public.contar_id_alimento(p_fk_nr_id_dispensa integer, p_nr_id_alimento integer)
+ RETURNS integer
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    num_id_alimento integer;
+BEGIN
+    SELECT COUNT(*)
+    INTO num_id_alimento
+    FROM dispensa_alimento
+    WHERE fk_nr_id_alimento = p_nr_id_alimento
+    and fk_nr_id_dispensa = p_fk_nr_id_dispensa ;
+
+    RETURN num_id_alimento;
+END;
+$function$
+;
+
+--atualizar quantidade alimento na dispensa()
+CREATE OR REPLACE FUNCTION public.atualizar_quantidade_alimento_na_dispensa(p_fk_nr_id_dispensa integer, p_fk_nr_id_alimento integer, p_nr_quantidade integer)
+ RETURNS void
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    UPDATE dispensa_alimento
+    SET nr_quantidade = p_nr_quantidade
+    WHERE fk_nr_id_dispensa = p_fk_nr_id_dispensa AND fk_nr_id_alimento = p_fk_nr_id_alimento;
+END;
+$function$
+;
+
+---Refeicao:
+--criar refeicao()
+CREATE OR REPLACE FUNCTION public.criar_refeicao(p_fk_nr_id_conta integer)
+ RETURNS integer
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    new_id INT;
+BEGIN
+    INSERT INTO refeicao (fk_nr_id_conta)
+    VALUES (p_fk_nr_id_conta)
+    RETURNING nr_id_refeicao INTO new_id;
+    RETURN new_id;
+END;
+$function$
+;
+--adicionar alimento na refeicao()
+CREATE OR REPLACE FUNCTION public.adicionar_alimento_na_refeicao(p_fk_nr_id_refeicao integer, p_fk_nr_id_alimento integer, p_nr_quantidade integer)
+ RETURNS void
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    INSERT INTO refeicao_alimento (fk_nr_id_refeicao, fk_nr_id_alimento, nr_quantidade)
+    VALUES (p_fk_nr_id_refeicao, p_fk_nr_id_alimento, p_nr_quantidade);
+END;
+$function$
+;
+
+---Conta
+--verficar email existente ()
+CREATE OR REPLACE FUNCTION public.verificar_email_existente(p_email character varying)
+ RETURNS boolean
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    email_existente BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1
+        FROM conta
+        WHERE ds_email  = p_email
+    ) INTO email_existente;
+
+    RETURN email_existente;
+END;
+$function$
+;
+--criar conta(v)
+CREATE OR REPLACE FUNCTION criar_conta(
+    p_nm_nome VARCHAR,
+    p_ds_email VARCHAR,
+    p_ds_senha VARCHAR,
+    p_nm_tipo_conta VARCHAR
+)
+RETURNS INT AS $$
+DECLARE
+    new_id INT;
+    tipo_conta_id INT;
+BEGIN
+    -- Busca o ID do tipo de conta com base no nome do tipo de conta
+    SELECT nr_id_tipo_conta INTO tipo_conta_id
+    FROM tipo_conta
+    WHERE nm_tipo_conta = p_nm_tipo_conta;
+
+    -- Verifica se o tipo de conta foi encontrado
+    IF tipo_conta_id IS NULL THEN
+        RAISE EXCEPTION 'Tipo de conta não encontrado: %', p_nm_tipo_conta;
+    END IF;
+
+    -- Insere a nova conta com o ID do tipo de conta encontrado
+    INSERT INTO conta (nm_nome, ds_email, ds_senha, fk_nr_id_tipo_conta)
+    VALUES (p_nm_nome, p_ds_email, p_ds_senha, tipo_conta_id)
+    RETURNING nr_id_conta INTO new_id;
+
+    RETURN new_id;
+END;
+$$ LANGUAGE plpgsql;
+--buscar id conta por email()
+CREATE OR REPLACE FUNCTION public.buscar_id_conta_por_email(email character varying)
+ RETURNS integer
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    id_conta INT;
+BEGIN
+    SELECT nr_id_conta INTO id_conta
+    FROM conta
+    WHERE ds_email = email;
+
+    RETURN id_conta;
+END;
+$function$
+;
+
+--buscar conta por id()
+CREATE OR REPLACE FUNCTION public.buscar_conta_por_id(p_nr_id_conta integer)
+ RETURNS TABLE(nr_id_conta integer, nm_nome character varying, ds_email character varying, ds_senha character varying, fk_nr_id_tipo_conta integer)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT nr_id_conta, nm_nome, ds_email, ds_senha, fk_nr_id_tipo_conta
+    FROM conta
+    WHERE nr_id_conta = p_nr_id_conta;
+END;
+$function$
+;
+
+---Tipo conta
+-- buscar tipo conta por nome ()
+CREATE OR REPLACE FUNCTION public.buscar_tipo_conta_por_nome(p_nome character varying)
+ RETURNS TABLE(nr_id_tipo_conta integer, nm_tipo_conta character varying)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT tc.nr_id_tipo_conta, tc.nm_tipo_conta
+    FROM tipo_conta tc
+    WHERE tc.nm_tipo_conta = p_nome;
+END;
+$function$
+;
+
+
+---Cliente
+--criar cliente()
+CREATE OR REPLACE FUNCTION public.criar_cliente(p_ds_genero character varying, p_nr_peso double precision, p_nr_altura double precision, p_ds_data_nascimento character varying, p_nr_tmb double precision, p_nr_get double precision, p_nm_categoria character varying, p_fk_nr_id_conta integer)
+ RETURNS integer
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    new_id INT;
+    v_id_categoria INT;  -- Variável para armazenar o ID da categoria
+BEGIN
+    -- Buscar o ID da categoria com base no nome
+    SELECT nr_id_categoria INTO v_id_categoria
+    FROM categoria
+    WHERE nm_categoria = p_nm_categoria;
+
+    -- Inserir os dados na tabela cliente
+    INSERT INTO cliente (ds_genero, nr_peso, nr_altura, ds_data_nascimento, nr_tmb, nr_get, fk_nr_id_categoria, fk_nr_id_conta)
+    VALUES (p_ds_genero, p_nr_peso, p_nr_altura, p_ds_data_nascimento, p_nr_tmb, p_nr_get, v_id_categoria, p_fk_nr_id_conta)
+    RETURNING fk_nr_id_conta INTO new_id;
+
+    RETURN new_id;
+END;
+$function$
+;
+--listar todos clientes()
+CREATE OR REPLACE FUNCTION public.listar_todos_clientes()
+ RETURNS TABLE(id_conta integer, nome character varying, email character varying, senha character varying, genero character varying, peso double precision, altura double precision, data_nascimento character varying, tmb double precision, get double precision, categoria_nome character varying, tipo_conta_nome character varying)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT
+        co.nr_id_conta AS id_conta,
+        co.nm_nome AS nome,
+        co.ds_email AS email,
+        co.ds_senha AS senha,
+        c.ds_genero AS genero,
+        c.nr_peso AS peso,
+        c.nr_altura AS altura,
+        c.ds_data_nascimento AS data_nascimento,
+        c.nr_tmb AS tmb,
+        c.nr_get AS get,
+        ca.nm_categoria AS categoria_nome,
+        tc.nm_tipo_conta AS tipo_conta_nome
+    FROM cliente c
+    INNER JOIN conta co ON c.fk_nr_id_conta = co.nr_id_conta
+    INNER JOIN tipo_conta tc ON co.fk_nr_id_tipo_conta = tc.nr_id_tipo_conta
+    INNER JOIN categoria ca ON c.fk_nr_id_categoria = ca.nr_id_categoria;
+END;
+$function$
+;
+
+--atualizar cliente procedure ()
+CREATE OR REPLACE PROCEDURE public.atualizar_cliente_procedure(IN p_id_conta integer, IN p_ds_genero character varying, IN p_nr_peso double precision, IN p_nr_altura double precision, IN p_ds_data_nascimento character varying, IN p_nr_tmb double precision, IN p_nr_get double precision, IN p_nm_categoria character varying)
+ LANGUAGE plpgsql
+AS $procedure$
+DECLARE
+    v_id_categoria INT;  -- Variável para armazenar o ID da categoria
+BEGIN
+    -- Buscar o ID da categoria com base no nome
+    SELECT nr_id_categoria INTO v_id_categoria
+    FROM categoria
+    WHERE nm_categoria = p_nm_categoria;
+
+    -- Atualizar os dados na tabela cliente
+    UPDATE cliente
+    SET
+        ds_genero = p_ds_genero,
+        nr_peso = p_nr_peso,
+        nr_altura = p_nr_altura,
+        ds_data_nascimento = p_ds_data_nascimento,
+        nr_tmb = p_nr_tmb,
+        nr_get = p_nr_get,
+        fk_nr_id_categoria = v_id_categoria
+    WHERE fk_nr_id_conta = p_id_conta;
+
+    -- Commit explícito se necessário (caso não esteja sendo gerenciado por transação externa)
+    COMMIT;
+END;
+$procedure$
+;
+
+--buscar categoria por id()
+CREATE OR REPLACE FUNCTION public.buscar_categoria_por_id(p_nr_id_categoria integer)
+ RETURNS character varying
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    v_nm_categoria character varying;
+BEGIN
+    SELECT c.nm_categoria
+    INTO v_nm_categoria
+    FROM categoria c
+    WHERE c.nr_id_categoria = p_nr_id_categoria;
+
+    RETURN v_nm_categoria;
+END;
+$function$
+;
+
+--atualiza cliente get tmb()
+CREATE OR REPLACE PROCEDURE public.atualiza_cliente_get_tmb(IN p_id_conta integer, IN p_get double precision, IN p_tmb double precision)
+ LANGUAGE plpgsql
+AS $procedure$
+BEGIN
+    UPDATE cliente
+    SET nr_get = p_get,
+        nr_tmb = p_tmb
+    WHERE fk_nr_id_conta = p_id_conta;
+END;
+$procedure$
+;
+
+---Categoria cliente
+--buscar categoria por nome ()
+CREATE OR REPLACE FUNCTION public.buscar_categoria_por_nome(p_nm_categoria character varying)
+ RETURNS TABLE(nr_id_categoria integer, nm_categoria character varying)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT c.nr_id_categoria, c.nm_categoria
+    FROM categoria c
+    WHERE c.nm_categoria = p_nm_categoria;
+END;
+$function$
+;
+
+---Diario
+-- criar diario ()
+CREATE OR REPLACE FUNCTION public.criar_diario(p_fk_nr_id_conta integer, p_ds_data character varying, p_fk_nr_id_refeicao integer)
+ RETURNS void
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    INSERT INTO diario (fk_nr_id_conta, ds_data, fk_nr_id_refeicao)
+    VALUES (p_fk_nr_id_conta, p_ds_data, p_fk_nr_id_refeicao);
+END;
+$function$
+;
+
+---Meta
+--criar meta()
+CREATE OR REPLACE FUNCTION public.criar_meta(p_nr_peso_desejado double precision, p_fk_nr_id_conta integer, p_fk_nr_id_objetivo integer, p_fk_nr_id_tempo integer)
+ RETURNS integer
+ LANGUAGE plpgsql
+AS $function$
+DECLARE
+    new_id INT;
+BEGIN
+    INSERT INTO meta (nr_peso_desejado, fk_nr_id_conta, fk_nr_id_objetivo, fk_nr_id_tempo)
+    VALUES (p_nr_peso_desejado, p_fk_nr_id_conta, p_fk_nr_id_objetivo, p_fk_nr_id_tempo)
+    RETURNING fk_nr_id_conta INTO new_id;
+    RETURN new_id;
+END;
+$function$
+;
+--criar diario meta()
+CREATE OR REPLACE PROCEDURE public.criar_diario_meta(IN p_id_conta integer, IN p_kcal double precision, IN p_carboidrato double precision, IN p_proteina double precision, IN p_gordura double precision)
+ LANGUAGE plpgsql
+AS $procedure$
+BEGIN
+    INSERT INTO diario_meta (fk_nr_id_conta, nr_kcal, nr_carboidrato, nr_proteina, nr_gordura)
+    VALUES (p_id_conta, p_kcal, p_carboidrato, p_proteina, p_gordura);
+END;
+$procedure$
+;
+-- buscar meta por id()
+CREATE OR REPLACE FUNCTION public.buscar_meta_por_id(p_fk_nr_id_conta integer)
+ RETURNS TABLE(nr_peso_desejado numeric, fk_nr_id_objetivo integer, fk_nr_id_tempo integer)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT
+        m.nr_peso_desejado,
+        m.fk_nr_id_objetivo,
+        m.fk_nr_id_tempo
+    FROM
+        meta m
+    WHERE
+        m.fk_nr_id_conta = p_fk_nr_id_conta;
+END;
+$function$
+;
+--atualizar diario meta
+CREATE OR REPLACE PROCEDURE public.atualizar_diario_meta(
+IN p_id_conta integer,
+IN p_kcal double precision,
+IN p_carboidrato double precision,
+IN p_proteina double precision,
+IN p_gordura double precision
+)
+ LANGUAGE plpgsql
+AS $procedure$
+BEGIN
+    UPDATE diario_meta
+    SET nr_kcal = p_kcal,
+        nr_carboidrato = p_carboidrato,
+        nr_proteina = p_proteina,
+        nr_gordura = p_gordura
+    WHERE fk_nr_id_conta = p_id_conta;
+END;
+$procedure$
+;
+
+
+--buscar tempo por id()
+CREATE OR REPLACE FUNCTION public.buscar_tempo_por_id(p_nr_id_tempo integer)
+ RETURNS TABLE(nr_id_tempo integer, ds_tempo character varying)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT t.nr_id_tempo, t.ds_tempo
+    FROM tempo t
+    WHERE t.nr_id_tempo = p_nr_id_tempo;
+END;
+$function$
+;
+--buscar objetivo por id()
+CREATE OR REPLACE FUNCTION public.buscar_objetivo_por_id(p_nr_id_objetivo integer)
+ RETURNS TABLE(nr_id_objetivo integer, ds_objetivo character varying)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT o.nr_id_objetivo, o.ds_objetivo
+    FROM objetivo o
+    WHERE o.nr_id_objetivo = p_nr_id_objetivo;
+END;
+$function$
+;
+
+---Objetivo
+--buscar objetivo por descricao()
+CREATE OR REPLACE FUNCTION public.buscar_objetivo_por_descricao(p_ds_objetivo character varying)
+ RETURNS TABLE(nr_id_objetivo integer, ds_objetivo character varying)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT o.nr_id_objetivo, o.ds_objetivo
+    FROM objetivo o
+    WHERE o.ds_objetivo = p_ds_objetivo;
+END;
+$function$
+;
+
+
+---Tempo
+--buscar tempo por descrição()
+CREATE OR REPLACE FUNCTION public.buscar_tempo_por_descricao(p_ds_tempo character varying)
+ RETURNS TABLE(nr_id_tempo integer, ds_tempo character varying)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT t.nr_id_tempo, t.ds_tempo
+    FROM tempo t
+    WHERE t.ds_tempo = p_ds_tempo;
+END;
+$function$
+;
